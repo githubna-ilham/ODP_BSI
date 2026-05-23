@@ -104,23 +104,7 @@ Planning ─→ Analysis ─→ Design ─→ Impl ─→ Testing ─→ Deploy
 - Requirement yang belum jelas atau pasti berubah
 - Proyek inovasi/eksperimen
 
-### 3.2 V-Model
-
-Variasi Waterfall di mana setiap fase development punya pasangan testing. Misal Design ↔ Integration Test, Coding ↔ Unit Test.
-
-```
-Requirements ─────────────────────→ Acceptance Test
-    ↓                                      ↑
-  Design ────────────────────────→ Integration Test
-    ↓                                      ↑
-  Coding ────────────────────────→ Unit Test
-                  ↓
-              Implementation
-```
-
-**Cocok untuk**: sistem mission-critical (perbankan core, kesehatan) yang butuh testing rigorous di setiap level.
-
-### 3.3 Iterative & Incremental
+### 3.2 Iterative & Incremental
 
 Bagi project jadi beberapa **iterasi pendek**. Tiap iterasi menghasilkan increment fungsionalitas. Berbeda dari Waterfall yang sekali jalan sampai selesai.
 
@@ -132,13 +116,13 @@ Iterasi 3: [Plan→Design→Build→Test] → finalisasi
 
 **Cocok untuk**: project besar yang bisa dipecah jadi modul-modul independen.
 
-### 3.4 Spiral
+### 3.3 Spiral
 
 Iterative + emphasis ke **risk management**. Setiap loop spiral menambah analisis risiko sebelum lanjut.
 
 **Cocok untuk**: project dengan risiko tinggi (mis. integrasi dengan sistem legacy yang kompleks).
 
-### 3.5 Agile
+### 3.4 Agile
 
 Mindset yang menekankan **adaptasi cepat terhadap perubahan**. Bukan satu metodologi spesifik — Scrum, Kanban, XP, SAFe semuanya implementasi dari mindset Agile.
 
@@ -151,7 +135,7 @@ Sprint 1 ─→ Sprint 2 ─→ Sprint 3 ─→ ... → Release
 
 **Cocok untuk**: product development di mana requirement bisa berubah, time-to-market penting, dan team relatif kecil (5–9 orang).
 
-### 3.6 DevOps
+### 3.5 DevOps
 
 Bukan SDLC model tradisional, tapi **pendekatan budaya** yang menggabungkan Development dan Operations. Fokus pada otomasi, continuous integration, continuous deployment (CI/CD).
 
@@ -162,18 +146,17 @@ Dev ─→ Build ─→ Test ─→ Release ─→ Deploy ─→ Operate ─→ 
 
 **Cocok untuk**: aplikasi yang butuh rilis sering, layanan cloud-native.
 
-### 3.7 Pemilihan Model — Ringkasan
+### 3.6 Pemilihan Model — Ringkasan
 
 | Model | Time-to-market | Adaptasi perubahan | Dokumentasi | Cocok untuk BSI |
 |---|---|---|---|---|
 | Waterfall | Lambat | Sulit | Lengkap | Core banking migration, regulasi baru |
-| V-Model | Lambat | Sulit | Sangat lengkap | Sistem syariah mission-critical |
 | Iterative | Sedang | Sedang | Cukup | Modul independen (mis. modul tabungan) |
 | Spiral | Sedang | Sedang | Lengkap | Integrasi legacy + sistem baru |
 | **Agile/Scrum** | **Cepat** | **Sangat baik** | Cukup | **Mobile banking, fitur digital baru** |
 | DevOps | Sangat cepat | Sangat baik | Otomatis di pipeline | Layanan cloud, API gateway |
 
-> **Catatan**: di BSI, biasanya **kombinasi** dipakai. Core banking pakai Waterfall/V-Model karena regulasi ketat, sedangkan mobile/digital product pakai Scrum karena butuh iterasi cepat.
+> **Catatan**: di BSI, biasanya **kombinasi** dipakai. Core banking pakai Waterfall karena regulasi ketat, sedangkan mobile/digital product pakai Scrum karena butuh iterasi cepat.
 
 ---
 
