@@ -49,7 +49,7 @@ Fase ini berfokus pada **penguatan konsep fundamental** dan **hands-on lab** sec
 | 09.30 – 12.00 | **Database Modeling**: ERD, normalisasi, constraint, index. Setup **PostgreSQL via Docker**. Schema design sesuai *studi kasus* (4 tabel). | Lab (Docker, psql) |
 | 12.00 – 13.00 | *ISHOMA* | – |
 | 13.00 – 14.30 | Setup project **Node.js + Express + TypeScript + Prisma**. Migration awal. Pola **Controller-Service-Schema**. | Lab (Claude Code CLI) |
-| 14.30 – 16.00 | Implementasi module **Nasabah** (CRUD 5 endpoint) + endpoint **Setor saldo** (idempotency + DB transaction + audit log). JWT auth + middleware. **Test via Thunder Client**. | Lab (Claude Code CLI) |
+| 14.30 – 16.00 | Implementasi module **Nasabah** (CRUD 5 endpoint) + endpoint **Setor saldo** (idempotency + DB transaction + audit log). JWT auth + middleware. **Test via Postman**. | Lab (Claude Code CLI) |
 
 **Output Hari 2**: REST API *studi kasus* jalan di `localhost:3000`, ter-validasi Zod, ter-autentikasi JWT.
 

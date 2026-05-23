@@ -4,7 +4,7 @@
 >
 > **Durasi estimasi**: 5–7 jam.
 >
-> **Tool**: Claude Code (Desktop + CLI) + Node.js 20+ + browser modern + Thunder Client (untuk debug).
+> **Tool**: Claude Code (Desktop + CLI) + Node.js 20+ + browser modern + Postman (untuk debug API).
 >
 > **Prasyarat**: API Tabungan Haji dari latihan Modul 2 sudah jalan di `http://localhost:3000`.
 
@@ -607,7 +607,7 @@ export default function DashboardPage() {
 
 ### 6.4 Test
 
-1. Pastikan ada minimal 1 tabungan di backend (kalau perlu, daftar nasabah baru via Thunder Client + buka tabungan).
+1. Pastikan ada minimal 1 tabungan di backend (kalau perlu, daftar nasabah baru via Postman + buka tabungan).
 2. Login → harus redirect ke `/dashboard`.
 3. Lihat kartu tabungan tampil dengan saldo formatted Rp, nomor rekening masked.
 

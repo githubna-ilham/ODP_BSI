@@ -4,7 +4,7 @@
 >
 > **Durasi estimasi**: 4–6 jam.
 >
-> **Tool**: Claude Code CLI + Node.js 20+ + Docker Desktop + Thunder Client (atau Postman).
+> **Tool**: Claude Code CLI + Node.js 20+ + Docker Desktop + Postman.
 
 ---
 
@@ -979,24 +979,34 @@ curl http://localhost:3000/api/v1/tabungan-haji/<ID> \
 
 ---
 
-## Langkah 8 — Test Manual dengan Thunder Client / Postman (20 menit)
+## Langkah 8 — Test Manual dengan Postman (20 menit)
 
 **Tujuan**: punya koleksi test yang bisa di-reuse & share ke tim.
 
-### 8.1 Install Thunder Client
+### 8.1 Install Postman
 
-Di VS Code / Cursor: extensions → cari **Thunder Client** → Install.
+Download dari [postman.com/downloads](https://www.postman.com/downloads/). Pilih sesuai OS:
+- macOS (Intel/Apple Silicon)
+- Windows (64-bit)
+- Linux (`.deb` / `.rpm` / Snap)
 
-### 8.2 Bikin Collection
+Install seperti aplikasi biasa, lalu **Sign in** (atau Skip kalau mau pakai tanpa akun — disarankan sign in supaya collection ter-sync ke cloud).
 
-1. Buka Thunder Client (icon petir di sidebar).
-2. **New Collection** → nama: `Tabungan Haji API`.
-3. Bikin 3 environment: `local`, `staging`, `production`.
-4. Di `local`, set variable: `baseUrl = http://localhost:3000`, `token = ""`.
+### 8.2 Bikin Workspace + Collection
+
+1. Buka Postman → **Workspaces** → **Create Workspace** → nama: `ODP-Tabungan-Haji`.
+2. Di workspace itu, klik **Collections** → **+** → nama: `Tabungan Haji API`.
+3. Klik **Environments** → **+** → bikin 3 environment: `local`, `staging`, `production`.
+4. Di environment `local`, tambah variable:
+   - `baseUrl` → `http://localhost:3000`
+   - `token` → (kosong dulu, akan diisi setelah login)
+   - `nasabah_id` → (kosong)
+   - `tabungan_id` → (kosong)
+5. Klik **Set active** untuk environment `local` (icon mata di kanan atas).
 
 ### 8.3 Bikin Request
 
-Bikin request berikut, simpan di collection:
+Bikin request berikut di Collection `Tabungan Haji API`. Untuk grouping, bikin **folder** (`Auth`, `Nasabah`, `Tabungan`).
 
 | Folder | Method | URL |
 |---|---|---|
@@ -1010,18 +1020,63 @@ Bikin request berikut, simpan di collection:
 | Tabungan | POST | `{{baseUrl}}/api/v1/tabungan-haji/{{tabungan_id}}/setor` |
 | Tabungan | GET | `{{baseUrl}}/api/v1/tabungan-haji/{{tabungan_id}}/mutasi` |
 
-Set `Authorization: Bearer {{token}}` di endpoint yang perlu auth.
+Untuk endpoint yang perlu auth, di tab **Authorization** pilih **Type: Bearer Token** → **Token: `{{token}}`** (Postman auto-resolve dari environment).
 
-### 8.4 Test Flow End-to-End
+### 8.4 Bikin Body Request (untuk POST/PATCH)
+
+Untuk request POST/PATCH, di tab **Body** pilih **raw → JSON**:
+
+```json
+// POST /auth/login
+{ "email": "budi@email.com", "password": "rahasia12345" }
+
+// POST /nasabah
+{
+  "nik": "3173052501800002",
+  "nama": "Budi Pratama",
+  "email": "budi@email.com",
+  "password": "rahasia12345",
+  "nomor_hp": "081234567891"
+}
+
+// POST /tabungan-haji
+{ "nasabah_id": "{{nasabah_id}}" }
+
+// POST /tabungan-haji/{id}/setor
+{ "nominal": 500000, "metode": "QRIS", "referensi": "TRX-001" }
+```
+
+### 8.5 Auto-extract Token Setelah Login (Tips Pro)
+
+Di request **POST /auth/login**, tab **Tests**, tulis script ini:
+
+```javascript
+const response = pm.response.json();
+if (response.data && response.data.token) {
+  pm.environment.set("token", response.data.token);
+  console.log("Token saved to environment");
+}
+```
+
+Sekarang setiap kali login sukses, `{{token}}` otomatis ter-update — tidak perlu copy-paste manual.
+
+### 8.6 Test Flow End-to-End
 
 Jalankan urut:
-1. POST Login → copy `token` dari response → paste ke env variable.
-2. POST Nasabah (jangan duplikat email/NIK).
-3. POST Tabungan (pakai `nasabah_id` dari step 2).
-4. POST Setor (pakai `tabungan_id` dari step 3).
-5. GET Mutasi → harus ada 1 transaksi.
+1. **POST /nasabah** — daftar nasabah baru. Copy `id` dari response → set ke environment variable `nasabah_id`.
+2. **POST /auth/login** — login dengan email/password yang baru didaftarkan → token auto-saved (lihat 8.5).
+3. **POST /tabungan-haji** — buka tabungan. Copy `id` → set ke `tabungan_id`.
+4. **POST /tabungan-haji/{id}/setor** — setor saldo 500.000.
+5. **GET /tabungan-haji/{id}/mutasi** — harus muncul 1 transaksi.
 
-**Checkpoint**: collection Thunder Client bisa di-export & share. ✅
+### 8.7 Export Collection
+
+Untuk share ke tim:
+1. Klik kanan Collection → **Export** → pilih **Collection v2.1** → save file `.json`.
+2. Kirim ke tim atau commit ke repo (`postman/Tabungan-Haji-API.postman_collection.json`).
+3. Tim lain bisa **Import** file ini di Postman mereka.
+
+**Checkpoint**: Postman collection siap pakai, semua endpoint ter-test, bisa di-export & share. ✅
 
 ---
 
@@ -1143,7 +1198,7 @@ Sebelum lanjut ke Modul 3, pastikan:
 - [ ] Login endpoint return JWT token.
 - [ ] Middleware JWT protect endpoint tabungan.
 - [ ] Format response konsisten (sukses & error) sesuai §2.6 materi.
-- [ ] Thunder Client collection siap pakai.
+- [ ] Postman collection siap pakai (bisa di-export & share).
 
 **Sudah semua tercentang?** Anda siap masuk **Modul 3 — React/Next.js & Integrasi API**, di mana API ini akan dipakai untuk membangun UI mobile banking.
 
@@ -1155,4 +1210,4 @@ Sebelum lanjut ke Modul 3, pastikan:
 - Materi konseptual: `materi.md` di folder yang sama.
 - Prisma Docs: [prisma.io/docs](https://www.prisma.io/docs)
 - Express + TypeScript Guide: [express.com/typescript](https://expressjs.com/en/advanced/best-practice-typescript.html)
-- Thunder Client Docs: [thunderclient.com](https://www.thunderclient.com/)
+- Postman Learning Center: [learning.postman.com](https://learning.postman.com/)

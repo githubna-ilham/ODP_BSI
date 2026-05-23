@@ -1039,13 +1039,17 @@ curl -X POST http://localhost:3000/api/v1/tabungan-haji/PSTH-001/setor \
   -d '{"nominal":500000,"metode":"QRIS","referensi":"TRX-001"}'
 ```
 
-### 10.2 Postman / Thunder Client
+### 10.2 Postman
 
-GUI yang lebih nyaman untuk explore API:
-- **Postman**: standalone app, paling populer.
-- **Thunder Client**: extension VS Code, ringan.
+**Postman** = standalone app paling populer untuk explore & test REST API. Cross-platform (Mac/Windows/Linux), gratis untuk individual use, dan punya fitur Collections + Environments + auto-generate code snippet.
 
-Bikin **Collection** per endpoint, simpan environment variable (URL, token).
+Download dari [postman.com/downloads](https://www.postman.com/downloads/).
+
+Workflow umum:
+1. Bikin **Workspace** untuk project (mis. "ODP-Tabungan-Haji").
+2. Bikin **Collection** per resource (Nasabah, Tabungan, Auth).
+3. Bikin **Environment** untuk tiap target (local, staging, prod) dengan variable `baseUrl` & `token`.
+4. Save tiap request dengan example response → bisa di-share/export ke tim.
 
 ### 10.3 Automated Test
 
@@ -1162,7 +1166,7 @@ Workflow lengkap di hari ke-2:
 | 6 | Implementasi modul Nasabah (CRUD lengkap) via Claude Code | Claude Code |
 | 7 | Implementasi modul Tabungan Haji (CRUD + endpoint setor) via Claude Code | Claude Code |
 | 8 | Tambah JWT auth | Claude Code |
-| 9 | Test pakai Thunder Client / Postman | Thunder Client |
+| 9 | Test pakai Postman | Postman |
 | 10 | Tambah dokumentasi OpenAPI | Claude Code |
 
 **Target hari ke-2 selesai**: API jalan di `localhost:3000`, bisa daftar nasabah, buka tabungan, setor saldo, lihat mutasi — semua dengan validasi & audit log.
