@@ -96,10 +96,12 @@ Fase ini berfokus pada **penguatan konsep fundamental** dan **hands-on lab** sec
 | 09.00 – 10.30 | **Git Flow** branching model (main, develop, feature/*, release/*, hotfix/*), **Conventional Commits**, PR best practice. | Teori |
 | 10.30 – 12.00 | Push project ke **GitHub**, setup **branch protection** + **GitHub Actions CI** (lint, typecheck, test). | Lab (Git, GitHub) |
 | 12.00 – 13.00 | *ISHOMA* | – |
-| 13.00 – 14.30 | **Docker** konsep (container vs VM), tulis **Dockerfile multi-stage** untuk API (Node) + Web (Next.js). Optimasi image size. | Lab (Docker) |
-| 14.30 – 16.00 | **Docker Compose** untuk full stack (PostgreSQL + API + Web). Environment & secret management, health check. **Post-test** + penyerahan sertifikat + penutupan. | Lab + assessment |
+| 13.00 – 14.00 | **Docker** konsep (container vs VM), tulis **Dockerfile multi-stage** untuk API (Node) + Web (Next.js). Optimasi image size. | Lab (Docker) |
+| 14.00 – 15.00 | **Docker Compose** untuk full stack (PostgreSQL + API + Web). Environment & secret management, health check. | Lab (Docker Compose) |
+| 15.00 – 15.30 | **Post-test** — evaluasi penguasaan materi 5 modul (PRETEST vs POSTTEST). | Assessment |
+| 15.30 – 16.00 | **Feedback session**, penyerahan **sertifikat**, foto bersama & penutupan bootcamp. | Closing |
 
-**Output Hari 5**: aplikasi Tabungan Haji bisa dijalankan via `docker compose up` di mana saja — siap deploy.
+**Output Hari 5**: aplikasi Tabungan Haji bisa dijalankan via `docker compose up` di mana saja — siap deploy. Skor post-test tercatat.
 
 ---
 
