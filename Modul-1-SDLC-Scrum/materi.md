@@ -163,6 +163,10 @@ Pada Februari 2001, 17 software engineer berkumpul di Snowbird, Utah dan menyusu
 
 ### 4.1 Empat Nilai Agile
 
+Manifesto Agile menyatakan:
+
+> "**Kami menemukan cara yang lebih baik dalam mengembangkan software** dengan mengerjakannya dan membantu orang lain mengerjakannya. Lewat pekerjaan ini, kami menjadi menghargai:"
+
 | Lebih menghargai | … di atas | Penjelasan |
 |---|---|---|
 | **Individu & interaksi** | Proses & tools | Tools penting, tapi yang bikin software jalan adalah orang & komunikasi |
@@ -171,6 +175,108 @@ Pada Februari 2001, 17 software engineer berkumpul di Snowbird, Utah dan menyusu
 | **Merespons perubahan** | Mengikuti rencana | Rencana dibuat untuk berubah seiring pemahaman bertambah |
 
 **Penting**: ini **bukan "kanan tidak penting"** — keduanya penting, tapi yang **kiri lebih diprioritaskan**.
+
+#### Penjelasan Detail Tiap Nilai
+
+##### Nilai #1: Individu & Interaksi > Proses & Tools
+
+**Maksudnya**: yang menentukan keberhasilan project bukan proses formal & tools canggih, melainkan **orang yang ngerjain & cara mereka berinteraksi**.
+
+**Anti-pattern (yang dihindari)**:
+- Tim ngandelin Jira/Confluence untuk komunikasi → updates ditulis tapi tidak dibaca.
+- Status update via dokumen formal saja → konteks hilang.
+- "Tunggu meeting Senin" untuk diskusi yang sebenarnya bisa 5 menit obrolan.
+
+**Praktik yang sejalan**:
+- Daily Scrum tatap muka (atau video call interaktif kalau remote).
+- Ngobrol langsung sama PM saat ada ambiguitas — jangan asumsi.
+- Pair programming saat ngerjain bagian sulit.
+- Tools pilih yang ringan (mis. Slack > email panjang).
+
+**Contoh konkret**:
+> Tim Backend hadapi bug aneh di endpoint setor. Anti-pattern: tulis tiket Jira lengkap, tunggu PM jawab besok. **Pendekatan Agile**: walk to Designer/PM 5 menit, dapat klarifikasi langsung, fix dalam 1 jam.
+
+---
+
+##### Nilai #2: Software yang Berfungsi > Dokumentasi yang Komprehensif
+
+**Maksudnya**: **bukti kemajuan project = kode yang jalan**, bukan tumpukan dokumen design lengkap. Dokumentasi 200 halaman tidak ada gunanya kalau softwarenya belum jalan.
+
+**Anti-pattern**:
+- Habis 3 bulan bikin BRD/SDD detail, baru mulai coding di bulan 4.
+- "Sprint Review" yang isinya presentasi slides, bukan demo software live.
+- Dokumen yang detail mendalam tapi tidak update-an dari kode aslinya.
+
+**Praktik yang sejalan**:
+- Tiap Sprint hasilkan **increment** yang **demo-able**.
+- Dokumentasi **just-in-time**: tulis saat butuh, bukan upfront semua.
+- README & API docs auto-generate dari kode (OpenAPI).
+- Arsitektur decision dicatat sebagai **ADR** (Architecture Decision Record) singkat — bukan SDD lengkap.
+
+**Yang TETAP perlu didokumentasi** (terutama di banking):
+- Architecture decision yang penting.
+- API contract (OpenAPI spec).
+- Setup & onboarding guide.
+- Audit trail untuk compliance.
+
+**Contoh konkret**:
+> Sprint 1 di tim Tabungan Haji. Anti-pattern: PO request dokumen design 30 halaman. **Pendekatan Agile**: tim demo endpoint setor jalan di-curl, sprint review 1 jam, feedback langsung dapat. Dokumen API otomatis dari Swagger.
+
+---
+
+##### Nilai #3: Kolaborasi dengan Customer > Negosiasi Kontrak
+
+**Maksudnya**: tim dan customer adalah **partner yang punya tujuan sama** (produk yang sukses), bukan dua pihak yang adu menang lewat kontrak SLA.
+
+**Anti-pattern**:
+- "Itu tidak ada di scope kontrak — bayar tambahan." — saat customer minta penyesuaian wajar.
+- Hubungan formal yang dingin: ketemu cuma di kickoff & UAT.
+- Change request prosedural berhari-hari untuk hal kecil.
+- "Anda salah requirement, jadi rework biaya tambahan."
+
+**Praktik yang sejalan**:
+- Customer/PO **hadir di Sprint Review** rutin → feedback berkala.
+- Product Backlog terbuka — customer bisa lihat & beri input.
+- Sprint Goal disepakati bersama customer, bukan dipaksakan.
+- Mindset: "Bagaimana cara terbaik kita capai goal customer?" bukan "Apa minimum yang kita harus deliver per kontrak?"
+
+**Contoh konkret**:
+> Tim development tabungan haji, customer = Tim Bisnis Haji. Anti-pattern: 6 bulan tidak komunikasi, di UAT customer kaget hasilnya tidak sesuai harapan. **Pendekatan Agile**: customer (perwakilan Bisnis Haji) hadir tiap Sprint Review, kasih feedback, increment di-adjust per Sprint. Hasil akhir = sesuai kebutuhan.
+
+> **Catatan untuk banking**: kontrak tetap perlu untuk perlindungan hukum & vendor management. Tapi **kontrak Agile** lebih ke "framework engagement" (durasi, rate, governance) — bukan list detail fitur yang signed-off di awal.
+
+---
+
+##### Nilai #4: Merespons Perubahan > Mengikuti Rencana
+
+**Maksudnya**: perubahan requirement adalah **normal & positif** — tanda tim semakin paham masalah customer. Rencana harus adaptif, bukan kaku.
+
+**Anti-pattern**:
+- "Itu bukan rencana awal — kita lanjut yang lama, perubahan masuk fase 2." → fase 2 = 6 bulan lagi.
+- Plan 12 bulan upfront, tidak boleh berubah.
+- Lihat change request sebagai "scope creep" yang harus ditolak.
+- Bonus tim diukur dari "patuh ke rencana", bukan dari outcome customer.
+
+**Praktik yang sejalan**:
+- **Sprint planning per 2 minggu** — rencana terbatas pada Sprint berikutnya.
+- Product Backlog **continuously re-prioritized** oleh PO sesuai feedback.
+- Change request di-evaluate per Sprint, bukan ditolak otomatis.
+- Tim happy ketika dapat user feedback yang mengubah arah — itu **insight**, bukan ancaman.
+
+**Penting**: "merespons perubahan" **bukan berarti** tidak ada planning. Tim Agile tetap **planning ketat**, hanya saja **scope-nya pendek** (1-2 Sprint) dan **siap di-adjust** berdasar empirical evidence.
+
+**Contoh konkret**:
+> Sprint 2 di tim Tabungan Haji. Setelah Sprint 1 demo, customer realize butuh fitur "set autodebit bulanan" yang tidak ada di rencana awal. Anti-pattern: tolak, sebut "scope creep", lanjut sesuai rencana awal. **Pendekatan Agile**: PO masukkan ke backlog dengan priority tinggi, prioritaskan vs item lain, ambil di Sprint 3. Customer happy karena requirement-nya didengar.
+
+#### Tabel Ringkasan: Mindset Shift
+
+| Situasi | Mindset Lama | Mindset Agile |
+|---|---|---|
+| Customer minta tambahan fitur mid-project | "Itu scope creep, tolak / charge extra." | "Bagus, masukkan ke backlog, kita prioritaskan." |
+| Dokumen design belum lengkap | "Belum bisa mulai coding." | "Mulai dari yang sudah jelas, refine sambil jalan." |
+| Tim dev butuh diskusi dengan PM | "Buat tiket, tunggu reply 2 hari." | "Walk over, ngobrol 5 menit." |
+| Sprint Review | "Presentasi slide formal ke direksi." | "Demo software live, ambil feedback, refine backlog." |
+| Bug ditemukan di production | "Cari yang salah, mulai blame game." | "Fix sekarang, retrospective belajar untuk Sprint berikutnya." |
 
 ### 4.2 Dua Belas Prinsip Agile
 
