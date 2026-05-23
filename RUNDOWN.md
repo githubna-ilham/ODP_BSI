@@ -10,7 +10,7 @@
 
 ## Ringkasan Program
 
-Fase ini berfokus pada **penguatan konsep fundamental** dan **hands-on lab** secara intensif. Tiap hari menghasilkan output konkret yang dipakai di hari berikutnya — peserta membangun **aplikasi Tabungan Haji end-to-end** dari nol selama 5 hari.
+Fase ini berfokus pada **penguatan konsep fundamental** dan **hands-on lab** secara intensif. Tiap hari menghasilkan output konkret yang dipakai di hari berikutnya — peserta membangun **aplikasi end-to-end** sesuai **studi kasus** yang disepakati, dari nol selama 5 hari.
 
 | Hari | Modul | Topik Utama | AI Tool |
 |---|---|---|---|
@@ -33,9 +33,9 @@ Fase ini berfokus pada **penguatan konsep fundamental** dan **hands-on lab** sec
 | 10.30 – 12.00 | **Scrum Framework**: 3 akuntabilitas (PO/SM/Dev), 5 events (Planning, Daily, Review, Retro, Sprint), 3 artifacts (Backlog, Increment). | Teori / Diskusi |
 | 12.00 – 13.00 | *ISHOMA* | – |
 | 13.00 – 14.30 | Setup **Claude Code Pro** (Desktop + CLI), install Node.js, Docker. Konfigurasi `CLAUDE.md` + `.claudeignore`. | Praktik mandiri |
-| 14.30 – 16.00 | Latihan **Bikin Artifact Scrum** untuk fitur Tabungan Haji: Product Vision → Backlog → Acceptance Criteria → Sprint Plan. **Recap & Q&A**. | Lab + diskusi tim |
+| 14.30 – 16.00 | Latihan **Bikin Artifact Scrum** untuk fitur sesuai *studi kasus*: Product Vision → Backlog → Acceptance Criteria → Sprint Plan. **Recap & Q&A**. | Lab + diskusi tim |
 
-**Output Hari 1**: tooling ready + Product Backlog & Sprint Plan untuk fitur Tabungan Haji.
+**Output Hari 1**: tooling ready + Product Backlog & Sprint Plan untuk fitur *studi kasus*.
 
 ---
 
@@ -46,12 +46,12 @@ Fase ini berfokus pada **penguatan konsep fundamental** dan **hands-on lab** sec
 | Waktu | Aktivitas Pembelajaran | Metode & Tools |
 |---|---|---|
 | 09.00 – 10.30 | Konsep **REST** (6 prinsip, HTTP methods, status codes), **API Response Contract** `{ data, error, meta }` sebagai kesepakatan dengan frontend. | Teori |
-| 10.30 – 12.00 | **Database Modeling**: ERD, normalisasi, constraint, index. Setup **PostgreSQL via Docker**. Schema design Tabungan Haji (4 tabel). | Lab (Docker, psql) |
+| 10.30 – 12.00 | **Database Modeling**: ERD, normalisasi, constraint, index. Setup **PostgreSQL via Docker**. Schema design sesuai *studi kasus* (4 tabel). | Lab (Docker, psql) |
 | 12.00 – 13.00 | *ISHOMA* | – |
 | 13.00 – 14.30 | Setup project **Node.js + Express + TypeScript + Prisma**. Migration awal. Pola **Controller-Service-Schema**. | Lab (Claude Code CLI) |
 | 14.30 – 16.00 | Implementasi module **Nasabah** (CRUD 5 endpoint) + endpoint **Setor saldo** (idempotency + DB transaction + audit log). JWT auth + middleware. **Test via Thunder Client**. | Lab (Claude Code CLI) |
 
-**Output Hari 2**: REST API Tabungan Haji jalan di `localhost:3000`, ter-validasi Zod, ter-autentikasi JWT.
+**Output Hari 2**: REST API *studi kasus* jalan di `localhost:3000`, ter-validasi Zod, ter-autentikasi JWT.
 
 ---
 
@@ -64,10 +64,10 @@ Fase ini berfokus pada **penguatan konsep fundamental** dan **hands-on lab** sec
 | 09.00 – 10.30 | **React fundamentals** (component, props, state, hooks) + **Next.js App Router** (Server vs Client Components, routing). | Teori |
 | 10.30 – 12.00 | Setup **Next.js + Tailwind + shadcn/ui + TanStack Query + React Hook Form**. Halaman **Login** dengan JWT auth flow. | Lab (Claude Code CLI) |
 | 12.00 – 13.00 | *ISHOMA* | – |
-| 13.00 – 14.30 | Build halaman **Dashboard** (KartuTabungan list) + **Detail Tabungan**. Workflow iterate UI pakai **Claude Desktop (Artifacts)** → apply ke project via **Claude Code CLI**. | Lab (Claude Desktop + CLI) |
+| 13.00 – 14.30 | Build halaman **Dashboard** (list kartu) + **Detail Resource**. Workflow iterate UI pakai **Claude Desktop (Artifacts)** → apply ke project via **Claude Code CLI**. | Lab (Claude Desktop + CLI) |
 | 14.30 – 16.00 | Build **Form Setor** (2-step confirmation) + **Halaman Mutasi** + Protected Route. Polish: loading skeleton, responsive, auto-logout 401. | Lab (Claude Code CLI) |
 
-**Output Hari 3**: web app Tabungan Haji jalan di `localhost:3001`, full-integrate dengan API Hari 2.
+**Output Hari 3**: web app *studi kasus* jalan di `localhost:3001`, full-integrate dengan API Hari 2.
 
 ---
 
@@ -80,7 +80,7 @@ Fase ini berfokus pada **penguatan konsep fundamental** dan **hands-on lab** sec
 | 09.00 – 10.30 | **Clean Code** (naming, function size, magic numbers) + **5 Prinsip SOLID** dengan contoh banking + **8 jenis Code Smells** umum. | Teori |
 | 10.30 – 12.00 | **Test Pyramid**, pattern **AAA**, setup **Vitest** + mocking. Tulis unit test pertama untuk service. | Lab (Vitest) |
 | 12.00 – 13.00 | *ISHOMA* | – |
-| 13.00 – 14.30 | **Refactor** `tabungan.service.ts`: pisah jadi helper kecil (SRP), inject dependency (DIP), fix smells. Generate test dari kode existing dengan Claude. | Lab (Claude Code CLI) |
+| 13.00 – 14.30 | **Refactor** service utama project: pisah jadi helper kecil (SRP), inject dependency (DIP), fix smells. Generate test dari kode existing dengan Claude. | Lab (Claude Code CLI) |
 | 14.30 – 16.00 | Capai **test coverage ≥ 80%** untuk module service. Setup **ESLint + Prettier**. **Code review berpasangan**. | Lab + pair review |
 
 **Output Hari 4**: kode kualitas production — clean, ter-test, lint-clean.
@@ -101,7 +101,7 @@ Fase ini berfokus pada **penguatan konsep fundamental** dan **hands-on lab** sec
 | 15.00 – 15.30 | **Post-test** — evaluasi penguasaan materi 5 modul (PRETEST vs POSTTEST). | Assessment |
 | 15.30 – 16.00 | **Feedback session**, penyerahan **sertifikat**, foto bersama & penutupan bootcamp. | Closing |
 
-**Output Hari 5**: aplikasi Tabungan Haji bisa dijalankan via `docker compose up` di mana saja — siap deploy. Skor post-test tercatat.
+**Output Hari 5**: aplikasi *studi kasus* bisa dijalankan via `docker compose up` di mana saja — siap deploy. Skor post-test tercatat.
 
 ---
 
@@ -114,8 +114,8 @@ Daftar artifact konkret yang **wajib di-deliver** di akhir bootcamp:
 | **Product Vision + Product Backlog** | H1 | 5 section vision + 15+ user story format INVEST dengan MoSCoW priority |
 | **Sprint Plan** | H1 | Sprint Goal + Sprint Backlog dengan estimasi Fibonacci |
 | **Database Schema** | H2 | ERD + migration files (`prisma/migrations/`) — 4 tabel domain |
-| **REST API + OpenAPI Spec** | H2 | Endpoint CRUD nasabah + tabungan + transaksi + audit log |
-| **Frontend Mobile-Friendly** | H3 | Login, dashboard, detail tabungan, setor, mutasi |
+| **REST API + OpenAPI Spec** | H2 | Endpoint CRUD untuk entitas sesuai *studi kasus* + audit log |
+| **Frontend Mobile-Friendly** | H3 | Login, dashboard, detail resource, form transaksi, riwayat |
 | **Unit Test (coverage > 80%)** | H4 | `*.test.ts` per modul + coverage report |
 | **Git Repository (GitHub)** | H5 | Branch `main`/`develop`/`feature/*`, PR history, CI workflows hijau |
 | **Docker Compose Stack** | H5 | `docker-compose.yml` lengkap dengan DB + API + Web siap deploy |
