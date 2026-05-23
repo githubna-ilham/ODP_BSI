@@ -1,14 +1,14 @@
 # Modul 1 — SDLC & Scrum Agile
 
-> **Konteks**: Materi ini ditujukan untuk peserta Officer Development Program (ODP) BSI — baik track IT maupun non-IT yang akan berinteraksi dengan tim pengembangan. Tujuannya: paham siklus pengembangan software, kenapa metodologi penting, dan bagaimana Scrum (sebagai implementasi Agile paling populer) bekerja dalam konteks perbankan syariah.
+> **Konteks**: Materi ini ditujukan untuk peserta Officer Development Program (ODP) — baik track IT maupun non-IT yang akan berinteraksi dengan tim pengembangan. Tujuannya: paham siklus pengembangan software, kenapa metodologi penting, dan bagaimana Scrum (sebagai implementasi Agile paling populer) bekerja dalam konteks perbankan syariah.
 
 > Setelah modul ini Anda harus bisa: (a) menjelaskan fase-fase SDLC dan kapan masing-masing pendekatan dipakai, (b) memahami nilai & prinsip Agile, (c) menjalankan peran dalam tim Scrum (Product Owner, Scrum Master, atau Developer), (d) menulis user story yang baik dan memahami estimasi, (e) berkolaborasi efektif dengan tim IT/bisnis lewat Scrum events.
 
 ---
 
-## 1. Pengantar — Mengapa SDLC & Agile Penting di BSI
+## 1. Pengantar — Mengapa SDLC & Agile Penting
 
-Industri perbankan, terutama perbankan syariah, sedang dalam fase **transformasi digital** yang masif. Layanan yang dulu hanya bisa diakses di cabang kini harus tersedia di aplikasi mobile, ATM, web, hingga channel pihak ketiga. Untuk merespon ini, BSI butuh tim pengembangan yang **cepat namun terkendali** — di sinilah SDLC dan metodologi Agile berperan.
+Industri perbankan, terutama perbankan syariah, sedang dalam fase **transformasi digital** yang masif. Layanan yang dulu hanya bisa diakses di cabang kini harus tersedia di aplikasi mobile, ATM, web, hingga channel pihak ketiga. Untuk merespon ini, bank butuh tim pengembangan yang **cepat namun terkendali** — di sinilah SDLC dan metodologi Agile berperan.
 
 ### Mengapa ODP harus paham?
 
@@ -65,7 +65,7 @@ flowchart LR
 | **6. Deployment** | Rilis ke production, training user | Sistem live, manual user |
 | **7. Maintenance** | Bug fix, enhancement, monitoring | Patch, update version |
 
-### 2.2 Contoh di BSI: Pengembangan Fitur QRIS Tabungan Haji
+### 2.2 Studi Kasus: Pengembangan Fitur QRIS Tabungan Haji BSI
 
 | Fase | Aktivitas Konkret |
 |---|---|
@@ -119,7 +119,7 @@ Setelah **Initial Planning**, project masuk loop **Planning → Requirements →
 
 Alur Agile: **Plan → Design → Develop → Test → Deploy → Review → (kembali ke Design)** lalu **Launch** di akhir. Tiap iterasi (Sprint 1–4 minggu) menghasilkan increment software yang siap dipakai. Feedback stakeholder masuk ke Sprint berikutnya.
 
-**Cocok untuk**: product development di mana requirement bisa berubah, time-to-market penting, dan team relatif kecil (5–9 orang). Di BSI: pengembangan mobile banking, fitur digital baru.
+**Cocok untuk**: product development di mana requirement bisa berubah, time-to-market penting, dan team relatif kecil (5–9 orang). Contoh: pengembangan mobile banking, fitur digital baru.
 
 **Tidak cocok untuk**: sistem dengan regulasi sangat ketat yang butuh upfront full specification (mis. core banking).
 
@@ -135,7 +135,7 @@ Diagram infinity (∞) menggambarkan **loop berkelanjutan tanpa akhir**: sisi **
 
 **Karakteristik utama**: otomasi pipeline (build/test/deploy), shift-left testing, immutable infrastructure (Docker, Terraform), rilis kecil & sering.
 
-**Cocok untuk**: aplikasi yang butuh rilis sering — mobile banking, web service, API publik, layanan cloud-native. Di BSI: BSI Mobile, micro-service baru.
+**Cocok untuk**: aplikasi yang butuh rilis sering — mobile banking, web service, API publik, layanan cloud-native. Contoh: aplikasi mobile banking, micro-service baru.
 
 **Tidak cocok untuk**: core banking syariah dengan regulasi OJK ketat → tetap pakai Waterfall + scheduled release.
 
@@ -145,13 +145,13 @@ Diagram infinity (∞) menggambarkan **loop berkelanjutan tanpa akhir**: sisi **
 
 ### 3.5 Pemilihan Model — Ringkasan
 
-| Model | Time-to-market | Adaptasi perubahan | Dokumentasi | Cocok untuk BSI |
+| Model | Time-to-market | Adaptasi perubahan | Dokumentasi | Cocok untuk |
 |---|---|---|---|---|
 | Waterfall | Lambat | Sulit | Lengkap | Core banking migration, regulasi baru |
 | Iterative | Sedang | Sedang | Cukup | Modul independen (mis. modul tabungan) |
 | **Agile/Scrum** | **Cepat** | **Sangat baik** | Cukup | **Mobile banking, fitur digital baru** |
 
-> **Catatan**: di BSI, biasanya **kombinasi** dipakai. Core banking pakai Waterfall karena regulasi ketat, sedangkan mobile/digital product pakai Scrum karena butuh iterasi cepat.
+> **Catatan**: di industri perbankan biasanya **kombinasi** dipakai. Core banking pakai Waterfall karena regulasi ketat, sedangkan mobile/digital product pakai Scrum karena butuh iterasi cepat.
 >
 > **DevOps tidak ada di tabel ini** karena bukan SDLC model yang sejajar — DevOps adalah **prinsip & praktik teknis** (CI/CD, otomasi, shared responsibility Dev+Ops) yang **menempel** ke metodologi lain. Tim Agile/Scrum yang dewasa biasanya **sekaligus pakai DevOps** untuk pipeline build & deploy-nya. Dan Waterfall pun bisa diperkuat sebagian dengan praktik DevOps (mis. automated test).
 
@@ -273,7 +273,7 @@ Tugas konkret:
 - Berinteraksi dengan stakeholder & pengguna.
 - **Satu** orang PO per produk (bukan komite).
 
-Profil cocok di BSI: business analyst, product manager, kepala unit bisnis yang punya wewenang prioritas.
+Profil yang cocok: business analyst, product manager, kepala unit bisnis yang punya wewenang prioritas.
 
 ### 6.2 Scrum Master (SM)
 
@@ -299,7 +299,7 @@ Tugas konkret:
 - **Cross-functional** — bisa kerjakan semua aspek (analisis, design, code, test).
 - **Self-organizing** — tim sendiri yang putuskan cara terbaik mengerjakan.
 
-Profil di BSI: developer, tester, UI/UX designer, system analyst — biasanya jadi satu tim Scrum.
+Profil yang cocok: developer, tester, UI/UX designer, system analyst — biasanya jadi satu tim Scrum.
 
 ### 6.4 Ukuran Tim Ideal
 
@@ -414,7 +414,7 @@ Setiap artifact berisi **commitment** tertentu — janji yang diukur.
 - Diprioritaskan oleh **Product Owner**.
 - Item di atas (high priority) lebih **detail**, di bawah lebih kasar.
 
-Contoh isi di BSI:
+Contoh isi (studi kasus Tabungan Haji BSI):
 ```
 [High priority — siap untuk Sprint mendatang]
 - User story: "Sebagai nasabah, saya bisa setor dana via QRIS ke tabungan haji"
@@ -654,7 +654,7 @@ Kanban adalah framework Agile lain yang populer. Bukan saingan — lebih ke alte
 
 **Scrumban**: kombinasi keduanya — pakai Sprint dari Scrum + WIP limit & continuous flow dari Kanban. Sering dipakai untuk tim hybrid (product + support).
 
-### Kapan Pakai Apa di BSI?
+### Kapan Pakai Apa?
 
 | Tim | Cocok pakai |
 |---|---|
@@ -730,13 +730,13 @@ flowchart TD
 | MCP servers (extension) | Ya | Ya |
 | Cocok untuk | Brainstorming, learning, dokumen | Coding aktif, refactor, automation |
 
-**Best practice di pelatihan ODP BSI**: pakai **keduanya bersamaan**.
+**Best practice di pelatihan ini**: pakai **keduanya bersamaan**.
 - **Claude Desktop** → diskusi konsep, generate snippet, analisis requirement.
 - **Claude Code (CLI)** → eksekusi di project (build endpoint, run test, commit).
 
-### 13.2 Kenapa Claude untuk ODP BSI?
+### 13.2 Kenapa Claude untuk Pelatihan Ini?
 
-| Aspek | Manfaat di konteks BSI |
+| Aspek | Manfaat di konteks perbankan |
 |---|---|
 | **Kualitas tinggi** | Claude Sonnet/Opus excel di reasoning kompleks (regulasi syariah, audit logic) |
 | **Context window besar** | 200K token — bisa baca seluruh module/repo dalam 1 sesi |
@@ -842,7 +842,7 @@ build
 
 `CLAUDE.md` adalah file di root project yang berisi **instruksi & konteks** untuk Claude. Setiap kali Anda chat / minta perubahan di project itu, Claude akan baca file ini dulu.
 
-Contoh `CLAUDE.md` untuk project banking BSI:
+Contoh `CLAUDE.md` untuk project banking (studi kasus Tabungan Haji BSI):
 
 ```markdown
 # Konteks Proyek
@@ -993,7 +993,7 @@ Lanjutannya akan dipakai di **Modul 2 — RESTful API & Database Modeling**, di 
 ### Yang harus Anda kuasai setelah modul ini
 
 **Konsep SDLC & Agile:**
-- [ ] Bisa menjelaskan 7 fase SDLC dan contohnya di BSI.
+- [ ] Bisa menjelaskan 7 fase SDLC dan contoh penerapannya di industri perbankan.
 - [ ] Tahu beda Waterfall, Iterative, Agile — dan kapan pilih masing-masing.
 - [ ] Hafal 4 nilai Agile dan minimal 6 dari 12 prinsip-nya.
 
@@ -1034,7 +1034,7 @@ Lanjutannya akan dipakai di **Modul 2 — RESTful API & Database Modeling**, di 
 
 ---
 
-### Roadmap 5 Hari IT Development ODP BSI
+### Roadmap 5 Hari IT Development
 
 | Hari | Modul | Topik |
 |---|---|---|
