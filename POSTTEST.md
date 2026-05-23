@@ -3,7 +3,7 @@
 **Durasi**: 30 menit
 **Total Soal**: 20 Pilihan Ganda
 **Bobot**: 5 poin per soal (Total 100)
-**Tujuan**: Mengukur penguasaan peserta setelah mengikuti 5 modul pelatihan (H1–H5). Konteks: studi kasus **Tabungan Haji BSI** yang dibangun sepanjang pelatihan.
+**Tujuan**: Mengukur penguasaan peserta setelah mengikuti 5 modul pelatihan (H1–H5).
 
 ---
 
@@ -31,12 +31,12 @@
 - B. Daily Scrum, setiap hari oleh masing-masing developer
 - C. Sprint Retrospective, setelah Sprint selesai sebagai dokumentasi
 
-**2. Untuk fitur QRIS Tabungan Haji yang sudah ditentukan & regulasi-nya ketat, **branching strategy** yang paling cocok untuk tim BSI adalah …**
-- A. Trunk-Based Development dengan commit langsung ke `main`
-- B. Tidak pakai branching, semua kerja di file yang sama
-- C. Git Flow dengan branch `main`, `develop`, `feature/*`, `release/*`, `hotfix/*`
+**2. Dalam Scrum, akuntabilitas **Scrum Master** berfungsi sebagai …**
+- A. Pengambil keputusan teknis paling akhir
+- B. Servant-leader yang membantu tim menjalankan Scrum efektif, menghilangkan impediment, dan coaching
+- C. Pengganti project manager yang memberi perintah ke developer
 
-**3. Saat memakai Cursor IDE untuk proyek banking, fitur yang **wajib diaktifkan** supaya kode tidak ke-collect untuk training AI adalah …**
+**3. Fitur yang **wajib diaktifkan** di Cursor IDE supaya kode tidak ke-collect untuk training AI adalah …**
 - A. Privacy Mode
 - B. Composer Mode
 - C. Tab Autocomplete
@@ -50,49 +50,49 @@
 
 ## BAGIAN B — RESTful API & PostgreSQL (Soal 5–8)
 
-**5. Endpoint REST yang paling tepat untuk **setor saldo** ke tabungan haji adalah …**
-- A. `POST /api/v1/tabungan-haji/PSTH-001/setor`
-- B. `GET /api/v1/setor?id=PSTH-001&nominal=500000`
-- C. `POST /api/v1/setorTabunganHaji`
+**5. Untuk operasi **create resource baru** di REST API, kombinasi HTTP method dan format URL yang paling tepat adalah …**
+- A. `POST /api/v1/users`
+- B. `GET /api/v1/createUser?nama=...`
+- C. `POST /api/v1/createUser`
 
-**6. Pola **idempotency** di endpoint setor saldo penting karena …**
-- A. Supaya nasabah bisa setor saldo sebanyak mungkin tanpa limit
-- B. Supaya kalau request di-retry karena timeout, saldo tidak bertambah ganda
-- C. Supaya endpoint bisa di-cache di browser
+**6. Pola **idempotency** dalam REST API penting karena …**
+- A. Supaya endpoint bisa di-cache di browser
+- B. Supaya request yang di-retry (karena timeout/jaringan) tidak menghasilkan efek samping ganda
+- C. Supaya client bisa melakukan request sebanyak mungkin tanpa limit
 
-**7. Untuk menyimpan **saldo dalam Rupiah** di PostgreSQL, tipe data yang paling tepat adalah …**
+**7. Untuk menyimpan **nilai uang** (dalam satuan Rupiah penuh) di PostgreSQL, tipe data yang paling tepat adalah …**
 - A. `FLOAT` atau `DOUBLE` karena bisa menyimpan desimal
 - B. `BIGINT` atau `NUMERIC` karena presisi akurat (tidak ada error pembulatan)
 - C. `VARCHAR` karena bisa disimpan dengan format "Rp 1.000.000"
 
-**8. Saat memproses setor saldo (update tabel `tabungan_haji` + insert ke `transaksi` + insert `audit_log`), keseluruhan operasi harus dibungkus dalam …**
+**8. Saat memproses operasi yang melibatkan **update beberapa tabel sekaligus** (mis. update saldo + insert transaksi + insert audit log), keseluruhan operasi harus dibungkus dalam …**
 - A. Multiple `try/catch` terpisah agar bisa partial success
 - B. Single function tanpa proteksi khusus
-- C. Database transaction (`prisma.$transaction(...)`) agar atomik — semua atau tidak sama sekali
+- C. Database transaction agar atomik — semua atau tidak sama sekali
 
 ---
 
 ## BAGIAN C — React/Next.js (Soal 9–12)
 
-**9. Di Next.js dengan App Router, file yang merepresentasikan halaman di route `/tabungan` adalah …**
-- A. `pages/tabungan.js`
-- B. `app/tabungan/page.tsx`
-- C. `routes/tabungan.tsx`
+**9. Di Next.js dengan **App Router**, file yang merepresentasikan halaman di route `/produk` adalah …**
+- A. `pages/produk.js`
+- B. `app/produk/page.tsx`
+- C. `routes/produk.tsx`
 
 **10. Untuk membuat component yang memakai `useState` dan event handler `onClick`, di Next.js App Router perlu menambahkan directive …**
 - A. `"use server"` di atas file
 - B. `"use strict"` di atas file
 - C. `"use client"` di atas file
 
-**11. Library yang dipakai di Modul 3 untuk **caching, refetch, dan mutation** API dari React adalah …**
+**11. Library yang dipakai di Modul 3 untuk **caching, refetch otomatis, dan mutation** API dari React adalah …**
 - A. TanStack Query (React Query)
 - B. Lodash
 - C. Redux Saga
 
-**12. Untuk **format Rupiah konsisten** di seluruh aplikasi (mis. "Rp 5.000.000"), pendekatan yang paling tepat adalah …**
-- A. Pakai helper function dengan `Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR" })`
-- B. Concat string manual: `"Rp " + nominal`
-- C. Pakai `toFixed(2)` lalu tambahkan "Rp" di depan
+**12. Untuk **format angka konsisten** sesuai locale Indonesia (mis. 5000000 → "5.000.000"), pendekatan yang paling tepat adalah …**
+- A. Pakai `Intl.NumberFormat("id-ID", ...)` sebagai helper bersama
+- B. Concat string manual dengan pemisah titik di tiap 3 digit
+- C. Pakai `toFixed(2)` lalu tambahkan separator manual
 
 ---
 
@@ -104,16 +104,16 @@
 - C. Project hanya boleh punya satu repository
 
 **14. Manakah dari berikut yang termasuk **code smell** yang perlu di-refactor?**
-- A. Function dengan nama deskriptif yang panjang seperti `hitungBagiHasilSyariah`
-- B. Pemakaian konstanta seperti `const MIN_SALDO = 100_000`
-- C. Magic number di kode seperti `if (saldo < 100000) { ... }` tanpa konstanta dengan nama
+- A. Function dengan nama deskriptif yang panjang seperti `hitungBagiHasilBulanan`
+- B. Pemakaian konstanta seperti `const MIN_NOMINAL = 100_000`
+- C. Magic number di kode seperti `if (nominal < 100000) { ... }` tanpa konstanta dengan nama
 
 **15. Pattern AAA dalam unit test adalah …**
 - A. Arrange → Act → Assert
 - B. Authentication → Authorization → Audit
 - C. Add → Append → Apply
 
-**16. Saat refactor `tabungan.service.ts` (Modul 4), pendekatan yang **paling efektif** memakai Cursor IDE adalah …**
+**16. Saat melakukan refactor kode existing, pendekatan yang **paling efektif** memakai Cursor IDE adalah …**
 - A. Hapus semua kode lama lalu minta AI bikin ulang dari nol
 - B. Highlight kode lalu Cmd+K untuk minta refactor spesifik (mis. "extract function", "fix SRP violation")
 - C. Copy kode ke ChatGPT browser, paste hasilnya kembali
@@ -122,22 +122,22 @@
 
 ## BAGIAN E — Git Flow & Docker (Soal 17–20)
 
-**17. Saat ada bug urgent di production (saldo bisa jadi negatif), branch yang harus dibuat adalah …**
-- A. `feature/fix-saldo-negatif` dari `develop`
-- B. `hotfix/saldo-negatif` dari `main` (lalu merge balik ke `main` dan `develop`)
+**17. Saat ada **bug urgent di production**, branch yang harus dibuat menurut Git Flow adalah …**
+- A. `feature/*` dari `develop`
+- B. `hotfix/*` dari `main` (lalu merge balik ke `main` dan `develop`)
 - C. Langsung commit ke `main` tanpa branch
 
-**18. Format **Conventional Commit** yang benar untuk perubahan menambahkan endpoint setor adalah …**
+**18. Format **Conventional Commit** yang benar untuk perubahan menambahkan fitur baru adalah …**
 - A. `update some files`
-- B. `add setor endpoint to tabungan`
-- C. `feat(tabungan): tambah endpoint setor via QRIS`
+- B. `add new feature`
+- C. `feat(modul): tambah fitur X untuk Y`
 
 **19. Dalam Dockerfile, alasan utama memakai **multi-stage build** adalah …**
 - A. Supaya image final lebih kecil karena hanya bawa hasil build, tidak bawa devDependencies & source code
 - B. Supaya image build lebih lama dan teliti
 - C. Supaya Dockerfile lebih panjang dan terlihat profesional
 
-**20. Di `docker-compose.yml` untuk stack Tabungan Haji (API + Web + PostgreSQL), cara API mengakses database adalah dengan menulis hostname …**
+**20. Di `docker-compose.yml` dengan beberapa service (mis. `api`, `web`, `postgres`), cara service `api` mengakses `postgres` adalah dengan menulis hostname …**
 - A. `localhost` (karena semua jalan di satu mesin)
 - B. `127.0.0.1` (loopback)
 - C. `postgres` (nama service di compose — auto-resolve via Docker network)
@@ -158,7 +158,7 @@
 **Interpretasi skor:**
 - 0 – 50   : **Perlu pendampingan lanjutan** — review materi inti, ulang lab modul yang lemah
 - 51 – 75  : **Cukup baik** — bisa lanjut ke project mandiri dengan supervisi
-- 76 – 90  : **Baik** — siap kontribusi di tim pengembangan BSI
+- 76 – 90  : **Baik** — siap kontribusi di tim pengembangan
 - 91 – 100 : **Sangat baik** — kandidat peer mentor / lead developer junior
 
 **Perbandingan dengan Pretest** (evaluasi efektivitas pelatihan):
@@ -177,7 +177,7 @@
 | No | Jwb | No | Jwb |
 | -- | --- | -- | --- |
 | 1  | **A** | 3  | **A** |
-| 2  | **C** | 4  | **B** |
+| 2  | **B** | 4  | **B** |
 
 ### Bagian B — RESTful API & PostgreSQL
 | No | Jwb | No | Jwb |
