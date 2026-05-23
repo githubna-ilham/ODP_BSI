@@ -203,6 +203,15 @@ Pada Februari 2001, 17 software engineer berkumpul di Snowbird, Utah dan menyusu
 
 **Scrum** adalah framework Agile yang paling banyak diadopsi (~80% adopsi Agile pakai Scrum). Dibuat oleh Ken Schwaber dan Jeff Sutherland. Definisi resminya ada di **Scrum Guide** (gratis, ~13 halaman).
 
+![Scrum Process — alur dari Product Backlog sampai Finished Work](./images/scrum-process.png)
+
+Diagram di atas menunjukkan **alur Scrum end-to-end** yang akan dibahas di section ini:
+- **Tiga akuntabilitas**: Product Owner, Team (Developers), Scrum Master (dibahas di §6).
+- **Input**: Product Backlog → Sprint Planning Meeting → Sprint Backlog.
+- **Sprint** (1–4 minggu) berjalan dengan **Daily Stand Up** tiap 24 jam.
+- **Output tiap Sprint**: Sprint Review + Sprint Retrospective → **Finished Work** (increment siap pakai).
+- Setelah Sprint selesai, loop kembali ke Product Backlog untuk Sprint berikutnya.
+
 ### 5.1 Apa itu Scrum?
 
 > "Scrum adalah framework ringan yang membantu orang, tim, dan organisasi menciptakan nilai melalui solusi adaptif untuk masalah kompleks." — Scrum Guide
@@ -1078,3 +1087,4 @@ Lanjutannya akan dipakai di **Modul 2 — RESTful API & Database Modeling**, di 
 - §3.2 Iterative & Incremental — adaptasi dari GeeksforGeeks.
 - §3.3 Agile — visual representasi siklus Plan-Design-Develop-Test-Deploy-Review-Launch.
 - §3.4 DevOps — infinity loop khas DevOps (Dev: code/build/test ↔ plan/release ↔ Ops: deploy/operate/monitor).
+- §5 Scrum Framework — diagram Scrum Process: roles → backlog → Sprint Planning → Sprint (Daily Stand Up) → Review/Retro → Finished Work.
