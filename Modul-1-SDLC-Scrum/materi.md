@@ -710,20 +710,240 @@ Kanban adalah framework Agile lain yang populer. Bukan saingan — lebih ke alte
 
 ---
 
-## 13. Penutup
+## 13. Setup Cursor IDE — Tool Utama Selama Pelatihan
+
+Selama 5 hari pelatihan IT Development, kita akan banyak pakai **Cursor IDE** sebagai code editor utama. Cursor adalah **AI-powered IDE** (fork dari VS Code) yang punya integrasi AI native — bisa diajak ngobrol, generate kode, refactoring, dan jawab pertanyaan tentang codebase Anda.
+
+### 13.1 Kenapa Cursor untuk ODP BSI?
+
+| Aspek | Manfaat di konteks BSI |
+|---|---|
+| **AI built-in** | Tidak perlu copy-paste ke ChatGPT — bisa langsung apply ke kode |
+| **Context-aware** | AI bisa "lihat" seluruh folder project, jawaban lebih relevan |
+| **Free tier cukup** | 2.000 completions/bulan gratis untuk peserta pelatihan |
+| **Privacy mode** | Bisa diset "Privacy Mode" — kode tidak ke-training Cursor (penting untuk kode banking) |
+| **Familiar UX** | Sama persis dengan VS Code — yang sudah pernah pakai langsung bisa |
+| **Multi-language** | Support semua bahasa: JavaScript, Python, Java, SQL, TypeScript |
+
+### 13.2 Instalasi
+
+1. Buka [cursor.com](https://cursor.com) → klik **Download**.
+2. Pilih installer sesuai OS:
+   - **Windows**: `.exe` (~120 MB)
+   - **macOS**: `.dmg` (Intel/Apple Silicon — auto-detect)
+   - **Linux**: `.AppImage` atau `.deb`
+3. Install seperti aplikasi biasa.
+4. Buka Cursor → **Sign in** (pakai Google account / GitHub).
+
+### 13.3 Setup Awal — Import VS Code Settings
+
+Kalau sudah pakai VS Code, Cursor bisa import extension & setting sekali klik:
+
+1. Saat first launch, akan muncul wizard.
+2. Pilih **Import from VS Code** → tunggu beberapa detik → semua extension & keybinding ter-copy.
+
+### 13.4 Empat Fitur Kunci yang Wajib Dikuasai
+
+```mermaid
+flowchart TD
+    Cursor["Cursor IDE"]:::root
+    Cursor --> Tab["1. Tab Autocomplete<br/>(saran kode otomatis)"]:::feat
+    Cursor --> CmdK["2. Cmd+K / Ctrl+K<br/>(inline edit)"]:::feat
+    Cursor --> Chat["3. Chat (Cmd+L)<br/>(tanya AI tentang kode)"]:::feat
+    Cursor --> Composer["4. Composer (Cmd+I)<br/>(buat/edit multi-file)"]:::feat
+
+    classDef root fill:#fef3c7,stroke:#f59e0b,stroke-width:2px
+    classDef feat fill:#dbeafe,stroke:#3b82f6
+```
+
+| Fitur | Trigger | Use case |
+|---|---|---|
+| **Tab Autocomplete** | Mulai ketik, tekan `Tab` untuk accept saran | Tulis function/loop biasa lebih cepat |
+| **Cmd+K (Inline Edit)** | Highlight kode → `Cmd+K` → ketik instruksi | "Ubah ini jadi async function", "Tambah error handling" |
+| **Chat (Cmd+L)** | `Cmd+L` → buka panel chat | Tanya "Bagaimana cara connect ke PostgreSQL?" |
+| **Composer (Cmd+I)** | `Cmd+I` → mode multi-file | "Bikin struktur project REST API untuk tabungan haji" |
+
+> Di Windows/Linux, ganti `Cmd` → `Ctrl`. Mis. `Ctrl+K`, `Ctrl+L`, `Ctrl+I`.
+
+### 13.5 Setting Wajib untuk Banking Project — Privacy Mode
+
+Kode banking sering mengandung logika sensitif (perhitungan bagi hasil syariah, validasi NIK, audit trail). Jangan biarkan kode ini ke-collect untuk training AI.
+
+**Cara aktifkan Privacy Mode:**
+
+1. Buka **Settings** (`Cmd/Ctrl + ,`).
+2. Cari **Privacy Mode**.
+3. Toggle **ON**.
+
+Saat Privacy Mode aktif:
+- Kode Anda **tidak dikirim** ke server Cursor untuk training.
+- Tetap dipakai untuk inference (dapat saran AI) — tapi tidak disimpan setelahnya.
+- Wajib untuk repo internal BSI.
+
+### 13.6 File `.cursorrules` — Customisasi AI per Project
+
+`.cursorrules` adalah file di root project yang berisi **instruksi khusus** untuk AI dalam project itu. AI akan baca file ini setiap kali Anda chat/edit.
+
+Contoh `.cursorrules` untuk project banking BSI:
+
+```
+# Konteks Proyek
+Proyek ini adalah backend service untuk sistem Tabungan Haji BSI.
+Stack: Node.js + Express + PostgreSQL + TypeScript.
+
+# Aturan Coding
+- Pakai TypeScript strict mode, hindari `any`.
+- Semua endpoint REST API harus punya validasi input pakai Zod.
+- Error response: pakai format { "error": { "code": "...", "message": "..." } }.
+- Setiap query DB harus pakai parameterized query — JANGAN string concatenation (SQL injection).
+- Tulis log audit untuk setiap operasi yang mengubah saldo.
+
+# Aturan Bisnis
+- Setoran tabungan haji minimum Rp 100.000.
+- Tidak ada bunga — pakai prinsip Wadiah (titipan) sesuai syariah.
+- Saldo tidak boleh negatif.
+
+# Aturan Naming
+- Function: camelCase, deskriptif (mis. `hitungBagiHasil`, bukan `calc`).
+- Database table: snake_case (mis. `transaksi_setor`).
+- API endpoint: kebab-case (mis. `/api/tabungan-haji/setor`).
+```
+
+Setelah file ini ada, semua jawaban AI di project akan mengikuti aturan tersebut.
+
+---
+
+## 14. Prompt Engineering — Komunikasi Efektif dengan AI
+
+Selama pelatihan, **AI bukan pengganti pikiran kritis Anda** — tapi alat yang sangat ampuh kalau tahu cara minta. Kemampuan **prompt engineering** menentukan apakah AI jadi multiplier produktivitas atau cuma menambah noise.
+
+### 14.1 Apa itu Prompt Engineering?
+
+**Prompt** = instruksi yang Anda berikan ke AI.
+**Prompt Engineering** = seni menyusun instruksi supaya AI memberi jawaban yang **akurat, relevan, dan langsung pakai**.
+
+Analogi: kalau Anda kasih instruksi vague ke staff baru ("Tolong urus laporan"), hasilnya juga vague. AI sama persis. Beda antara prompt buruk vs baik bisa **5–10x lipat efektivitas**.
+
+### 14.2 Anatomi Prompt yang Baik — Pola RCTF
+
+| Komponen | Penjelasan | Contoh |
+|---|---|---|
+| **R**ole | Beri AI peran spesifik | "Kamu adalah senior backend engineer..." |
+| **C**ontext | Konteks proyek/situasi | "...di sistem perbankan syariah BSI untuk tabungan haji" |
+| **T**ask | Tugas konkret yang diminta | "Buatkan struktur folder REST API..." |
+| **F**ormat | Format output yang diinginkan | "...dalam bentuk tree directory + penjelasan singkat per folder" |
+
+### 14.3 Anti-Pattern — Prompt yang Buruk
+
+**Contoh prompt buruk:**
+
+```
+"Buatkan API untuk tabungan"
+```
+
+Kenapa buruk?
+- Tidak ada konteks (untuk apa? bahasa apa? database apa?).
+- Tidak ada constraint (REST? GraphQL? authentication?).
+- Tidak jelas format output (kode lengkap? outline saja?).
+
+**AI akan menebak**, dan tebakannya sering tidak sesuai kebutuhan. Anda akan habis waktu revisi berulang.
+
+### 14.4 Contoh Prompt yang Baik untuk Struktur Proyek Perbankan
+
+**Konteks**: Anda diminta bikin starter project untuk REST API tabungan haji. Berikut prompt yang baik:
+
+```
+Kamu adalah senior backend engineer dengan spesialisasi sistem perbankan syariah.
+
+Konteks: Saya akan membangun REST API untuk sistem Tabungan Haji BSI.
+- Stack: Node.js + Express + TypeScript + PostgreSQL.
+- Authentication: JWT.
+- Akan ada 3 modul utama: (a) Customer Management,
+  (b) Tabungan (saldo, mutasi, setor/tarik),
+  (c) Setoran via QRIS.
+- Compliance: harus ada audit log untuk semua perubahan saldo.
+
+Task: Buatkan struktur folder & file untuk project ini, mengikuti
+best practice clean architecture (controller / service / repository layer).
+
+Format output:
+1. Tree directory dalam code block.
+2. Penjelasan singkat (1–2 kalimat) untuk setiap folder & file utama.
+3. Tidak perlu generate isi file dulu — fokus ke struktur.
+```
+
+**AI akan kasih jawaban terstruktur**: tree directory + penjelasan per file. Anda bisa langsung copy dan refine.
+
+### 14.5 Pattern Tambahan — Iterative Refinement
+
+Jangan paksa AI sempurna di satu shot. Pakai pendekatan **iteratif**:
+
+```
+Prompt 1: "Buatkan struktur folder REST API..."
+   ↓ AI kasih jawaban awal
+Prompt 2: "Saya butuh tambahan layer untuk audit logging,
+            terpisah dari business logic. Update strukturnya."
+   ↓ AI revise
+Prompt 3: "Untuk modul Tabungan, tambahkan file unit test
+            untuk setiap controller & service."
+   ↓ AI revise lagi
+```
+
+Setiap iterasi menambah refinement. Lebih efektif daripada nulis prompt 500 kata sekali.
+
+### 14.6 Banking-Specific Considerations
+
+**JANGAN PERNAH** masukkan ke prompt:
+- ❌ Data nasabah asli (nama, NIK, no rekening, saldo).
+- ❌ Credential database production.
+- ❌ Token/API key live.
+- ❌ Source code dari sistem core banking yang masih confidential.
+
+**BOLEH** masukkan ke prompt:
+- ✅ Skema database (struktur tabel, tanpa data).
+- ✅ Contoh data dummy (mis. nasabah fiktif "Ahmad" / "Sari").
+- ✅ Logika bisnis umum (prinsip syariah, alur transaksi).
+- ✅ Aturan compliance/regulasi yang sudah publik.
+
+### 14.7 Latihan Praktik
+
+Setelah Cursor IDE ter-install dan Anda paham 4 fitur kunci, coba latihan berikut:
+
+1. **Buka Composer (Cmd+I)** di folder kosong.
+2. **Paste prompt RCTF** dari §14.4.
+3. **Inspect output** AI — bandingkan dengan ekspektasi Anda.
+4. **Iterate** — minta refinement minimal 2x.
+5. **Apply** struktur yang dihasilkan ke folder local.
+
+Lanjutannya akan dipakai di **Modul 2 — RESTful API & Database Modeling**, di mana folder ini akan diisi dengan endpoint & migration PostgreSQL.
+
+---
+
+## 15. Penutup
 
 ### Yang harus Anda kuasai setelah modul ini
 
+**Konsep SDLC & Agile:**
 - [ ] Bisa menjelaskan 7 fase SDLC dan contohnya di BSI.
 - [ ] Tahu beda Waterfall, Iterative, Agile — dan kapan pilih masing-masing.
 - [ ] Hafal 4 nilai Agile dan minimal 6 dari 12 prinsip-nya.
-- [ ] Paham peran Product Owner, Scrum Master, dan Developers — bisa identify kalau ada anti-pattern.
-- [ ] Bisa jalankan / berpartisipasi di 5 Scrum events (terutama Daily Scrum, Planning, Review, Retro).
+
+**Scrum Framework:**
+- [ ] Paham peran Product Owner, Scrum Master, dan Developers.
+- [ ] Bisa jalankan / berpartisipasi di 5 Scrum events.
 - [ ] Bisa baca Product Backlog & Sprint Backlog.
 - [ ] Bisa tulis user story format `Sebagai... saya ingin... sehingga...` + acceptance criteria.
 - [ ] Paham Definition of Done & Definition of Ready.
 - [ ] Bisa membaca burn-down chart & velocity.
 - [ ] Sadar tantangan implementasi Agile di banking & strategi mitigasinya.
+
+**Tooling (Cursor IDE & Prompt Engineering):**
+- [ ] Cursor IDE sudah ter-install, Privacy Mode aktif.
+- [ ] Hafal 4 fitur kunci: Tab Autocomplete, Cmd+K, Chat (Cmd+L), Composer (Cmd+I).
+- [ ] Bisa setup `.cursorrules` per project.
+- [ ] Paham pola **RCTF** (Role-Context-Task-Format) untuk prompt yang baik.
+- [ ] Bisa generate struktur proyek perbankan via Composer AI dengan iterative refinement.
+- [ ] Tahu data apa yang **boleh & tidak boleh** dimasukkan ke prompt (banking-specific privacy).
 
 ### Bacaan & Sertifikasi Lanjutan
 
@@ -731,9 +951,23 @@ Kanban adalah framework Agile lain yang populer. Bukan saingan — lebih ke alte
 |---|---|
 | **Scrum Guide 2020** (scrumguides.org) | Definisi resmi Scrum, ~13 halaman, wajib baca |
 | **Agile Manifesto** (agilemanifesto.org) | Nilai & prinsip dasar |
+| **Cursor Docs** (docs.cursor.com) | Referensi resmi fitur Cursor IDE |
+| **Prompt Engineering Guide** (promptingguide.ai) | Best practices prompt engineering lintas use case |
 | Sertifikasi **PSM I** (Professional Scrum Master) | Dari scrum.org, tes online, fundamental |
 | Sertifikasi **PSPO I** (Product Owner) | Untuk yang akan jadi PO |
 | Buku **"Scrum: The Art of Doing Twice the Work in Half the Time"** — Jeff Sutherland | Pengarang Scrum sendiri |
 | Buku **"User Story Mapping"** — Jeff Patton | Untuk paham backlog management |
 
-**Selanjutnya**: Modul 2 — (akan ditentukan: bisa Project Management Lanjutan, atau Software Architecture Dasar, atau Banking IT Operations).
+---
+
+### Roadmap 5 Hari IT Development ODP BSI
+
+| Hari | Modul | Topik |
+|---|---|---|
+| **H1** ← Anda di sini | **Modul 1** | SDLC, Agile & Setup Cursor IDE + Prompt Engineering |
+| H2 | Modul 2 | RESTful API & Database Modeling (PostgreSQL) — auto-generate API endpoints |
+| H3 | Modul 3 | React/Next.js & Integrasi API — asistensi UI Component pakai Claude 3.5 Sonnet |
+| H4 | Modul 4 | Prinsip SOLID & Clean Code + Automated Unit Testing — refactoring kode pakai AI |
+| H5 | Modul 5 | Git Flow & Dockerizing Apps — best practice version control & containerisasi |
+
+**Selanjutnya**: **Modul 2 — RESTful API & Database Modeling (PostgreSQL)**. Anda akan pakai Cursor IDE + prompt engineering yang dipelajari di hari ini untuk auto-generate endpoint API tabungan haji yang sudah didesain di sesi Sprint Planning.
