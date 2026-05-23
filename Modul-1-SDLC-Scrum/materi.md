@@ -87,12 +87,9 @@ SDLC adalah **konsep umum**. Cara menjalankannya bermacam-macam. Berikut model u
 
 **Karakteristik**: fase berurutan, satu fase harus selesai sebelum fase berikutnya dimulai. Mirip air terjun — air mengalir ke bawah, tidak balik ke atas.
 
-```
-Planning ─→ Analysis ─→ Design ─→ Impl ─→ Testing ─→ Deploy
-   │           │          │        │         │         │
-   └───────────┴──────────┴────────┴─────────┴─────────┘
-              Tidak ada balik arah (idealnya)
-```
+![Waterfall Model — 5 Fase Berurutan](./images/waterfall.png)
+
+Lima fase klasik Waterfall: **Requirements Analysis → Design → Development → Testing → Maintenance**. Tiap fase punya output yang menjadi input fase berikutnya.
 
 **Cocok untuk**:
 - Project dengan requirement sangat jelas & tidak akan berubah (contoh: implementasi sistem yang sudah mature)
