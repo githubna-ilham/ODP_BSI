@@ -188,14 +188,80 @@ Detail Agile + Scrum (akuntabilitas, events, artifacts) dibahas mendalam di **§
 
 ### 3.4 DevOps
 
-Bukan SDLC model tradisional, tapi **pendekatan budaya** yang menggabungkan Development dan Operations. Fokus pada otomasi, continuous integration, continuous deployment (CI/CD).
+**DevOps** adalah **pendekatan budaya + praktik teknis** yang menggabungkan **Dev**elopment dan **Op**eration**s** dalam satu workflow terpadu. Bukan SDLC model tradisional seperti Waterfall/Agile — DevOps lebih ke **filosofi & set practice** yang melengkapi metodologi lain.
+
+Inti masalah yang dipecahkan DevOps: di banyak organisasi tradisional, **tim Dev** (yang nulis kode) dan **tim Ops** (yang deploy & maintain) **terpisah dan sering konflik** — Dev pengen rilis cepat, Ops pengen stabil. DevOps menghapus tembok itu.
+
+#### Pipeline DevOps — Continuous Loop
 
 ```
-Dev ─→ Build ─→ Test ─→ Release ─→ Deploy ─→ Operate ─→ Monitor ─→ Dev
-                       (automated)
+Plan → Code → Build → Test → Release → Deploy → Operate → Monitor → Plan (loop)
+              └────────── (automated CI/CD) ───────────┘
 ```
 
-**Cocok untuk**: aplikasi yang butuh rilis sering, layanan cloud-native.
+| Fase | Aktivitas Utama | Tool umum |
+|---|---|---|
+| **Plan** | Backlog, requirement, design | Jira, Linear, Notion |
+| **Code** | Tulis kode, version control | Git, GitHub/GitLab |
+| **Build** | Compile, bundle, dependency install | npm, Maven, Docker |
+| **Test** | Unit, integration, E2E test | Jest/Vitest, Cypress |
+| **Release** | Tag version, generate artifact | Semantic versioning, GitHub Releases |
+| **Deploy** | Kirim artifact ke server/cloud | Kubernetes, Docker Compose, AWS ECS |
+| **Operate** | Run, scale, manage incident | PagerDuty, OpsGenie |
+| **Monitor** | Cek metrics, logs, error rate | Grafana, Prometheus, Datadog, Sentry |
+
+Output monitoring jadi input fase Plan berikutnya — loop berkelanjutan.
+
+#### Tiga Pilar DevOps
+
+| Pilar | Penjelasan |
+|---|---|
+| **CALMS** (budaya) | **C**ulture, **A**utomation, **L**ean, **M**easurement, **S**haring |
+| **CI/CD** (praktik teknis) | **Continuous Integration**: tiap commit otomatis di-build & di-test. **Continuous Deployment**: tiap merge ke main otomatis rilis ke production |
+| **IaC** (Infrastructure as Code) | Server config ditulis sebagai kode (Terraform, Ansible), bukan klik-klik manual |
+
+#### Karakteristik Utama
+
+- **Otomasi**: setiap step manual yang berulang harus dijadikan otomatis (build, test, deploy).
+- **Shift-left testing**: testing dilakukan **sedini mungkin**, bukan di akhir.
+- **Continuous Feedback**: monitoring → alert → fix dalam hitungan jam, bukan minggu.
+- **Shared responsibility**: Dev & Ops tanggung jawab bersama atas kualitas & uptime.
+- **Immutable infrastructure**: server tidak diutak-atik in-place — selalu rebuild dari kode (Docker image, Terraform).
+- **Rilis kecil & sering**: 10x/hari deploy normal di perusahaan DevOps-mature (Netflix, Amazon).
+
+#### Kapan Pakai DevOps?
+
+**Cocok untuk:**
+- Aplikasi yang **butuh rilis sering** — mobile banking, web service, API publik.
+- Layanan **cloud-native** — natively butuh CI/CD untuk auto-scale & auto-deploy.
+- Tim yang **bertanggung jawab end-to-end** terhadap service (build + deploy + operate).
+- Organisasi yang ingin **mengurangi lead time** dari commit ke production.
+
+**Tantangan untuk industri perbankan:**
+- **Regulasi**: tidak semua sistem bisa di-deploy continuous — core banking biasanya tetap pakai release schedule terkoordinasi.
+- **Risk-averse culture**: tim Risk & Compliance butuh waktu adaptasi.
+- **Legacy system**: integrasi dengan mainframe / sistem lama susah di-otomasi 100%.
+
+#### Implementasi DevOps di BSI
+
+| Komponen Sistem BSI | Cocok DevOps? | Strategi |
+|---|---|---|
+| Mobile banking, web banking | ✅ Ya — penuh | Full CI/CD, rilis 2-mingguan, blue-green deployment |
+| API gateway, micro-service baru | ✅ Ya — penuh | Containerize (Docker), Kubernetes, GitOps |
+| Internet banking (legacy) | ⚠️ Sebagian | Modernize bertahap, deploy via release train |
+| Core banking syariah | ❌ Tidak | Tetap Waterfall + scheduled release, butuh approval OJK |
+| Data warehouse / reporting | ⚠️ Sebagian | DataOps — pipeline data ter-otomasi, tapi schema change tetap di-review |
+
+#### DevOps vs Agile — Apa Bedanya?
+
+Sering disamakan, tapi sebenarnya **komplemen**:
+
+- **Agile** = cara tim Dev mengorganisir pekerjaan (Sprint, retrospective, backlog).
+- **DevOps** = cara Dev + Ops berkolaborasi & otomasi pipeline dari code ke production.
+
+Tim modern di BSI biasanya pakai **keduanya bersamaan**: Agile/Scrum untuk planning + dev, DevOps untuk build + deploy + monitor.
+
+Detail praktis DevOps (Dockerfile, CI/CD pipeline, GitHub Actions) dibahas mendalam di **Modul 5 — Git Flow & Dockerizing Apps**.
 
 ### 3.5 Pemilihan Model — Ringkasan
 
