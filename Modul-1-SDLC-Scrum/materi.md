@@ -115,13 +115,9 @@ Setelah **Initial Planning**, project masuk loop **Planning → Requirements →
 
 **Agile** adalah **mindset** pengembangan software yang menekankan adaptasi cepat terhadap perubahan, kolaborasi dengan customer, dan delivery rutin software yang bernilai. Diformalkan tahun **2001** lewat *Agile Manifesto*. Bukan satu metodologi spesifik — Scrum, Kanban, XP, SAFe semuanya implementasi mindset Agile.
 
-```
-Sprint 1 ─→ Sprint 2 ─→ Sprint 3 ─→ ... → Release
-   ↑           ↑           ↑
-   └───── Feedback ────────┘
-```
+![Agile — Plan, Design, Develop, Test, Deploy, Review, Launch (looping)](./images/agile.png)
 
-Tiap iterasi (Sprint 1–4 minggu) menghasilkan increment software yang siap dipakai. Feedback stakeholder masuk ke Sprint berikutnya.
+Alur Agile: **Plan → Design → Develop → Test → Deploy → Review → (kembali ke Design)** lalu **Launch** di akhir. Tiap iterasi (Sprint 1–4 minggu) menghasilkan increment software yang siap dipakai. Feedback stakeholder masuk ke Sprint berikutnya.
 
 **Cocok untuk**: product development di mana requirement bisa berubah, time-to-market penting, dan team relatif kecil (5–9 orang). Di BSI: pengembangan mobile banking, fitur digital baru.
 
@@ -1040,3 +1036,44 @@ Lanjutannya akan dipakai di **Modul 2 — RESTful API & Database Modeling**, di 
 | H5 | Modul 5 | Git Flow & Dockerizing Apps — best practice version control & containerisasi |
 
 **Selanjutnya**: **Modul 2 — RESTful API & Database Modeling (PostgreSQL)**. Anda akan pakai Claude Code Pro (Desktop + CLI) untuk auto-generate endpoint API tabungan haji yang sudah didesain di sesi Sprint Planning.
+
+---
+
+## Referensi
+
+### Materi Konseptual
+
+- **Agile Manifesto** — [agilemanifesto.org](https://agilemanifesto.org). Sumber asli 4 nilai + 12 prinsip Agile (2001).
+- **Scrum Guide 2020** — [scrumguides.org](https://scrumguides.org). Definisi resmi Scrum, ~13 halaman, gratis.
+- **DevOps Roadmap** — [roadmap.sh/devops](https://roadmap.sh/devops). Visual roadmap belajar DevOps dari pemula.
+- **Atlassian Agile Coach** — [atlassian.com/agile](https://atlassian.com/agile). Tutorial Agile, Scrum, Kanban praktis.
+
+### Artikel Pendukung
+
+- **SDLC Metode Waterfall** — Dot Intern (Medium): [medium.com/dot-intern/sdlc-metode-waterfall-5ae2071f161d](https://medium.com/dot-intern/sdlc-metode-waterfall-5ae2071f161d). Referensi diagram Waterfall.
+- **GeeksforGeeks — SDLC Models** — [geeksforgeeks.org/software-engineering-sdlc-models](https://www.geeksforgeeks.org/software-engineering-sdlc-models/). Perbandingan SDLC models lengkap.
+- **Phases of Iterative Incremental Model** — GeeksforGeeks. Referensi diagram §3.2.
+
+### Buku
+
+- **"Scrum: The Art of Doing Twice the Work in Half the Time"** — Jeff Sutherland. Co-creator Scrum sendiri yang menulis.
+- **"User Story Mapping"** — Jeff Patton. Backlog management & product discovery.
+- **"The Phoenix Project"** — Gene Kim. Novel tentang transformasi DevOps di perusahaan IT.
+
+### Sertifikasi
+
+- **PSM I** (Professional Scrum Master) — [scrum.org/PSM-I](https://www.scrum.org/professional-scrum-master-i-certification). Tes online, fundamental Scrum.
+- **PSPO I** (Professional Scrum Product Owner) — [scrum.org/PSPO-I](https://www.scrum.org/professional-scrum-product-owner-i-certification). Untuk yang akan jadi PO.
+- **CSM** (Certified ScrumMaster) — [scrumalliance.org](https://scrumalliance.org). Alternatif PSM, butuh training class.
+
+### Tooling Pelatihan
+
+- **Claude Code Docs** — [docs.claude.com/claude-code](https://docs.claude.com/claude-code). Referensi resmi Claude Code CLI.
+- **Anthropic Docs** — [docs.anthropic.com](https://docs.anthropic.com). Claude API, Desktop, dan best practices prompt.
+- **Prompt Engineering Guide** — [promptingguide.ai](https://www.promptingguide.ai). Best practices prompt lintas use case.
+
+### Gambar dalam Materi Ini
+
+- §3.1 Waterfall — referensi diagram dari artikel Medium "SDLC Metode Waterfall".
+- §3.2 Iterative & Incremental — adaptasi dari GeeksforGeeks.
+- §3.3 Agile — visual representasi siklus Plan-Design-Develop-Test-Deploy-Review-Launch.
