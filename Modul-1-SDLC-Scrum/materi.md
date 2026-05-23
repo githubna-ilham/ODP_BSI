@@ -129,10 +129,9 @@ Alur Agile: **Plan → Design → Develop → Test → Deploy → Review → (ke
 
 **DevOps** adalah **pendekatan budaya + praktik teknis** yang menggabungkan **Dev**elopment dan **Op**eration**s**. Bukan SDLC model tradisional — lebih ke filosofi & set practice yang melengkapi metodologi lain (Agile, Waterfall). Fokus utama: **otomasi**, **continuous integration / continuous deployment (CI/CD)**, dan tim Dev + Ops yang shared responsibility.
 
-```
-Plan → Code → Build → Test → Release → Deploy → Operate → Monitor → Plan (loop)
-              └────────── (automated CI/CD) ───────────┘
-```
+![DevOps Infinity Loop — Dev (code, build, test) ↔ plan & release ↔ Ops (deploy, operate, monitor)](./images/devops.png)
+
+Diagram infinity (∞) menggambarkan **loop berkelanjutan tanpa akhir**: sisi **Dev** (code → build → test) terhubung dengan sisi **Ops** (deploy → operate → monitor) lewat fase **plan** & **release** di tengah. Output monitor jadi input plan berikutnya.
 
 **Karakteristik utama**: otomasi pipeline (build/test/deploy), shift-left testing, immutable infrastructure (Docker, Terraform), rilis kecil & sering.
 
@@ -1077,3 +1076,4 @@ Lanjutannya akan dipakai di **Modul 2 — RESTful API & Database Modeling**, di 
 - §3.1 Waterfall — referensi diagram dari artikel Medium "SDLC Metode Waterfall".
 - §3.2 Iterative & Incremental — adaptasi dari GeeksforGeeks.
 - §3.3 Agile — visual representasi siklus Plan-Design-Develop-Test-Deploy-Review-Launch.
+- §3.4 DevOps — infinity loop khas DevOps (Dev: code/build/test ↔ plan/release ↔ Ops: deploy/operate/monitor).
