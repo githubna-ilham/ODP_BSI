@@ -113,155 +113,40 @@ Setelah **Initial Planning**, project masuk loop **Planning → Requirements →
 
 ### 3.3 Agile
 
-**Agile** adalah **mindset / filosofi** pengembangan software yang menekankan **adaptasi cepat terhadap perubahan**, kolaborasi langsung dengan customer, dan delivery rutin software yang bernilai. Diformalkan tahun **2001** lewat *Agile Manifesto* yang ditandatangani 17 software engineer.
-
-Penting dipahami: **Agile bukan satu metodologi spesifik**. Agile adalah payung yang menaungi banyak framework — yang paling populer:
-
-| Framework | Karakteristik |
-|---|---|
-| **Scrum** | Time-boxed Sprint (2 minggu), 3 akuntabilitas (PO/SM/Dev), 5 events |
-| **Kanban** | Visual board + WIP limit, continuous flow tanpa Sprint |
-| **XP** (Extreme Programming) | Engineering practice: TDD, pair programming, CI |
-| **SAFe** (Scaled Agile Framework) | Agile untuk enterprise/multi-tim (50+ orang) |
-| **Scrumban** | Hybrid Scrum + Kanban |
-
-Modul ini fokus ke **Scrum** sebagai framework Agile terpopuler — dibahas mendalam di §5.
-
-#### Empat Nilai Agile (dari Manifesto)
-
-Agile lebih menghargai:
-
-| Lebih dari | … daripada | Maksudnya |
-|---|---|---|
-| **Individu & interaksi** | proses & tools | Tools penting, tapi yang bikin software jalan adalah orang & komunikasi |
-| **Software yang berfungsi** | dokumentasi komprehensif | Dokumen tetap perlu, tapi prioritas: kode yang jalan & bermanfaat |
-| **Kolaborasi customer** | negosiasi kontrak | Customer = partner, bukan lawan negosiasi |
-| **Merespons perubahan** | mengikuti rencana | Rencana dibuat untuk berubah seiring pemahaman bertambah |
-
-**Penting**: bukan "kanan tidak penting" — keduanya penting, tapi yang **kiri lebih diprioritaskan**.
-
-#### Alur Iterasi Sprint
+**Agile** adalah **mindset** pengembangan software yang menekankan adaptasi cepat terhadap perubahan, kolaborasi dengan customer, dan delivery rutin software yang bernilai. Diformalkan tahun **2001** lewat *Agile Manifesto*. Bukan satu metodologi spesifik — Scrum, Kanban, XP, SAFe semuanya implementasi mindset Agile.
 
 ```
 Sprint 1 ─→ Sprint 2 ─→ Sprint 3 ─→ ... → Release
    ↑           ↑           ↑
    └───── Feedback ────────┘
-       (continuous)
 ```
 
-Tiap Sprint (biasanya 2 minggu) menghasilkan **increment software yang siap dipakai**. Stakeholder beri feedback di Sprint Review → masuk ke Sprint berikutnya. Bukan menunggu sampai semua fitur selesai baru rilis.
+Tiap iterasi (Sprint 1–4 minggu) menghasilkan increment software yang siap dipakai. Feedback stakeholder masuk ke Sprint berikutnya.
 
-#### Karakteristik Utama
+**Cocok untuk**: product development di mana requirement bisa berubah, time-to-market penting, dan team relatif kecil (5–9 orang). Di BSI: pengembangan mobile banking, fitur digital baru.
 
-- **Iterasi pendek**: Sprint 1–4 minggu, tidak lebih. Goal: dapat feedback cepat.
-- **Cross-functional team**: 1 tim bisa kerjakan analysis, design, code, test — bukan dibagi per spesialisasi yang harus handoff.
-- **Self-organizing**: tim sendiri yang putuskan cara terbaik mengerjakan. Manager tidak micro-manage.
-- **Embrace change**: perubahan requirement di Sprint berikutnya = welcome, bukan masalah.
-- **Working software > documentation**: prioritas selalu kode yang jalan.
+**Tidak cocok untuk**: sistem dengan regulasi sangat ketat yang butuh upfront full specification (mis. core banking).
 
-#### Kapan Pakai Agile?
-
-**Cocok untuk:**
-- **Product development** di mana requirement bisa berubah seiring user feedback (mis. mobile banking BSI, fitur digital baru).
-- **Time-to-market penting** — perlu rilis kecil & sering, bukan rilis besar di akhir.
-- Tim **relatif kecil** (5–9 orang per Scrum team).
-- Tim yang **co-located** atau punya remote tooling matang (Slack, Zoom, Jira).
-- Budaya organisasi **terbuka pada perubahan** & toleran terhadap eksperimen.
-
-**Tidak cocok untuk:**
-- Project dengan **regulasi sangat ketat** yang butuh upfront full specification (mis. sistem core banking yang harus pre-audited OJK).
-- Tim yang belum punya **disiplin teknis** (testing, CI, refactor) — Agile tanpa disiplin = chaos.
-- Tim sangat besar tanpa coaching scaling (kalau > 50 orang, perlu SAFe / LeSS).
-- Stakeholder yang **menolak terlibat aktif** — Agile butuh Product Owner yang available.
-
-#### Implementasi Agile di BSI
-
-| Use case | Framework Agile yang cocok |
-|---|---|
-| Pengembangan BSI Mobile feature baru | **Scrum** (2-week Sprint) |
-| Tim production support / bug fix | **Kanban** (continuous flow, prioritas dinamis) |
-| Tim platform (DevOps, infra) | **Kanban** atau **Scrumban** |
-| Transformasi digital lintas divisi (50+ orang) | **SAFe** atau **LeSS** |
-| Core banking migration | **Bukan Agile** — pakai Waterfall karena regulasi ketat |
-
-Detail Agile + Scrum (akuntabilitas, events, artifacts) dibahas mendalam di **§4 Manifesto Agile** dan **§5 Scrum Framework**.
+> Detail Manifesto Agile dibahas di §4, framework Scrum (akuntabilitas, events, artifacts) di §5.
 
 ### 3.4 DevOps
 
-**DevOps** adalah **pendekatan budaya + praktik teknis** yang menggabungkan **Dev**elopment dan **Op**eration**s** dalam satu workflow terpadu. Bukan SDLC model tradisional seperti Waterfall/Agile — DevOps lebih ke **filosofi & set practice** yang melengkapi metodologi lain.
-
-Inti masalah yang dipecahkan DevOps: di banyak organisasi tradisional, **tim Dev** (yang nulis kode) dan **tim Ops** (yang deploy & maintain) **terpisah dan sering konflik** — Dev pengen rilis cepat, Ops pengen stabil. DevOps menghapus tembok itu.
-
-#### Pipeline DevOps — Continuous Loop
+**DevOps** adalah **pendekatan budaya + praktik teknis** yang menggabungkan **Dev**elopment dan **Op**eration**s**. Bukan SDLC model tradisional — lebih ke filosofi & set practice yang melengkapi metodologi lain (Agile, Waterfall). Fokus utama: **otomasi**, **continuous integration / continuous deployment (CI/CD)**, dan tim Dev + Ops yang shared responsibility.
 
 ```
 Plan → Code → Build → Test → Release → Deploy → Operate → Monitor → Plan (loop)
               └────────── (automated CI/CD) ───────────┘
 ```
 
-| Fase | Aktivitas Utama | Tool umum |
-|---|---|---|
-| **Plan** | Backlog, requirement, design | Jira, Linear, Notion |
-| **Code** | Tulis kode, version control | Git, GitHub/GitLab |
-| **Build** | Compile, bundle, dependency install | npm, Maven, Docker |
-| **Test** | Unit, integration, E2E test | Jest/Vitest, Cypress |
-| **Release** | Tag version, generate artifact | Semantic versioning, GitHub Releases |
-| **Deploy** | Kirim artifact ke server/cloud | Kubernetes, Docker Compose, AWS ECS |
-| **Operate** | Run, scale, manage incident | PagerDuty, OpsGenie |
-| **Monitor** | Cek metrics, logs, error rate | Grafana, Prometheus, Datadog, Sentry |
+**Karakteristik utama**: otomasi pipeline (build/test/deploy), shift-left testing, immutable infrastructure (Docker, Terraform), rilis kecil & sering.
 
-Output monitoring jadi input fase Plan berikutnya — loop berkelanjutan.
+**Cocok untuk**: aplikasi yang butuh rilis sering — mobile banking, web service, API publik, layanan cloud-native. Di BSI: BSI Mobile, micro-service baru.
 
-#### Tiga Pilar DevOps
+**Tidak cocok untuk**: core banking syariah dengan regulasi OJK ketat → tetap pakai Waterfall + scheduled release.
 
-| Pilar | Penjelasan |
-|---|---|
-| **CALMS** (budaya) | **C**ulture, **A**utomation, **L**ean, **M**easurement, **S**haring |
-| **CI/CD** (praktik teknis) | **Continuous Integration**: tiap commit otomatis di-build & di-test. **Continuous Deployment**: tiap merge ke main otomatis rilis ke production |
-| **IaC** (Infrastructure as Code) | Server config ditulis sebagai kode (Terraform, Ansible), bukan klik-klik manual |
-
-#### Karakteristik Utama
-
-- **Otomasi**: setiap step manual yang berulang harus dijadikan otomatis (build, test, deploy).
-- **Shift-left testing**: testing dilakukan **sedini mungkin**, bukan di akhir.
-- **Continuous Feedback**: monitoring → alert → fix dalam hitungan jam, bukan minggu.
-- **Shared responsibility**: Dev & Ops tanggung jawab bersama atas kualitas & uptime.
-- **Immutable infrastructure**: server tidak diutak-atik in-place — selalu rebuild dari kode (Docker image, Terraform).
-- **Rilis kecil & sering**: 10x/hari deploy normal di perusahaan DevOps-mature (Netflix, Amazon).
-
-#### Kapan Pakai DevOps?
-
-**Cocok untuk:**
-- Aplikasi yang **butuh rilis sering** — mobile banking, web service, API publik.
-- Layanan **cloud-native** — natively butuh CI/CD untuk auto-scale & auto-deploy.
-- Tim yang **bertanggung jawab end-to-end** terhadap service (build + deploy + operate).
-- Organisasi yang ingin **mengurangi lead time** dari commit ke production.
-
-**Tantangan untuk industri perbankan:**
-- **Regulasi**: tidak semua sistem bisa di-deploy continuous — core banking biasanya tetap pakai release schedule terkoordinasi.
-- **Risk-averse culture**: tim Risk & Compliance butuh waktu adaptasi.
-- **Legacy system**: integrasi dengan mainframe / sistem lama susah di-otomasi 100%.
-
-#### Implementasi DevOps di BSI
-
-| Komponen Sistem BSI | Cocok DevOps? | Strategi |
-|---|---|---|
-| Mobile banking, web banking | ✅ Ya — penuh | Full CI/CD, rilis 2-mingguan, blue-green deployment |
-| API gateway, micro-service baru | ✅ Ya — penuh | Containerize (Docker), Kubernetes, GitOps |
-| Internet banking (legacy) | ⚠️ Sebagian | Modernize bertahap, deploy via release train |
-| Core banking syariah | ❌ Tidak | Tetap Waterfall + scheduled release, butuh approval OJK |
-| Data warehouse / reporting | ⚠️ Sebagian | DataOps — pipeline data ter-otomasi, tapi schema change tetap di-review |
-
-#### DevOps vs Agile — Apa Bedanya?
-
-Sering disamakan, tapi sebenarnya **komplemen**:
-
-- **Agile** = cara tim Dev mengorganisir pekerjaan (Sprint, retrospective, backlog).
-- **DevOps** = cara Dev + Ops berkolaborasi & otomasi pipeline dari code ke production.
-
-Tim modern di BSI biasanya pakai **keduanya bersamaan**: Agile/Scrum untuk planning + dev, DevOps untuk build + deploy + monitor.
-
-Detail praktis DevOps (Dockerfile, CI/CD pipeline, GitHub Actions) dibahas mendalam di **Modul 5 — Git Flow & Dockerizing Apps**.
+> **DevOps vs Agile** — komplemen, bukan saingan. Agile mengatur cara tim Dev bekerja (Sprint, backlog). DevOps mengatur otomasi pipeline dari code ke production. Tim modern pakai keduanya.
+>
+> Detail praktis (Dockerfile, CI/CD GitHub Actions) dibahas di **Modul 5 — Git Flow & Dockerizing Apps**.
 
 ### 3.5 Pemilihan Model — Ringkasan
 
