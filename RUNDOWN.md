@@ -45,8 +45,8 @@ Fase ini berfokus pada **penguatan konsep fundamental** dan **hands-on lab** sec
 
 | Waktu | Aktivitas Pembelajaran | Metode & Tools |
 |---|---|---|
-| 09.00 – 10.30 | Konsep **REST** (6 prinsip, HTTP methods, status codes), **API Response Contract** `{ data, error, meta }` sebagai kesepakatan dengan frontend. | Teori |
-| 10.30 – 12.00 | **Database Modeling**: ERD, normalisasi, constraint, index. Setup **PostgreSQL via Docker**. Schema design sesuai *studi kasus* (4 tabel). | Lab (Docker, psql) |
+| 08.00 – 09.30 | Konsep **REST** (6 prinsip, HTTP methods, status codes), **API Response Contract** `{ data, error, meta }` sebagai kesepakatan dengan frontend. | Teori |
+| 09.30 – 12.00 | **Database Modeling**: ERD, normalisasi, constraint, index. Setup **PostgreSQL via Docker**. Schema design sesuai *studi kasus* (4 tabel). | Lab (Docker, psql) |
 | 12.00 – 13.00 | *ISHOMA* | – |
 | 13.00 – 14.30 | Setup project **Node.js + Express + TypeScript + Prisma**. Migration awal. Pola **Controller-Service-Schema**. | Lab (Claude Code CLI) |
 | 14.30 – 16.00 | Implementasi module **Nasabah** (CRUD 5 endpoint) + endpoint **Setor saldo** (idempotency + DB transaction + audit log). JWT auth + middleware. **Test via Thunder Client**. | Lab (Claude Code CLI) |
@@ -61,8 +61,8 @@ Fase ini berfokus pada **penguatan konsep fundamental** dan **hands-on lab** sec
 
 | Waktu | Aktivitas Pembelajaran | Metode & Tools |
 |---|---|---|
-| 09.00 – 10.30 | **React fundamentals** (component, props, state, hooks) + **Next.js App Router** (Server vs Client Components, routing). | Teori |
-| 10.30 – 12.00 | Setup **Next.js + Tailwind + shadcn/ui + TanStack Query + React Hook Form**. Halaman **Login** dengan JWT auth flow. | Lab (Claude Code CLI) |
+| 08.00 – 09.30 | **React fundamentals** (component, props, state, hooks) + **Next.js App Router** (Server vs Client Components, routing). | Teori |
+| 09.30 – 12.00 | Setup **Next.js + Tailwind + shadcn/ui + TanStack Query + React Hook Form**. Halaman **Login** dengan JWT auth flow. | Lab (Claude Code CLI) |
 | 12.00 – 13.00 | *ISHOMA* | – |
 | 13.00 – 14.30 | Build halaman **Dashboard** (list kartu) + **Detail Resource**. Workflow iterate UI pakai **Claude Desktop (Artifacts)** → apply ke project via **Claude Code CLI**. | Lab (Claude Desktop + CLI) |
 | 14.30 – 16.00 | Build **Form Setor** (2-step confirmation) + **Halaman Mutasi** + Protected Route. Polish: loading skeleton, responsive, auto-logout 401. | Lab (Claude Code CLI) |
@@ -77,8 +77,8 @@ Fase ini berfokus pada **penguatan konsep fundamental** dan **hands-on lab** sec
 
 | Waktu | Aktivitas Pembelajaran | Metode & Tools |
 |---|---|---|
-| 09.00 – 10.30 | **Clean Code** (naming, function size, magic numbers) + **5 Prinsip SOLID** dengan contoh banking + **8 jenis Code Smells** umum. | Teori |
-| 10.30 – 12.00 | **Test Pyramid**, pattern **AAA**, setup **Vitest** + mocking. Tulis unit test pertama untuk service. | Lab (Vitest) |
+| 08.00 – 09.30 | **Clean Code** (naming, function size, magic numbers) + **5 Prinsip SOLID** dengan contoh banking + **8 jenis Code Smells** umum. | Teori |
+| 09.30 – 12.00 | **Test Pyramid**, pattern **AAA**, setup **Vitest** + mocking. Tulis unit test pertama untuk service. | Lab (Vitest) |
 | 12.00 – 13.00 | *ISHOMA* | – |
 | 13.00 – 14.30 | **Refactor** service utama project: pisah jadi helper kecil (SRP), inject dependency (DIP), fix smells. Generate test dari kode existing dengan Claude. | Lab (Claude Code CLI) |
 | 14.30 – 16.00 | Capai **test coverage ≥ 80%** untuk module service. Setup **ESLint + Prettier**. **Code review berpasangan**. | Lab + pair review |
@@ -93,8 +93,8 @@ Fase ini berfokus pada **penguatan konsep fundamental** dan **hands-on lab** sec
 
 | Waktu | Aktivitas Pembelajaran | Metode & Tools |
 |---|---|---|
-| 09.00 – 10.30 | **Git Flow** branching model (main, develop, feature/*, release/*, hotfix/*), **Conventional Commits**, PR best practice. | Teori |
-| 10.30 – 12.00 | Push project ke **GitHub**, setup **branch protection** + **GitHub Actions CI** (lint, typecheck, test). | Lab (Git, GitHub) |
+| 08.00 – 09.30 | **Git Flow** branching model (main, develop, feature/*, release/*, hotfix/*), **Conventional Commits**, PR best practice. | Teori |
+| 09.30 – 12.00 | Push project ke **GitHub**, setup **branch protection** + **GitHub Actions CI** (lint, typecheck, test). | Lab (Git, GitHub) |
 | 12.00 – 13.00 | *ISHOMA* | – |
 | 13.00 – 14.00 | **Docker** konsep (container vs VM), tulis **Dockerfile multi-stage** untuk API (Node) + Web (Next.js). Optimasi image size. | Lab (Docker) |
 | 14.00 – 15.00 | **Docker Compose** untuk full stack (PostgreSQL + API + Web). Environment & secret management, health check. | Lab (Docker Compose) |
