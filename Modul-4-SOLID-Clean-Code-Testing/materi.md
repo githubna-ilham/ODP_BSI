@@ -1,8 +1,8 @@
 # Modul 4 — Prinsip SOLID & Clean Code + Automated Unit Testing
 
-> **Hari ke-4 ODP BSI IT Development**. Setelah punya backend (Modul 2) dan frontend (Modul 3), hari ini Anda **angkat kualitas kode** ke level production-ready: refactor dengan prinsip SOLID, terapkan Clean Code, dan tutup dengan automated test. Tool AI utama: **Cursor IDE** untuk refactoring & generate test.
+> **Hari ke-4 ODP BSI IT Development**. Setelah punya backend (Modul 2) dan frontend (Modul 3), hari ini Anda **angkat kualitas kode** ke level production-ready: refactor dengan prinsip SOLID, terapkan Clean Code, dan tutup dengan automated test. Tool AI utama: **Claude Code** untuk refactoring & generate test.
 
-> Setelah modul ini Anda harus bisa: (a) mengenali code smells dan refactor-nya, (b) menerapkan 5 prinsip SOLID di kode TypeScript, (c) menulis unit test dengan Jest/Vitest, (d) memanfaatkan Cursor IDE untuk auto-generate test dari kode existing dan suggest refactoring.
+> Setelah modul ini Anda harus bisa: (a) mengenali code smells dan refactor-nya, (b) menerapkan 5 prinsip SOLID di kode TypeScript, (c) menulis unit test dengan Jest/Vitest, (d) memanfaatkan Claude Code untuk auto-generate test dari kode existing dan suggest refactoring.
 
 ---
 
@@ -745,64 +745,84 @@ Run test → **tetap pass**. Refactor selesai.
 
 ---
 
-## 8. Refactoring dengan Cursor IDE
+## 8. Refactoring dengan Claude Code
+
+Hari ini Anda akan banyak pakai **Claude Code CLI** karena tugas refactor melibatkan multi-file & terminal commands.
 
 ### 8.1 Generate Unit Test dari Kode Existing
 
-Setelah kode existing (dari Modul 2-3), highlight function → Cmd+K:
+Buka terminal di folder project → jalankan `claude` → prompt:
 
 ```
-Generate Vitest unit test untuk function ini.
-Cover: happy path, edge case (input kosong/zero), error path.
-Pakai AAA pattern. Mock dependency database.
+Baca file src/modules/tabungan-haji/tabungan.service.ts.
+Generate Vitest unit test untuk function setorTabungan() dan helper-nya.
+Simpan di tabungan.service.test.ts (same folder).
+Cover: happy path, edge case (input kosong/zero), error path (tabungan beku, idempotency).
+Pakai AAA pattern. Mock dependency database (Prisma).
 ```
 
-Cursor akan generate file `*.test.ts` lengkap. Anda tinggal **review**, hapus test yang tidak masuk akal, tambah kasus yang kurang.
+Claude akan baca service file, generate test file lengkap, dan tampilkan diff sebelum save. Anda tinggal **review** dan accept.
 
-### 8.2 Suggest Refactoring
+### 8.2 Suggest Refactoring (Analisis Dulu)
 
-Buka file panjang → Chat (Cmd+L):
+Untuk analisis tanpa langsung ubah kode, prompt lebih spesifik:
 
 ```
-Analisis file ini untuk code smell. Sebutkan:
-1. Smell apa saja yang ada (dengan line number).
-2. Untuk masing-masing, kasih saran refactor + rationale.
-3. Prioritaskan dari yang paling impact ke ringan.
+Analisis file src/modules/tabungan-haji/tabungan.service.ts untuk code smell.
+JANGAN edit file sekarang — kasih analisis dulu dalam format:
 
-JANGAN ubah file dulu — kasih analisis dulu.
+1. Daftar smell (dengan line number).
+2. Untuk masing-masing: saran refactor + rationale.
+3. Prioritaskan dari impact tertinggi ke ringan.
 ```
 
-Setelah review analisis, baru terapkan satu-per-satu dengan Cmd+K.
+Claude akan baca file dan return analysis dalam chat — tanpa modifikasi. Setelah Anda review, baru minta apply satu-per-satu:
+
+```
+Apply fix nomor 1 (extract setor logic ke service helper).
+```
 
 ### 8.3 Refactor SOLID Violation
 
-Highlight class yang melanggar SRP → Cmd+K:
+```
+Class TabunganService di src/modules/tabungan/tabungan.service.ts
+melanggar SRP — sekaligus handle DB query, business logic, dan email notif.
 
+Refactor:
+1. Pisah jadi TabunganRepository (DB query) + TabunganService (logic) + NotifService (email).
+2. Bikin file baru di folder yang sesuai.
+3. Update semua import di file lain yang reference class lama.
+4. Jalankan npm run typecheck setelah selesai dan fix error yang muncul.
 ```
-Refactor class ini sesuai prinsip SRP.
-Pecah jadi beberapa class kecil per responsibility.
-Buat file baru di folder yang sesuai.
-Update import di file lain yang reference class lama.
-```
+
+Claude bisa do all of the above dalam satu sesi.
 
 ### 8.4 Extract Function
 
-Highlight blok kode dalam function panjang → Cmd+K:
+Untuk refactor lokal yang lebih kecil:
 
 ```
-Extract blok ini jadi helper function dengan nama yang deskriptif.
-Letakkan di file utilities yang relevan.
+Di file tabungan.service.ts, blok validasi nominal di setorTabungan
+(line ~45-60) bisa di-extract jadi helper function.
+
+Bikin helper validateNominalSetor(nominal: number) di lib/validation.ts.
+Update setorTabungan untuk pakai helper baru.
+Tulis 3 unit test untuk helper baru ini.
 ```
 
-### 8.5 Rename Symbol
+### 8.5 Rename Symbol — Manual atau via Claude Code
 
-Cmd+K bisa juga rename:
+Untuk rename simple di 1 file: pakai **editor refactor** (VS Code: F2, klik kanan → Rename Symbol).
+
+Untuk rename **lintas project + smart context** (mis. rename hanya yang related ke domain tertentu, bukan global): pakai Claude Code:
 
 ```
-Rename variabel `data` menjadi `daftarTransaksi` di semua tempat di file ini.
+Rename semua occurrence variabel `data` yang merefer ke daftar transaksi
+menjadi `daftarTransaksi` di folder src/modules/tabungan/.
+JANGAN ubah `data` di context lain (mis. di test fixtures).
 ```
 
-Atau pakai **VS Code/Cursor refactor built-in**: klik kanan variabel → Rename Symbol (F2) — otomatis update semua reference di project.
+Claude paham konteks — lebih cerdas dari rename mekanis editor.
 
 ### 8.6 Snapshot Testing untuk UI
 
@@ -868,14 +888,14 @@ Workflow hari ke-4 (lanjutan dari Modul 2):
 | Step | Aktivitas | Tool |
 |---|---|---|
 | 1 | Setup Vitest di project API Modul 2 | Terminal |
-| 2 | Identify code smell di `tabungan.service.ts` (manual + AI analysis) | Cursor Chat |
-| 3 | Refactor: pecah function gemuk jadi helper-helper | Cursor Cmd+K |
-| 4 | Refactor: pisah layer service vs repository (DIP) | Cursor Composer |
-| 5 | Tulis unit test untuk function utama (manual + AI generate) | Cursor Cmd+K |
+| 2 | Identify code smell di `tabungan.service.ts` (manual + AI analysis) | Claude Desktop |
+| 3 | Refactor: pecah function gemuk jadi helper-helper | Claude Code CLI |
+| 4 | Refactor: pisah layer service vs repository (DIP) | Claude Code CLI |
+| 5 | Tulis unit test untuk function utama (manual + AI generate) | Claude Code CLI |
 | 6 | Target coverage 80%+ untuk module service | `npm run test:coverage` |
-| 7 | Refactor `kartu-tabungan.tsx` (Modul 3) — split kalau > 150 line | Cursor Cmd+K |
-| 8 | Tambah snapshot test untuk komponen utama | Cursor |
-| 9 | Setup ESLint + Prettier + auto-format on save | Cursor settings |
+| 7 | Refactor `kartu-tabungan.tsx` (Modul 3) — split kalau > 150 line | Claude Code CLI |
+| 8 | Tambah snapshot test untuk komponen utama | Claude Code CLI |
+| 9 | Setup ESLint + Prettier + auto-format on save | VS Code settings |
 | 10 | Code review pakai checklist § 9.1 dengan mentor | Pair programming |
 
 **Target hari ke-4 selesai**:
@@ -916,7 +936,7 @@ Workflow hari ke-4 (lanjutan dari Modul 2):
 - [ ] Paham cycle Red-Green-Refactor.
 - [ ] Pernah praktik TDD untuk 1 function sederhana.
 
-**Cursor + AI:**
+**Claude Code Pro:**
 - [ ] Bisa generate test dari kode existing.
 - [ ] Bisa minta AI analisis code smell.
 - [ ] Bisa refactor SOLID violation dengan bantuan AI.
@@ -931,7 +951,7 @@ Workflow hari ke-4 (lanjutan dari Modul 2):
 
 | Hari | Modul | Topik |
 |---|---|---|
-| H1 | Modul 1 | SDLC, Agile & Setup Cursor IDE + Prompt Engineering |
+| H1 | Modul 1 | SDLC, Agile & Setup Claude Code + Prompt Engineering |
 | H2 | Modul 2 | RESTful API & Database Modeling (PostgreSQL) |
 | H3 | Modul 3 | React/Next.js & Integrasi API |
 | **H4** ← Anda di sini | **Modul 4** | **Prinsip SOLID & Clean Code + Automated Unit Testing** |

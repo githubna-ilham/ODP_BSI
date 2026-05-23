@@ -24,7 +24,7 @@
 
 ---
 
-## BAGIAN A — SDLC, Scrum, Cursor IDE & Prompt Engineering (Soal 1–4)
+## BAGIAN A — SDLC, Scrum, Claude Code & Prompt Engineering (Soal 1–4)
 
 **1. Dalam Scrum, "Sprint Goal" ditetapkan saat …**
 - A. Sprint Planning, di awal Sprint sebagai komitmen tim
@@ -36,10 +36,10 @@
 - B. Servant-leader yang membantu tim menjalankan Scrum efektif, menghilangkan impediment, dan coaching
 - C. Pengganti project manager yang memberi perintah ke developer
 
-**3. Fitur yang **wajib diaktifkan** di Cursor IDE supaya kode tidak ke-collect untuk training AI adalah …**
-- A. Privacy Mode
-- B. Composer Mode
-- C. Tab Autocomplete
+**3. File yang dipakai untuk **memberikan konteks & aturan project** kepada Claude Code (mis. coding standard, business rules, naming convention) adalah …**
+- A. `CLAUDE.md` di root project
+- B. `package.json`
+- C. `.gitignore`
 
 **4. Pola prompt **RCTF** yang dipelajari di Modul 1 adalah singkatan dari …**
 - A. Refactor, Compile, Test, Format
@@ -113,10 +113,10 @@
 - B. Authentication → Authorization → Audit
 - C. Add → Append → Apply
 
-**16. Saat melakukan refactor kode existing, pendekatan yang **paling efektif** memakai Cursor IDE adalah …**
+**16. Saat melakukan refactor kode existing, pendekatan yang **paling efektif** memakai Claude Code (CLI) adalah …**
 - A. Hapus semua kode lama lalu minta AI bikin ulang dari nol
-- B. Highlight kode lalu Cmd+K untuk minta refactor spesifik (mis. "extract function", "fix SRP violation")
-- C. Copy kode ke ChatGPT browser, paste hasilnya kembali
+- B. Jalankan `claude` di folder project lalu minta refactor spesifik dengan natural language (mis. "extract validasi nominal ke helper function di lib/validation.ts")
+- C. Copy semua kode ke text editor lain, edit manual baris per baris
 
 ---
 
@@ -148,7 +148,7 @@
 
 | Bagian | Topik | Jumlah Soal | Poin |
 | ------ | ----- | ----------- | ---- |
-| A | SDLC, Scrum, Cursor IDE & Prompt Engineering (Modul 1) | 4 | 20 |
+| A | SDLC, Scrum, Claude Code & Prompt Engineering (Modul 1) | 4 | 20 |
 | B | RESTful API & PostgreSQL (Modul 2)                     | 4 | 20 |
 | C | React/Next.js (Modul 3)                                | 4 | 20 |
 | D | SOLID, Clean Code & Testing (Modul 4)                  | 4 | 20 |
@@ -173,7 +173,7 @@
 <details>
 <summary>Klik untuk membuka kunci jawaban</summary>
 
-### Bagian A — SDLC, Scrum, Cursor IDE & Prompt Engineering
+### Bagian A — SDLC, Scrum, Claude Code & Prompt Engineering
 | No | Jwb | No | Jwb |
 | -- | --- | -- | --- |
 | 1  | **A** | 3  | **A** |

@@ -710,106 +710,185 @@ Kanban adalah framework Agile lain yang populer. Bukan saingan — lebih ke alte
 
 ---
 
-## 13. Setup Cursor IDE — Tool Utama Selama Pelatihan
+## 13. Setup Claude Code Pro — AI Coding Assistant Utama
 
-Selama 5 hari pelatihan IT Development, kita akan banyak pakai **Cursor IDE** sebagai code editor utama. Cursor adalah **AI-powered IDE** (fork dari VS Code) yang punya integrasi AI native — bisa diajak ngobrol, generate kode, refactoring, dan jawab pertanyaan tentang codebase Anda.
-
-### 13.1 Kenapa Cursor untuk ODP BSI?
-
-| Aspek | Manfaat di konteks BSI |
-|---|---|
-| **AI built-in** | Tidak perlu copy-paste ke ChatGPT — bisa langsung apply ke kode |
-| **Context-aware** | AI bisa "lihat" seluruh folder project, jawaban lebih relevan |
-| **Free tier cukup** | 2.000 completions/bulan gratis untuk peserta pelatihan |
-| **Privacy mode** | Bisa diset "Privacy Mode" — kode tidak ke-training Cursor (penting untuk kode banking) |
-| **Familiar UX** | Sama persis dengan VS Code — yang sudah pernah pakai langsung bisa |
-| **Multi-language** | Support semua bahasa: JavaScript, Python, Java, SQL, TypeScript |
-
-### 13.2 Instalasi
-
-1. Buka [cursor.com](https://cursor.com) → klik **Download**.
-2. Pilih installer sesuai OS:
-   - **Windows**: `.exe` (~120 MB)
-   - **macOS**: `.dmg` (Intel/Apple Silicon — auto-detect)
-   - **Linux**: `.AppImage` atau `.deb`
-3. Install seperti aplikasi biasa.
-4. Buka Cursor → **Sign in** (pakai Google account / GitHub).
-
-### 13.3 Setup Awal — Import VS Code Settings
-
-Kalau sudah pakai VS Code, Cursor bisa import extension & setting sekali klik:
-
-1. Saat first launch, akan muncul wizard.
-2. Pilih **Import from VS Code** → tunggu beberapa detik → semua extension & keybinding ter-copy.
-
-### 13.4 Empat Fitur Kunci yang Wajib Dikuasai
+Selama 5 hari pelatihan IT Development, kita akan banyak pakai **Claude Code Pro** sebagai AI coding assistant utama. Claude (model AI dari Anthropic) tersedia dalam **dua bentuk** yang akan kita pakai:
 
 ```mermaid
 flowchart TD
-    Cursor["Cursor IDE"]:::root
-    Cursor --> Tab["1. Tab Autocomplete<br/>(saran kode otomatis)"]:::feat
-    Cursor --> CmdK["2. Cmd+K / Ctrl+K<br/>(inline edit)"]:::feat
-    Cursor --> Chat["3. Chat (Cmd+L)<br/>(tanya AI tentang kode)"]:::feat
-    Cursor --> Composer["4. Composer (Cmd+I)<br/>(buat/edit multi-file)"]:::feat
+    Subscription["Langganan Claude Pro / Max"]:::sub
+    Subscription --> Desktop["Claude Desktop<br/>(GUI App)"]:::desktop
+    Subscription --> CLI["Claude Code<br/>(CLI / Terminal)"]:::cli
 
-    classDef root fill:#fef3c7,stroke:#f59e0b,stroke-width:2px
-    classDef feat fill:#dbeafe,stroke:#3b82f6
+    Desktop --> DUse["Chat, brainstorm,<br/>generate snippet,<br/>analisis dokumen"]
+    CLI --> CUse["Integrasi langsung dgn project:<br/>baca/edit file, run command,<br/>multi-file refactor, git ops"]
+
+    classDef sub fill:#fef3c7,stroke:#f59e0b,stroke-width:2px
+    classDef desktop fill:#dbeafe,stroke:#3b82f6,stroke-width:2px
+    classDef cli fill:#dcfce7,stroke:#16a34a,stroke-width:2px
 ```
 
-| Fitur | Trigger | Use case |
+### 13.1 Dua Pilihan: Desktop vs CLI
+
+| Aspek | **Claude Desktop** | **Claude Code (CLI)** |
 |---|---|---|
-| **Tab Autocomplete** | Mulai ketik, tekan `Tab` untuk accept saran | Tulis function/loop biasa lebih cepat |
-| **Cmd+K (Inline Edit)** | Highlight kode → `Cmd+K` → ketik instruksi | "Ubah ini jadi async function", "Tambah error handling" |
-| **Chat (Cmd+L)** | `Cmd+L` → buka panel chat | Tanya "Bagaimana cara connect ke PostgreSQL?" |
-| **Composer (Cmd+I)** | `Cmd+I` → mode multi-file | "Bikin struktur project REST API untuk tabungan haji" |
+| Bentuk | Aplikasi GUI (Mac/Windows/Linux) | Terminal command (`claude`) |
+| UX | Chat-style window, ada Projects & Artifacts | Text-based, terintegrasi shell |
+| Akses ke file project | Manual (copy-paste / drag file) | **Otomatis** — baca/edit langsung |
+| Run command terminal | Tidak bisa | **Bisa** (`bash`, `npm`, `git`, dll) |
+| Multi-file edit sekaligus | Tidak otomatis | **Bisa** |
+| Slash commands | Tidak | Ada (`/help`, `/init`, custom) |
+| MCP servers (extension) | Ya | Ya |
+| Cocok untuk | Brainstorming, learning, dokumen | Coding aktif, refactor, automation |
 
-> Di Windows/Linux, ganti `Cmd` → `Ctrl`. Mis. `Ctrl+K`, `Ctrl+L`, `Ctrl+I`.
+**Best practice di pelatihan ODP BSI**: pakai **keduanya bersamaan**.
+- **Claude Desktop** → diskusi konsep, generate snippet, analisis requirement.
+- **Claude Code (CLI)** → eksekusi di project (build endpoint, run test, commit).
 
-### 13.5 Setting Wajib untuk Banking Project — Privacy Mode
+### 13.2 Kenapa Claude untuk ODP BSI?
 
-Kode banking sering mengandung logika sensitif (perhitungan bagi hasil syariah, validasi NIK, audit trail). Jangan biarkan kode ini ke-collect untuk training AI.
+| Aspek | Manfaat di konteks BSI |
+|---|---|
+| **Kualitas tinggi** | Claude Sonnet/Opus excel di reasoning kompleks (regulasi syariah, audit logic) |
+| **Context window besar** | 200K token — bisa baca seluruh module/repo dalam 1 sesi |
+| **Code-fluent** | Paham TypeScript, SQL, React, Docker — tidak perlu konteks panjang |
+| **Privacy first** | Anthropic tidak training di prompt user secara default |
+| **Tooling lengkap** | File ops, bash, search, git — di satu interface |
 
-**Cara aktifkan Privacy Mode:**
+### 13.3 Instalasi
 
-1. Buka **Settings** (`Cmd/Ctrl + ,`).
-2. Cari **Privacy Mode**.
-3. Toggle **ON**.
+#### Claude Desktop
 
-Saat Privacy Mode aktif:
-- Kode Anda **tidak dikirim** ke server Cursor untuk training.
-- Tetap dipakai untuk inference (dapat saran AI) — tapi tidak disimpan setelahnya.
-- Wajib untuk repo internal BSI.
+1. Buka [claude.ai/download](https://claude.ai/download) → pilih OS Anda.
+2. Install seperti aplikasi biasa.
+3. Buka → Sign in pakai akun Claude Pro/Max.
 
-### 13.6 File `.cursorrules` — Customisasi AI per Project
+#### Claude Code (CLI)
 
-`.cursorrules` adalah file di root project yang berisi **instruksi khusus** untuk AI dalam project itu. AI akan baca file ini setiap kali Anda chat/edit.
+Pakai npm (paling cepat) — pastikan Node.js 18+ sudah ter-install:
 
-Contoh `.cursorrules` untuk project banking BSI:
+```bash
+npm install -g @anthropic-ai/claude-code
+```
+
+Verifikasi:
+
+```bash
+claude --version
+```
+
+Login (sekali saja):
+
+```bash
+claude
+# saat pertama kali jalan, akan minta login → ikuti link di terminal
+```
+
+Setelah login, di terminal manapun cukup:
+
+```bash
+cd ~/project-tabungan-haji
+claude            # start session di folder ini
+```
+
+### 13.4 Fitur Kunci yang Wajib Dikuasai
+
+#### Claude Desktop — 3 Fitur Utama
+
+| Fitur | Use case |
+|---|---|
+| **Conversation** | Chat biasa — paste kode, tanya, generate snippet |
+| **Projects** | Folder konteks: upload dokumen referensi (mis. spec API), Claude pakai sebagai knowledge base sepanjang chat |
+| **Artifacts** | Block code/dokumen di sebelah chat — bisa di-preview & iterasi |
+
+#### Claude Code (CLI) — 5 Fitur Kunci
+
+| Fitur | Cara pakai |
+|---|---|
+| **Natural language request** | "Buatkan endpoint POST /api/users dengan validasi Zod" — Claude paham + langsung edit file |
+| **File read/edit** | Claude bisa baca file di project + edit (dengan konfirmasi user) |
+| **Bash execution** | Claude bisa run `npm test`, `git status`, `docker compose up`, dll |
+| **Slash commands** | `/init` (bikin CLAUDE.md), `/help`, `/clear`, custom `/your-command` |
+| **Multi-file changes** | Refactor di banyak file sekaligus dengan 1 prompt |
+
+Contoh sesi Claude Code:
 
 ```
-# Konteks Proyek
-Proyek ini adalah backend service untuk sistem Tabungan Haji BSI.
-Stack: Node.js + Express + PostgreSQL + TypeScript.
+$ claude
+> Tambahkan endpoint POST /api/v1/tabungan-haji/{id}/setor di project ini.
+  Pakai pola Controller-Service-Schema seperti modul nasabah yang sudah ada.
 
-# Aturan Coding
+Claude akan:
+1. Baca struktur project
+2. Baca contoh modul existing (nasabah)
+3. Generate file controller.ts, service.ts, schema.ts, routes.ts
+4. Update routing utama
+5. Konfirmasi setiap perubahan file ke Anda
+```
+
+### 13.5 Setting Wajib untuk Banking Project
+
+Kode banking sensitif — perhatikan konfigurasi privacy:
+
+| Pengaturan | Lokasi |
+|---|---|
+| **Anthropic Data Usage** | Default: prompt user **tidak dipakai** untuk training |
+| **Workspace permissions** (Claude Code) | Bisa restrict folder yang accessible: `~/.claude/settings.json` |
+| **Sensitive file exclusion** | Set di `.claudeignore` (mirip `.gitignore`) supaya `.env` & secrets tidak di-baca |
+
+Contoh `.claudeignore` di root project:
+
+```
+.env
+.env.*
+secrets/
+*.pem
+*.key
+node_modules
+dist
+build
+```
+
+### 13.6 File `CLAUDE.md` — Customisasi AI per Project
+
+`CLAUDE.md` adalah file di root project yang berisi **instruksi & konteks** untuk Claude. Setiap kali Anda chat / minta perubahan di project itu, Claude akan baca file ini dulu.
+
+Contoh `CLAUDE.md` untuk project banking BSI:
+
+```markdown
+# Konteks Proyek
+
+Proyek ini adalah backend service untuk sistem Tabungan Haji BSI.
+Stack: Node.js + Express + PostgreSQL + TypeScript + Prisma.
+
+## Aturan Coding
+
 - Pakai TypeScript strict mode, hindari `any`.
 - Semua endpoint REST API harus punya validasi input pakai Zod.
-- Error response: pakai format { "error": { "code": "...", "message": "..." } }.
-- Setiap query DB harus pakai parameterized query — JANGAN string concatenation (SQL injection).
+- Error response: pakai format `{ "error": { "code": "...", "message": "..." } }`.
+- Setiap query DB harus via Prisma (parameterized) — JANGAN raw SQL concatenation.
 - Tulis log audit untuk setiap operasi yang mengubah saldo.
 
-# Aturan Bisnis
+## Aturan Bisnis
+
 - Setoran tabungan haji minimum Rp 100.000.
 - Tidak ada bunga — pakai prinsip Wadiah (titipan) sesuai syariah.
-- Saldo tidak boleh negatif.
+- Saldo tidak boleh negatif (CHECK constraint di DB).
 
-# Aturan Naming
+## Aturan Naming
+
 - Function: camelCase, deskriptif (mis. `hitungBagiHasil`, bukan `calc`).
 - Database table: snake_case (mis. `transaksi_setor`).
 - API endpoint: kebab-case (mis. `/api/tabungan-haji/setor`).
+
+## Workflow
+
+- Tiap fitur baru di branch `feature/*` dari `develop`.
+- Wajib unit test (coverage target 80%).
+- Commit pakai Conventional Commits (`feat:`, `fix:`, `refactor:`).
 ```
 
-Setelah file ini ada, semua jawaban AI di project akan mengikuti aturan tersebut.
+Setelah file ini ada, semua jawaban Claude di project akan mengikuti aturan tersebut tanpa perlu re-explain di tiap prompt. **Tip Claude Code**: jalankan `/init` di sesi pertama — Claude akan auto-generate `CLAUDE.md` awal berdasarkan struktur project Anda.
 
 ---
 
@@ -907,13 +986,14 @@ Setiap iterasi menambah refinement. Lebih efektif daripada nulis prompt 500 kata
 
 ### 14.7 Latihan Praktik
 
-Setelah Cursor IDE ter-install dan Anda paham 4 fitur kunci, coba latihan berikut:
+Setelah Claude Desktop & Claude Code ter-install, coba latihan berikut:
 
-1. **Buka Composer (Cmd+I)** di folder kosong.
-2. **Paste prompt RCTF** dari §14.4.
-3. **Inspect output** AI — bandingkan dengan ekspektasi Anda.
-4. **Iterate** — minta refinement minimal 2x.
-5. **Apply** struktur yang dihasilkan ke folder local.
+1. Buat folder kosong di local, mis. `~/odp/latihan-prompt`.
+2. Buka terminal di folder itu → jalankan `claude`.
+3. **Paste prompt RCTF** dari §14.4.
+4. **Inspect output** Claude — file/struktur yang dihasilkan sesuai ekspektasi?
+5. **Iterate** — minta refinement minimal 2x.
+6. **Compare**: paste prompt yang sama di Claude Desktop → bandingkan UX & hasilnya.
 
 Lanjutannya akan dipakai di **Modul 2 — RESTful API & Database Modeling**, di mana folder ini akan diisi dengan endpoint & migration PostgreSQL.
 
@@ -937,12 +1017,16 @@ Lanjutannya akan dipakai di **Modul 2 — RESTful API & Database Modeling**, di 
 - [ ] Bisa membaca burn-down chart & velocity.
 - [ ] Sadar tantangan implementasi Agile di banking & strategi mitigasinya.
 
-**Tooling (Cursor IDE & Prompt Engineering):**
-- [ ] Cursor IDE sudah ter-install, Privacy Mode aktif.
-- [ ] Hafal 4 fitur kunci: Tab Autocomplete, Cmd+K, Chat (Cmd+L), Composer (Cmd+I).
-- [ ] Bisa setup `.cursorrules` per project.
+**Tooling (Claude Code Pro & Prompt Engineering):**
+- [ ] Claude Desktop sudah ter-install + sign in.
+- [ ] Claude Code (CLI) sudah ter-install via `npm install -g @anthropic-ai/claude-code`.
+- [ ] Tahu perbedaan use case Desktop vs CLI.
+- [ ] Familiar dengan fitur Desktop: Conversations, Projects, Artifacts.
+- [ ] Familiar dengan Claude Code: natural language request, file edit, bash execution, `/init`, `/help`.
+- [ ] Bisa setup `CLAUDE.md` per project.
+- [ ] Bisa setup `.claudeignore` untuk file sensitif.
 - [ ] Paham pola **RCTF** (Role-Context-Task-Format) untuk prompt yang baik.
-- [ ] Bisa generate struktur proyek perbankan via Composer AI dengan iterative refinement.
+- [ ] Bisa generate struktur proyek perbankan dengan iterative refinement.
 - [ ] Tahu data apa yang **boleh & tidak boleh** dimasukkan ke prompt (banking-specific privacy).
 
 ### Bacaan & Sertifikasi Lanjutan
@@ -951,7 +1035,8 @@ Lanjutannya akan dipakai di **Modul 2 — RESTful API & Database Modeling**, di 
 |---|---|
 | **Scrum Guide 2020** (scrumguides.org) | Definisi resmi Scrum, ~13 halaman, wajib baca |
 | **Agile Manifesto** (agilemanifesto.org) | Nilai & prinsip dasar |
-| **Cursor Docs** (docs.cursor.com) | Referensi resmi fitur Cursor IDE |
+| **Claude Code Docs** (docs.claude.com/claude-code) | Referensi resmi Claude Code CLI |
+| **Anthropic Docs** (docs.anthropic.com) | Referensi Claude API & Desktop |
 | **Prompt Engineering Guide** (promptingguide.ai) | Best practices prompt engineering lintas use case |
 | Sertifikasi **PSM I** (Professional Scrum Master) | Dari scrum.org, tes online, fundamental |
 | Sertifikasi **PSPO I** (Product Owner) | Untuk yang akan jadi PO |
@@ -964,10 +1049,10 @@ Lanjutannya akan dipakai di **Modul 2 — RESTful API & Database Modeling**, di 
 
 | Hari | Modul | Topik |
 |---|---|---|
-| **H1** ← Anda di sini | **Modul 1** | SDLC, Agile & Setup Cursor IDE + Prompt Engineering |
+| **H1** ← Anda di sini | **Modul 1** | SDLC, Agile & Setup Claude Code Pro + Prompt Engineering |
 | H2 | Modul 2 | RESTful API & Database Modeling (PostgreSQL) — auto-generate API endpoints |
 | H3 | Modul 3 | React/Next.js & Integrasi API — asistensi UI Component pakai Claude 3.5 Sonnet |
 | H4 | Modul 4 | Prinsip SOLID & Clean Code + Automated Unit Testing — refactoring kode pakai AI |
 | H5 | Modul 5 | Git Flow & Dockerizing Apps — best practice version control & containerisasi |
 
-**Selanjutnya**: **Modul 2 — RESTful API & Database Modeling (PostgreSQL)**. Anda akan pakai Cursor IDE + prompt engineering yang dipelajari di hari ini untuk auto-generate endpoint API tabungan haji yang sudah didesain di sesi Sprint Planning.
+**Selanjutnya**: **Modul 2 — RESTful API & Database Modeling (PostgreSQL)**. Anda akan pakai Claude Code Pro (Desktop + CLI) untuk auto-generate endpoint API tabungan haji yang sudah didesain di sesi Sprint Planning.

@@ -811,7 +811,7 @@ Setiap peserta presentasi 5-10 menit:
 
 ### Yang Anda Kuasai Setelah 5 Hari
 
-**Modul 1 — SDLC, Agile, Cursor IDE, Prompt Engineering**
+**Modul 1 — SDLC, Agile, Claude Code Pro, Prompt Engineering**
 - Konsep SDLC + Scrum framework
 - Setup AI-powered IDE
 - Komunikasi efektif dengan AI
@@ -819,7 +819,7 @@ Setiap peserta presentasi 5-10 menit:
 **Modul 2 — RESTful API & PostgreSQL**
 - Database modeling + Prisma migration
 - REST API best practices
-- Auto-generate endpoint dengan Cursor
+- Auto-generate endpoint dengan Claude Code
 
 **Modul 3 — React/Next.js**
 - Modern frontend dengan Next.js
@@ -857,7 +857,7 @@ Aplikasi **Tabungan Haji BSI Mini** end-to-end:
 
 | Hari | Modul | Status |
 |---|---|---|
-| H1 | Modul 1 — SDLC, Agile & Cursor IDE | ✓ Selesai |
+| H1 | Modul 1 — SDLC, Agile & Claude Code Pro | ✓ Selesai |
 | H2 | Modul 2 — RESTful API & PostgreSQL | ✓ Selesai |
 | H3 | Modul 3 — React/Next.js & Integrasi API | ✓ Selesai |
 | H4 | Modul 4 — SOLID, Clean Code & Testing | ✓ Selesai |

@@ -1,8 +1,8 @@
 # Modul 2 — RESTful API & Database Modeling (PostgreSQL)
 
-> **Hari ke-2 ODP BSI IT Development**. Setelah memahami SDLC, Agile, dan basic Cursor IDE di Modul 1, hari ini Anda membangun **layer data** dan **layer API** dari sistem perbankan — fondasi semua aplikasi backend di BSI.
+> **Hari ke-2 ODP BSI IT Development**. Setelah memahami SDLC, Agile, dan basic Claude Code di Modul 1, hari ini Anda membangun **layer data** dan **layer API** dari sistem perbankan — fondasi semua aplikasi backend di BSI.
 
-> Setelah modul ini Anda harus bisa: (a) merancang skema database PostgreSQL untuk kasus perbankan, (b) menerapkan prinsip REST API yang benar, (c) membangun endpoint CRUD lengkap dengan Node.js + Express + TypeScript, (d) memanfaatkan Cursor IDE untuk auto-generate endpoint dari skema database.
+> Setelah modul ini Anda harus bisa: (a) merancang skema database PostgreSQL untuk kasus perbankan, (b) menerapkan prinsip REST API yang benar, (c) membangun endpoint CRUD lengkap dengan Node.js + Express + TypeScript, (d) memanfaatkan Claude Code untuk auto-generate endpoint dari skema database.
 
 ---
 
@@ -704,13 +704,13 @@ export default router;
 
 ---
 
-## 8. Auto-Generate Endpoint dengan Cursor IDE
+## 8. Auto-Generate Endpoint dengan Claude Code
 
 Sekarang bagian seru: **manfaatkan AI** untuk mempercepat development.
 
 ### 8.1 Pola Prompt — Generate CRUD dari Schema
 
-Setelah `prisma/schema.prisma` ditulis, **paste schema + minta Cursor generate CRUD endpoint**:
+Setelah `prisma/schema.prisma` ditulis, **paste schema + minta Claude Code generate CRUD endpoint**:
 
 ```
 Konteks: Saya pakai Express + TypeScript + Prisma + Zod.
@@ -750,23 +750,40 @@ Tambahkan audit log di semua mutation (create, update, delete).
 Pakai helper catatAudit() yang sudah ada di lib/audit.ts.
 ```
 
-### 8.3 Tab Autocomplete untuk Speed
+### 8.3 Kombinasi Desktop + CLI
 
-Saat menulis service, mulai ketik:
-```typescript
-export async function update
+Pakai dua-duanya komplemen:
+
+| Tugas | Tool | Alasan |
+|---|---|---|
+| Brainstorm desain endpoint (request/response shape, error format) | **Claude Desktop** | Cocok untuk diskusi konsep, banyak iterasi tanpa menyentuh kode |
+| Generate file controller/service/schema dari schema Prisma | **Claude Code CLI** | Bisa langsung create/edit file di project, paham struktur folder existing |
+| Refactor lokal (extract function, ubah signature) | **Claude Code CLI** | Edit langsung di file yang sedang dibuka |
+| Belajar konsep baru (mis. "apa beda PATCH vs PUT?") | **Claude Desktop** | Lebih nyaman untuk Q&A panjang |
+
+### 8.4 Contoh Sesi Claude Code untuk Refactor
+
 ```
-Cursor akan auto-suggest function signature lengkap dengan parameter, validasi, dan Prisma call — berdasarkan pattern yang sudah ada di file lain.
+$ cd ~/tabungan-haji-api
+$ claude
 
-### 8.4 Inline Edit (Cmd+K) untuk Refactor
+> Ekstrak validasi nominal di tabungan.service.ts ke helper function
+  baru di lib/validation.ts. Pakai naming validateNominalSetor.
+  Update semua tempat yang panggil validasi ini.
 
-Highlight kode → Cmd+K → ketik instruksi:
-
+Claude akan:
+1. Baca tabungan.service.ts
+2. Identify validation logic
+3. Tulis helper di lib/validation.ts (atau buat file kalau belum ada)
+4. Update tabungan.service.ts pakai helper baru
+5. Konfirmasi tiap perubahan sebelum apply
 ```
-"Ekstrak validasi nominal ini ke helper function di lib/validation.ts"
-"Ubah ini supaya pakai database transaction"
-"Tambahkan rate limiting untuk endpoint ini"
-```
+
+### 8.5 Tips Prompt yang Efektif
+
+- **Mention file path eksplisit** kalau Claude perlu baca/edit file spesifik: `"baca file src/modules/nasabah/nasabah.service.ts dulu"`.
+- **Beri contoh pattern existing**: `"ikuti pola yang sudah ada di modul nasabah"` — Claude akan baca + replicate.
+- **Run command kalau perlu validasi**: `"setelah edit, jalankan npm run typecheck dan fix error yang muncul"`.
 
 ---
 
@@ -855,7 +872,7 @@ curl -X POST http://localhost:3000/api/v1/tabungan-haji/PSTH-001/setor \
 
 GUI yang lebih nyaman untuk explore API:
 - **Postman**: standalone app, paling populer.
-- **Thunder Client**: extension VS Code/Cursor, ringan.
+- **Thunder Client**: extension VS Code, ringan.
 
 Bikin **Collection** per endpoint, simpan environment variable (URL, token).
 
@@ -968,14 +985,14 @@ Workflow lengkap di hari ke-2:
 |---|---|---|
 | 1 | Design ERD (sesuai §3.1) | dbdiagram.io / pen & paper |
 | 2 | Setup Postgres via Docker | Docker |
-| 3 | Tulis `schema.prisma` (pakai prompt AI kalau perlu) | Cursor IDE |
+| 3 | Tulis `schema.prisma` (pakai prompt AI kalau perlu) | Claude Code |
 | 4 | `npx prisma migrate dev --name init` | Terminal |
-| 5 | Generate boilerplate Express + TypeScript | `npm init` + Cursor Composer |
-| 6 | Implementasi modul Nasabah (CRUD lengkap) via Cursor | Cursor IDE |
-| 7 | Implementasi modul Tabungan Haji (CRUD + endpoint setor) via Cursor | Cursor IDE |
-| 8 | Tambah JWT auth | Cursor IDE |
+| 5 | Generate boilerplate Express + TypeScript | `npm init` + Claude Code |
+| 6 | Implementasi modul Nasabah (CRUD lengkap) via Claude Code | Claude Code |
+| 7 | Implementasi modul Tabungan Haji (CRUD + endpoint setor) via Claude Code | Claude Code |
+| 8 | Tambah JWT auth | Claude Code |
 | 9 | Test pakai Thunder Client / Postman | Thunder Client |
-| 10 | Tambah dokumentasi OpenAPI | Cursor IDE |
+| 10 | Tambah dokumentasi OpenAPI | Claude Code |
 
 **Target hari ke-2 selesai**: API jalan di `localhost:3000`, bisa daftar nasabah, buka tabungan, setor saldo, lihat mutasi — semua dengan validasi & audit log.
 
@@ -1003,10 +1020,11 @@ Workflow lengkap di hari ke-2:
 - [ ] Bisa validasi input dengan Zod.
 - [ ] Bisa implementasi JWT auth + role-based access.
 
-**Cursor IDE:**
-- [ ] Bisa pakai Composer untuk generate CRUD module dari schema.
+**Claude Code Pro:**
+- [ ] Bisa pakai Claude Code CLI untuk generate CRUD module dari schema.
 - [ ] Bisa iterative refinement prompt.
-- [ ] Bisa pakai Cmd+K untuk inline refactor.
+- [ ] Tahu kapan pakai Claude Desktop (brainstorm) vs Claude Code CLI (eksekusi di project).
+- [ ] Pernah pakai natural language untuk refactor file existing.
 
 **Banking-specific:**
 - [ ] Paham idempotency + cara implementasi.
@@ -1019,7 +1037,7 @@ Workflow lengkap di hari ke-2:
 
 | Hari | Modul | Topik |
 |---|---|---|
-| H1 | Modul 1 | SDLC, Agile & Setup Cursor IDE + Prompt Engineering |
+| H1 | Modul 1 | SDLC, Agile & Setup Claude Code + Prompt Engineering |
 | **H2** ← Anda di sini | **Modul 2** | **RESTful API & Database Modeling (PostgreSQL)** |
 | H3 | Modul 3 | React/Next.js & Integrasi API — asistensi UI Component pakai Claude 3.5 Sonnet |
 | H4 | Modul 4 | Prinsip SOLID & Clean Code + Automated Unit Testing — refactoring kode pakai AI |

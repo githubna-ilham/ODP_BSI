@@ -1,8 +1,8 @@
 # Modul 3 — React/Next.js & Integrasi API
 
-> **Hari ke-3 ODP BSI IT Development**. Di Modul 2 Anda membangun API Tabungan Haji. Hari ini Anda bikin **antarmuka** yang konsumsi API itu — versi web yang nasabah/admin akan lihat. Tool AI utama: **Claude Sonnet** (via Cursor) untuk asistensi pembuatan UI Component.
+> **Hari ke-3 ODP BSI IT Development**. Di Modul 2 Anda membangun API Tabungan Haji. Hari ini Anda bikin **antarmuka** yang konsumsi API itu — versi web yang nasabah/admin akan lihat. Tool AI utama: **Claude Code Pro** — kombinasi Claude Desktop (untuk iterasi visual via Artifacts) dan Claude Code CLI (untuk generate file langsung ke project).
 
-> Setelah modul ini Anda harus bisa: (a) memahami React (component, props, state, hooks), (b) bikin aplikasi Next.js dengan routing modern, (c) integrasi ke REST API dengan handling loading/error/success, (d) memanfaatkan Claude Sonnet untuk generate UI component berkualitas dengan prompt yang baik.
+> Setelah modul ini Anda harus bisa: (a) memahami React (component, props, state, hooks), (b) bikin aplikasi Next.js dengan routing modern, (c) integrasi ke REST API dengan handling loading/error/success, (d) memanfaatkan Claude (via Desktop + CLI) untuk generate UI component berkualitas dengan prompt yang baik.
 
 ---
 
@@ -495,18 +495,23 @@ export default function FormSetor() {
 
 ---
 
-## 7. UI Component dengan Claude Sonnet (via Cursor)
+## 7. UI Component dengan Claude (Desktop + Code CLI)
 
-Sekarang bagian highlight Modul 3: **Claude Sonnet excel di generate UI component** karena paham desain modern, accessibility, dan komposisi.
+Sekarang bagian highlight Modul 3: **Claude excel di generate UI component** karena paham desain modern, accessibility, dan komposisi.
 
-### 7.1 Switch Model di Cursor
+### 7.1 Pilih Tool: Desktop atau CLI?
 
-Di Cursor:
-1. Buka Chat (Cmd+L) atau Composer (Cmd+I).
-2. Klik nama model di pojok bawah panel chat (default biasanya `gpt-4` atau `claude-3-5-sonnet`).
-3. Pilih **claude-3-5-sonnet** (atau versi terbaru yang tersedia).
+Untuk membuat UI component, dua-duanya bisa — pilih sesuai konteks:
 
-> Untuk task UI/visual, Claude Sonnet biasanya kasih hasil yang lebih rapi & aesthetic dibanding model lain.
+| Skenario | Tool | Alasan |
+|---|---|---|
+| Iterasi visual rapid (preview block-by-block) | **Claude Desktop** | Artifacts: lihat preview component di sidebar sambil iterasi |
+| Sketch component baru dari deskripsi text/wireframe | **Claude Desktop** | UX chat lebih nyaman untuk diskusi konseptual |
+| Generate component langsung ke project file | **Claude Code CLI** | Otomatis create file di lokasi yang tepat (`components/...`) |
+| Integrasi component baru ke route/page existing | **Claude Code CLI** | Bisa edit `app/page.tsx`, import component, update routing |
+| Refactor component existing (styling tweak, prop change) | **Claude Code CLI** | Edit langsung file yang sudah ada |
+
+> **Tip workflow**: pakai Desktop untuk **iterate visual** sampai dapat hasil yang oke, lalu copy hasil final ke project via Claude Code CLI.
 
 ### 7.2 Pola Prompt untuk UI Component
 
@@ -544,7 +549,7 @@ Format output:
 - Beri komentar singkat di section utama
 ```
 
-Claude Sonnet akan generate component lengkap. Anda tinggal **review & integrate**.
+Claude akan generate component lengkap. Anda tinggal **review & integrate** ke project.
 
 ### 7.3 Iterative Refinement
 
@@ -565,7 +570,7 @@ Kalau true → tambah subtle border emerald untuk indikasi data belum konfirmasi
 
 ### 7.4 Dari Sketsa ke Code
 
-Punya wireframe / mockup? Claude Sonnet bisa terima **deskripsi text** wireframe:
+Punya wireframe / mockup? Claude bisa terima **deskripsi text** wireframe:
 
 ```
 Wireframe halaman Mutasi Tabungan:
@@ -592,7 +597,7 @@ untuk fetch mutasi dari /api/v1/tabungan-haji/{id}/mutasi.
 
 ### 7.5 Generate Multi-File App Section
 
-Pakai **Composer** (Cmd+I) untuk generate multi-file sekaligus:
+Pakai **Claude Code CLI** untuk generate multi-file sekaligus — Claude bisa create banyak file dalam satu sesi:
 
 ```
 Generate folder structure + files untuk fitur "Setor Saldo" yang lengkap:
@@ -671,14 +676,15 @@ Build hari ke-3: aplikasi mini dengan halaman-halaman berikut.
 
 | Step | Aktivitas | Tool |
 |---|---|---|
-| 1 | Setup Next.js project + Tailwind + shadcn | Terminal + Cursor |
-| 2 | Setup TanStack Query + structure folder | Cursor Composer |
-| 3 | Bikin `<KartuTabungan />` (prompt Claude Sonnet) | Cursor (Claude) |
-| 4 | Bikin halaman Login + auth flow | Cursor (Claude) |
-| 5 | Bikin dashboard pakai data API Modul 2 | Cursor (Claude) |
-| 6 | Bikin form setor + integrasi API | Cursor (Claude) |
-| 7 | Bikin halaman mutasi dengan filter | Cursor (Claude) |
-| 8 | Polish: loading state, error handling, responsive | Cursor inline edit (Cmd+K) |
+| 1 | Setup Next.js project + Tailwind + shadcn | Terminal + Claude Code CLI |
+| 2 | Setup TanStack Query + structure folder | Claude Code CLI |
+| 3 | Sketch `<KartuTabungan />` visual (iterasi cepat) | Claude Desktop (Artifacts) |
+| 4 | Copy final `<KartuTabungan />` ke project | Claude Code CLI |
+| 5 | Bikin halaman Login + auth flow | Claude Code CLI |
+| 6 | Bikin dashboard pakai data API Modul 2 | Claude Code CLI |
+| 7 | Bikin form setor + integrasi API | Claude Code CLI |
+| 8 | Bikin halaman mutasi dengan filter | Claude Code CLI |
+| 9 | Polish: loading state, error handling, responsive | Claude Code CLI |
 
 **Target hari ke-3 selesai**: aplikasi web Tabungan Haji jalan di `localhost:3001` (port beda dari API), full integrate dengan API Modul 2, looks professional.
 
@@ -747,11 +753,11 @@ Banking app harus accessible:
 - [ ] Handle loading, error, success state.
 - [ ] React Hook Form + Zod untuk form & validasi.
 
-**Cursor + Claude Sonnet:**
-- [ ] Switch model di Cursor ke Claude Sonnet.
+**Claude Code Pro untuk UI:**
+- [ ] Tahu kapan pakai Claude Desktop (iterate visual via Artifacts) vs Claude Code CLI (langsung ke project file).
 - [ ] Prompt RCTF untuk UI component dengan spesifikasi visual.
 - [ ] Iterative refinement.
-- [ ] Generate multi-file feature lewat Composer.
+- [ ] Generate multi-file feature lewat Claude Code CLI.
 
 **Banking-specific:**
 - [ ] Format Rupiah konsisten.
@@ -765,7 +771,7 @@ Banking app harus accessible:
 
 | Hari | Modul | Topik |
 |---|---|---|
-| H1 | Modul 1 | SDLC, Agile & Setup Cursor IDE + Prompt Engineering |
+| H1 | Modul 1 | SDLC, Agile & Setup Claude Code Pro + Prompt Engineering |
 | H2 | Modul 2 | RESTful API & Database Modeling (PostgreSQL) |
 | **H3** ← Anda di sini | **Modul 3** | **React/Next.js & Integrasi API** |
 | H4 | Modul 4 | Prinsip SOLID & Clean Code + Automated Unit Testing |

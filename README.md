@@ -8,10 +8,10 @@ Materi pelatihan **Officer Development Program — Fase 1 IT Development** Bank 
 
 | Hari | Modul | Topik | AI Tool |
 |---|---|---|---|
-| H1 | [Modul 1](./Modul-1-SDLC-Scrum/materi.md) | **SDLC, Agile & Setup Cursor IDE + Prompt Engineering** | Cursor IDE |
-| H2 | [Modul 2](./Modul-2-RESTful-API-PostgreSQL/materi.md) | **RESTful API & Database Modeling (PostgreSQL)** | Cursor IDE — auto-generate endpoint |
-| H3 | [Modul 3](./Modul-3-React-NextJS/materi.md) | **React/Next.js & Integrasi API** | Claude Sonnet — asistensi UI Component |
-| H4 | [Modul 4](./Modul-4-SOLID-Clean-Code-Testing/materi.md) | **Prinsip SOLID & Clean Code + Automated Unit Testing** | Cursor IDE — refactoring kode |
+| H1 | [Modul 1](./Modul-1-SDLC-Scrum/materi.md) | **SDLC, Agile & Setup Claude Code Pro + Prompt Engineering** | Claude Code Pro |
+| H2 | [Modul 2](./Modul-2-RESTful-API-PostgreSQL/materi.md) | **RESTful API & Database Modeling (PostgreSQL)** | Claude Code (CLI) — auto-generate endpoint |
+| H3 | [Modul 3](./Modul-3-React-NextJS/materi.md) | **React/Next.js & Integrasi API** | Claude Desktop + CLI — asistensi UI Component |
+| H4 | [Modul 4](./Modul-4-SOLID-Clean-Code-Testing/materi.md) | **Prinsip SOLID & Clean Code + Automated Unit Testing** | Claude Code (CLI) — refactoring kode |
 | H5 | [Modul 5](./Modul-5-Git-Docker/materi.md) | **Git Flow & Dockerizing Apps** | — |
 
 ---
@@ -41,7 +41,7 @@ Hasil akhir: aplikasi web Tabungan Haji yang bisa daftar nasabah, buka rekening,
 - **Audiens**: peserta ODP IT track BSI (calon staff IT) + officer non-IT yang akan berinteraksi dengan tim pengembangan.
 - **Prerequisite**: pemahaman dasar JavaScript / TypeScript membantu, tapi materi disusun progresif dari fondasi.
 - **Hardware**: laptop dengan minimal 8GB RAM, akses internet, browser modern.
-- **Software**: Node.js 20+, Docker Desktop, Cursor IDE, akun GitHub.
+- **Software**: Node.js 20+, Docker Desktop, Claude Code Pro, akun GitHub.
 
 ---
 
