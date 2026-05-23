@@ -1,7 +1,5 @@
 # Modul 1 — SDLC & Scrum Agile
 
-![Digital Banking](./images/01-intro-digital-banking.jpg)
-
 > **Konteks**: Materi ini ditujukan untuk peserta Officer Development Program (ODP) BSI — baik track IT maupun non-IT yang akan berinteraksi dengan tim pengembangan. Tujuannya: paham siklus pengembangan software, kenapa metodologi penting, dan bagaimana Scrum (sebagai implementasi Agile paling populer) bekerja dalam konteks perbankan syariah.
 
 > Setelah modul ini Anda harus bisa: (a) menjelaskan fase-fase SDLC dan kapan masing-masing pendekatan dipakai, (b) memahami nilai & prinsip Agile, (c) menjalankan peran dalam tim Scrum (Product Owner, Scrum Master, atau Developer), (d) menulis user story yang baik dan memahami estimasi, (e) berkolaborasi efektif dengan tim IT/bisnis lewat Scrum events.
@@ -38,13 +36,24 @@ Tanpa SDLC/Scrum:                   Dengan SDLC/Scrum:
 
 ## 2. SDLC — Software Development Life Cycle
 
-![Team Collaboration](./images/02-team-collaboration.jpg)
-
 **SDLC** adalah serangkaian fase yang dilalui suatu perangkat lunak dari ide awal hingga digunakan & dipelihara. Anggap seperti **siklus hidup produk** — mulai dari konsep, lahir, dipakai, sampai pensiun.
 
 ### 2.1 Tujuh Fase Klasik SDLC
 
-![7 Fase SDLC](./images/diagram-1-sdlc-phases.png)
+```mermaid
+flowchart LR
+    A[1. Planning] --> B[2. Analysis]
+    B --> C[3. Design]
+    C --> D[4. Implementation]
+    D --> E[5. Testing]
+    E --> F[6. Deployment]
+    F --> G[7. Maintenance]
+    G -.feedback.-> A
+
+    style A fill:#fef3c7,stroke:#f59e0b
+    style D fill:#dbeafe,stroke:#3b82f6
+    style F fill:#dcfce7,stroke:#16a34a
+```
 
 | Fase | Aktivitas Utama | Output |
 |---|---|---|
@@ -170,8 +179,6 @@ Dev ─→ Build ─→ Test ─→ Release ─→ Deploy ─→ Operate ─→ 
 
 ## 4. Manifesto Agile — Filosofi Dasar
 
-![Agile Planning Board](./images/03-agile-manifesto.jpg)
-
 Pada Februari 2001, 17 software engineer berkumpul di Snowbird, Utah dan menyusun **Manifesto Agile**. Ini bukan metodologi, melainkan **set nilai dan prinsip** yang jadi fondasi semua framework Agile (Scrum, Kanban, XP, dll).
 
 ### 4.1 Empat Nilai Agile
@@ -251,9 +258,20 @@ Scrum dibangun di atas **empirisme** — keputusan dibuat berdasarkan observasi,
 
 Tim Scrum terdiri dari **3 akuntabilitas** (sejak Scrum Guide 2020, istilah "role" diganti "accountability"). Total tim biasanya **5–9 orang**.
 
-![Scrum Team Meeting](./images/04-scrum-team-meeting.jpg)
+```mermaid
+flowchart TD
+    PO["Product Owner<br/>(WHAT - apa yang dibangun)"]:::po
+    SM["Scrum Master<br/>(HOW - efektivitas proses)"]:::sm
+    DEV["Developers<br/>(BUILD - membangun increment)"]:::dev
 
-![Scrum Team — 3 Akuntabilitas](./images/diagram-2-scrum-team.png)
+    PO -.-> Backlog[("Product<br/>Backlog")]
+    SM -.-> Process[("Scrum Process<br/>health")]
+    DEV -.-> Increment[("Increment")]
+
+    classDef po fill:#fef3c7,stroke:#f59e0b,stroke-width:2px
+    classDef sm fill:#dbeafe,stroke:#3b82f6,stroke-width:2px
+    classDef dev fill:#dcfce7,stroke:#16a34a,stroke-width:2px
+```
 
 ### 6.1 Product Owner (PO)
 
@@ -309,7 +327,16 @@ Profil di BSI: developer, tester, UI/UX designer, system analyst — biasanya ja
 
 Semua aktivitas Scrum terjadi dalam 5 events. Aturan: **time-boxed** — ada batas waktu maksimal supaya tidak melar.
 
-![Scrum Events Cycle](./images/diagram-3-scrum-events.png)
+```mermaid
+flowchart LR
+    SP["Sprint Planning<br/>max 8 jam"]:::e --> Daily["Daily Scrum<br/>15 menit/hari"]:::e
+    Daily --> Daily
+    Daily --> Review["Sprint Review<br/>max 4 jam"]:::e
+    Review --> Retro["Sprint Retrospective<br/>max 3 jam"]:::e
+    Retro --> SP
+
+    classDef e fill:#fef3c7,stroke:#f59e0b,stroke-width:2px
+```
 
 (Semuanya berada dalam container **The Sprint** — biasanya 2 minggu.)
 
@@ -576,8 +603,6 @@ Kalau garis flat (tidak turun), tim stuck atau scope nambah → perlu intervensi
 
 ## 10. Studi Kasus — Implementasi Scrum di BSI Mobile Banking
 
-![Mobile Banking Case](./images/05-mobile-banking-case.jpg)
-
 ### Skenario
 
 Tim **BSI Mobile** sedang mengembangkan fitur baru: **"Setor Dana QRIS ke Tabungan Haji"**. Tim terdiri dari:
@@ -712,10 +737,3 @@ Kanban adalah framework Agile lain yang populer. Bukan saingan — lebih ke alte
 | Buku **"User Story Mapping"** — Jeff Patton | Untuk paham backlog management |
 
 **Selanjutnya**: Modul 2 — (akan ditentukan: bisa Project Management Lanjutan, atau Software Architecture Dasar, atau Banking IT Operations).
-
----
-
-### Kredit Gambar
-
-- Ilustrasi (`01–05.jpg`): [Unsplash](https://unsplash.com/license) — free for commercial use, no attribution required.
-- Diagram (`diagram-1–3.png`): di-generate dari source Mermaid via [mermaid.ink](https://mermaid.ink) — source-nya tersimpan di history `materi.md` (kalau perlu di-edit, generate ulang via mermaid.live).
