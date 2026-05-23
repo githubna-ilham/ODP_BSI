@@ -105,11 +105,9 @@ Lima fase klasik Waterfall: **Requirements Analysis → Design → Development �
 
 Bagi project jadi beberapa **iterasi pendek**. Tiap iterasi menghasilkan increment fungsionalitas. Berbeda dari Waterfall yang sekali jalan sampai selesai.
 
-```
-Iterasi 1: [Plan→Design→Build→Test] → fitur dasar
-Iterasi 2: [Plan→Design→Build→Test] → tambah fitur
-Iterasi 3: [Plan→Design→Build→Test] → finalisasi
-```
+![Phases of Iterative Incremental Model](./images/iterative-incremental.png)
+
+Setelah **Initial Planning**, project masuk loop **Planning → Requirements → Analysis & Design → Implementation → Testing → Evaluation → (kembali ke Planning)**. Tiap putaran loop = increment baru yang siap di-deploy. Loop berhenti saat semua requirement terpenuhi.
 
 **Cocok untuk**: project besar yang bisa dipecah jadi modul-modul independen.
 
