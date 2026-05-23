@@ -27,6 +27,79 @@ Latihan ini mengikuti **alur Sprint pertama dari nol** sampai selesai — termas
 
 ---
 
+## Klarifikasi: Scrum Artifact vs Dokumen BRD/SDD
+
+Sebelum mulai latihan, **penting paham bedanya** — biar tidak salah paham kalau dengar istilah ini di kantor:
+
+### Scrum Artifact (yang akan kita bikin di latihan ini)
+
+Dari **Scrum Guide 2020**, hanya ada **3 artifact resmi**:
+
+| Artifact | Commitment |
+|---|---|
+| **Product Backlog** | Product Goal |
+| **Sprint Backlog** | Sprint Goal |
+| **Increment** | Definition of Done |
+
+Karakteristik: **lightweight**, **evolving** (di-update tiap Sprint), berbasis **conversation**, owned by Scrum Team.
+
+### BRD & SDD (dokumen Waterfall tradisional)
+
+| Dokumen | Isi | Karakteristik |
+|---|---|---|
+| **BRD** (Business Requirement Document) | Tujuan bisnis, scope, requirement fungsional & non-fungsional | Comprehensive, up-front, signed-off, contractual |
+| **SDD** (Software Design Document) | Arsitektur sistem, database schema, modul, sequence diagram | Detail teknis, written by architect/lead, signed-off |
+
+Karakteristik: **heavy**, **static** (signed sekali di awal), berbasis **document**, owned by analyst/architect.
+
+### Beda Fundamental
+
+| Aspek | BRD / SDD | Scrum Artifact |
+|---|---|---|
+| **Asal paradigma** | Waterfall / heavy process | Agile / Scrum |
+| **Filosofi** | "Tahu semua di awal, dokumen lengkap, tidak berubah" | "Belajar sambil jalan, dokumen secukupnya, embrace change" |
+| **Bentuk** | Multi-page PDF/Word formal | List (backlog), plan (sprint), working software |
+| **Update** | Static — sekali sign-off | Continuous |
+| **Audiens utama** | Stakeholder bisnis (BRD) / tim teknis (SDD) | Seluruh Scrum Team |
+| **Approval** | Signed-off oleh manajemen | Tidak ada formal approval — empirical |
+
+### Realita di Industri Perbankan: Hybrid
+
+Di **banking**, banyak tim Scrum **tetap perlu BRD/SDD** karena tuntutan compliance:
+
+| Kebutuhan | Solusi Praktis |
+|---|---|
+| **Audit OJK** wajib trace requirement | Export Product Backlog + AC jadi PDF bulanan |
+| **Vendor contract** butuh formal spec | Bikin BRD ringkas (1-3 halaman) — detail di Product Backlog |
+| **Compliance review** butuh signed document | Section sign-off di BRD ringkas untuk milestone tertentu |
+| **Architecture decision** perlu di-record | Pakai **ADR** (Architecture Decision Record) — SDD versi lightweight |
+
+### Pemetaan File Latihan ke Konsep Waterfall
+
+Untuk mempermudah kalau Anda bandingkan dengan dokumen tradisional:
+
+| File Latihan | Mendekati konsep di Waterfall |
+|---|---|
+| 01-product-vision.md | "Executive Summary" + "Project Charter" di BRD |
+| 02-product-backlog.md | "Functional Requirements" di BRD — tapi format list & dynamic |
+| 03-acceptance-criteria.md | "Detailed Requirements" + "Test Scenarios" |
+| 04-dor-dod.md | "Quality Requirements" + "Acceptance Standards" |
+| 05-estimasi.md | "Effort Estimation" |
+| 06-sprint-1-planning.md | "Project Plan" (mini, per-Sprint) |
+| 07-09 Sprint mechanics | Tidak ada padanannya di Waterfall (proses live) |
+| 10-velocity-burndown.md | "Progress Report" |
+
+### Kesimpulan untuk Latihan Ini
+
+- **Yang Anda bikin di latihan ini = Scrum Artifact + supporting docs**, **bukan** BRD/SDD.
+- Tapi **content-nya overlap** — Product Backlog + AC bisa "menggantikan" sebagian besar BRD untuk tim Agile.
+- Di BSI nyatanya, **kedua-duanya hidup berdampingan**: BRD ringkas untuk audit & contract, Scrum artifact untuk daily work.
+- **SDD belum dibikin di Modul 1** karena fokus planning. Konten SDD-like (database schema, API design) akan muncul di **Modul 2-3**.
+
+> **Tip praktis**: kalau di kantor Anda diminta bikin BRD, ekstrak dari **Product Vision (file 01) + Product Backlog (file 02) + AC (file 03)**. Itu sudah ~70% BRD. Sisanya tinggal tambah header formal, sign-off section, dan referensi regulasi.
+
+---
+
 ## Langkah 1 — Tulis Product Goal & Product Vision (15 menit)
 
 **Tujuan**: tim sepakati arah produk yang akan dibangun, jadi acuan semua prioritisasi backlog.
