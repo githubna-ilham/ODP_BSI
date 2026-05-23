@@ -113,7 +113,34 @@ Setelah **Initial Planning**, project masuk loop **Planning → Requirements →
 
 ### 3.3 Agile
 
-Mindset yang menekankan **adaptasi cepat terhadap perubahan**. Bukan satu metodologi spesifik — Scrum, Kanban, XP, SAFe semuanya implementasi dari mindset Agile.
+**Agile** adalah **mindset / filosofi** pengembangan software yang menekankan **adaptasi cepat terhadap perubahan**, kolaborasi langsung dengan customer, dan delivery rutin software yang bernilai. Diformalkan tahun **2001** lewat *Agile Manifesto* yang ditandatangani 17 software engineer.
+
+Penting dipahami: **Agile bukan satu metodologi spesifik**. Agile adalah payung yang menaungi banyak framework — yang paling populer:
+
+| Framework | Karakteristik |
+|---|---|
+| **Scrum** | Time-boxed Sprint (2 minggu), 3 akuntabilitas (PO/SM/Dev), 5 events |
+| **Kanban** | Visual board + WIP limit, continuous flow tanpa Sprint |
+| **XP** (Extreme Programming) | Engineering practice: TDD, pair programming, CI |
+| **SAFe** (Scaled Agile Framework) | Agile untuk enterprise/multi-tim (50+ orang) |
+| **Scrumban** | Hybrid Scrum + Kanban |
+
+Modul ini fokus ke **Scrum** sebagai framework Agile terpopuler — dibahas mendalam di §5.
+
+#### Empat Nilai Agile (dari Manifesto)
+
+Agile lebih menghargai:
+
+| Lebih dari | … daripada | Maksudnya |
+|---|---|---|
+| **Individu & interaksi** | proses & tools | Tools penting, tapi yang bikin software jalan adalah orang & komunikasi |
+| **Software yang berfungsi** | dokumentasi komprehensif | Dokumen tetap perlu, tapi prioritas: kode yang jalan & bermanfaat |
+| **Kolaborasi customer** | negosiasi kontrak | Customer = partner, bukan lawan negosiasi |
+| **Merespons perubahan** | mengikuti rencana | Rencana dibuat untuk berubah seiring pemahaman bertambah |
+
+**Penting**: bukan "kanan tidak penting" — keduanya penting, tapi yang **kiri lebih diprioritaskan**.
+
+#### Alur Iterasi Sprint
 
 ```
 Sprint 1 ─→ Sprint 2 ─→ Sprint 3 ─→ ... → Release
@@ -122,7 +149,42 @@ Sprint 1 ─→ Sprint 2 ─→ Sprint 3 ─→ ... → Release
        (continuous)
 ```
 
-**Cocok untuk**: product development di mana requirement bisa berubah, time-to-market penting, dan team relatif kecil (5–9 orang).
+Tiap Sprint (biasanya 2 minggu) menghasilkan **increment software yang siap dipakai**. Stakeholder beri feedback di Sprint Review → masuk ke Sprint berikutnya. Bukan menunggu sampai semua fitur selesai baru rilis.
+
+#### Karakteristik Utama
+
+- **Iterasi pendek**: Sprint 1–4 minggu, tidak lebih. Goal: dapat feedback cepat.
+- **Cross-functional team**: 1 tim bisa kerjakan analysis, design, code, test — bukan dibagi per spesialisasi yang harus handoff.
+- **Self-organizing**: tim sendiri yang putuskan cara terbaik mengerjakan. Manager tidak micro-manage.
+- **Embrace change**: perubahan requirement di Sprint berikutnya = welcome, bukan masalah.
+- **Working software > documentation**: prioritas selalu kode yang jalan.
+
+#### Kapan Pakai Agile?
+
+**Cocok untuk:**
+- **Product development** di mana requirement bisa berubah seiring user feedback (mis. mobile banking BSI, fitur digital baru).
+- **Time-to-market penting** — perlu rilis kecil & sering, bukan rilis besar di akhir.
+- Tim **relatif kecil** (5–9 orang per Scrum team).
+- Tim yang **co-located** atau punya remote tooling matang (Slack, Zoom, Jira).
+- Budaya organisasi **terbuka pada perubahan** & toleran terhadap eksperimen.
+
+**Tidak cocok untuk:**
+- Project dengan **regulasi sangat ketat** yang butuh upfront full specification (mis. sistem core banking yang harus pre-audited OJK).
+- Tim yang belum punya **disiplin teknis** (testing, CI, refactor) — Agile tanpa disiplin = chaos.
+- Tim sangat besar tanpa coaching scaling (kalau > 50 orang, perlu SAFe / LeSS).
+- Stakeholder yang **menolak terlibat aktif** — Agile butuh Product Owner yang available.
+
+#### Implementasi Agile di BSI
+
+| Use case | Framework Agile yang cocok |
+|---|---|
+| Pengembangan BSI Mobile feature baru | **Scrum** (2-week Sprint) |
+| Tim production support / bug fix | **Kanban** (continuous flow, prioritas dinamis) |
+| Tim platform (DevOps, infra) | **Kanban** atau **Scrumban** |
+| Transformasi digital lintas divisi (50+ orang) | **SAFe** atau **LeSS** |
+| Core banking migration | **Bukan Agile** — pakai Waterfall karena regulasi ketat |
+
+Detail Agile + Scrum (akuntabilitas, events, artifacts) dibahas mendalam di **§4 Manifesto Agile** dan **§5 Scrum Framework**.
 
 ### 3.4 DevOps
 
