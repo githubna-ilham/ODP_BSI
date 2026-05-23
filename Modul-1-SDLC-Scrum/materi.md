@@ -150,9 +150,10 @@ Diagram infinity (∞) menggambarkan **loop berkelanjutan tanpa akhir**: sisi **
 | Waterfall | Lambat | Sulit | Lengkap | Core banking migration, regulasi baru |
 | Iterative | Sedang | Sedang | Cukup | Modul independen (mis. modul tabungan) |
 | **Agile/Scrum** | **Cepat** | **Sangat baik** | Cukup | **Mobile banking, fitur digital baru** |
-| DevOps | Sangat cepat | Sangat baik | Otomatis di pipeline | Layanan cloud, API gateway |
 
 > **Catatan**: di BSI, biasanya **kombinasi** dipakai. Core banking pakai Waterfall karena regulasi ketat, sedangkan mobile/digital product pakai Scrum karena butuh iterasi cepat.
+>
+> **DevOps tidak ada di tabel ini** karena bukan SDLC model yang sejajar — DevOps adalah **prinsip & praktik teknis** (CI/CD, otomasi, shared responsibility Dev+Ops) yang **menempel** ke metodologi lain. Tim Agile/Scrum yang dewasa biasanya **sekaligus pakai DevOps** untuk pipeline build & deploy-nya. Dan Waterfall pun bisa diperkuat sebagian dengan praktik DevOps (mis. automated test).
 
 ---
 
