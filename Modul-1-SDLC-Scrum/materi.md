@@ -111,55 +111,7 @@ Setelah **Initial Planning**, project masuk loop **Planning → Requirements →
 
 **Cocok untuk**: project besar yang bisa dipecah jadi modul-modul independen.
 
-### 3.3 Spiral
-
-**Spiral Model** (dikenalkan Barry Boehm tahun 1986) adalah kombinasi **Iterative + emphasis ke risk management**. Berbeda dengan Iterative biasa yang fokus ke increment fungsionalitas, Spiral menempatkan **analisis risiko di pusat setiap loop** — sebelum tim lanjut ke fase berikutnya, semua risiko diidentifikasi dan dimitigasi dulu.
-
-Disebut "spiral" karena tiap loop menggambar lingkaran yang **makin besar** — semakin banyak fitur dibangun, semakin matang produk, semakin besar investasi yang dibuat.
-
-#### Empat Kuadran per Loop
-
-Setiap loop spiral melewati **4 fase berurutan**:
-
-| Kuadran | Fase | Aktivitas Utama |
-|---|---|---|
-| 1 | **Planning** (Determine objectives) | Identifikasi tujuan iterasi, alternatif solusi, constraint (budget, waktu, regulasi) |
-| 2 | **Risk Analysis** | Daftar risiko, evaluasi dampak, bikin prototype/PoC untuk validasi |
-| 3 | **Engineering** (Development & Test) | Bangun increment produk, unit test, integration test |
-| 4 | **Evaluation** (Customer review) | Demo ke stakeholder, kumpulkan feedback, rencanakan loop berikutnya |
-
-Setelah kuadran 4, loop berikutnya kembali ke kuadran 1 — tapi lingkup-nya lebih besar dari loop sebelumnya.
-
-#### Karakteristik Utama
-
-- **Risk-driven**: keputusan lanjut/stop di tiap loop ditentukan oleh hasil risk analysis. Kalau risiko terlalu besar → revisi pendekatan atau batalkan project sebelum loss makin besar.
-- **Loop progresif**: increment di tiap putaran makin besar — dari PoC, prototype, MVP, sampai production-ready.
-- **Eksplisit di prototyping**: prototype sering dibikin di kuadran 2 untuk **uji teknis** sebelum invest besar di kuadran 3.
-- **Dokumentasi seimbang**: lebih lengkap dari Agile tapi tidak se-rigid Waterfall — disesuaikan kebutuhan tiap loop.
-
-#### Kapan Pakai Spiral?
-
-**Cocok untuk:**
-- Project dengan **risiko tinggi** — teknis (teknologi baru), bisnis (pasar belum jelas), atau regulasi (mis. integrasi dengan sistem core legacy yang kompleks).
-- Project **berbiaya besar & jangka panjang** — di mana failure di tengah jalan akan sangat costly.
-- Project yang butuh **prototype eksploratif** sebelum commit ke arsitektur final.
-
-**Tidak cocok untuk:**
-- Project kecil/sederhana — overhead risk analysis tidak sebanding dengan ukuran project.
-- Tim yang belum familiar dengan formal risk management — Spiral butuh pengalaman.
-- Deadline ketat & predictable — Spiral butuh fleksibilitas waktu.
-
-#### Contoh di Konteks BSI
-
-Misal: **migrasi sistem core banking syariah dari vendor lama ke vendor baru** — risiko tinggi (data nasabah miliaran, regulasi OJK ketat, tidak boleh downtime).
-
-- **Loop 1** — Planning: tentukan scope migrasi (modul tabungan dulu). Risk Analysis: identifikasi risiko data loss, downtime, ketidakcocokan schema. Engineering: bikin PoC migrasi 1000 record dummy. Evaluation: cek hasil PoC dengan tim Risk & Compliance.
-- **Loop 2** — Planning: lanjut migrasi modul deposito. Risk Analysis: temukan risiko baru (currency conversion). Engineering: bikin migration script + reconciliation tool. Evaluation: pilot dengan 1 cabang dulu.
-- **Loop 3** — Migrasi production penuh, dengan semua risiko sudah ter-mitigasi dari loop sebelumnya.
-
-Spiral cocok di sini karena **stop early** bisa dilakukan kalau loop awal menunjukkan risiko tidak bisa di-mitigasi — daripada lanjut buta-buta dan rugi besar.
-
-### 3.4 Agile
+### 3.3 Agile
 
 Mindset yang menekankan **adaptasi cepat terhadap perubahan**. Bukan satu metodologi spesifik — Scrum, Kanban, XP, SAFe semuanya implementasi dari mindset Agile.
 
@@ -172,7 +124,7 @@ Sprint 1 ─→ Sprint 2 ─→ Sprint 3 ─→ ... → Release
 
 **Cocok untuk**: product development di mana requirement bisa berubah, time-to-market penting, dan team relatif kecil (5–9 orang).
 
-### 3.5 DevOps
+### 3.4 DevOps
 
 Bukan SDLC model tradisional, tapi **pendekatan budaya** yang menggabungkan Development dan Operations. Fokus pada otomasi, continuous integration, continuous deployment (CI/CD).
 
@@ -183,13 +135,12 @@ Dev ─→ Build ─→ Test ─→ Release ─→ Deploy ─→ Operate ─→ 
 
 **Cocok untuk**: aplikasi yang butuh rilis sering, layanan cloud-native.
 
-### 3.6 Pemilihan Model — Ringkasan
+### 3.5 Pemilihan Model — Ringkasan
 
 | Model | Time-to-market | Adaptasi perubahan | Dokumentasi | Cocok untuk BSI |
 |---|---|---|---|---|
 | Waterfall | Lambat | Sulit | Lengkap | Core banking migration, regulasi baru |
 | Iterative | Sedang | Sedang | Cukup | Modul independen (mis. modul tabungan) |
-| Spiral | Sedang | Sedang | Lengkap | Integrasi legacy + sistem baru |
 | **Agile/Scrum** | **Cepat** | **Sangat baik** | Cukup | **Mobile banking, fitur digital baru** |
 | DevOps | Sangat cepat | Sangat baik | Otomatis di pipeline | Layanan cloud, API gateway |
 
