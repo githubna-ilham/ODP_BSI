@@ -288,7 +288,6 @@ model Transaksi {
   metode        String?      @db.VarChar(20)
   waktu         DateTime     @default(now())
 
-  @@index([tabunganId, waktu(sort: Desc)])
   @@map("transaksi")
 }
 
@@ -301,7 +300,6 @@ model AuditLog {
   metadata   Json?
   waktu      DateTime @default(now())
 
-  @@index([waktu(sort: Desc)])
   @@map("audit_log")
 }
 ```

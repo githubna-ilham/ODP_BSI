@@ -125,22 +125,6 @@ Untuk modul ini, fokus ke **3NF** — cukup untuk 90% kasus.
 | `CHECK` | Aturan custom | `CHECK (saldo >= 0)` |
 | `DEFAULT` | Nilai default | `created_at TIMESTAMP DEFAULT NOW()` |
 
-### 2.5 Index — Untuk Performance
-
-Index = "daftar isi" tabel — query lebih cepat tapi insert/update sedikit lebih lambat.
-
-**Aturan kapan bikin index**:
-- ✅ Kolom yang sering di-filter di `WHERE` (mis. `email`, `nik`).
-- ✅ Kolom yang sering di-JOIN.
-- ✅ Foreign key (otomatis di banyak ORM).
-- ❌ Kolom yang sering berubah (overhead lebih besar dari benefit).
-- ❌ Tabel kecil (< 1000 baris) — full scan sudah cepat.
-
-```sql
-CREATE INDEX idx_transaksi_tabungan_waktu
-ON transaksi (tabungan_id, waktu DESC);
-```
-
 ---
 
 ## 3. PostgreSQL — Pengenalan
@@ -195,9 +179,6 @@ CREATE TABLE nasabah (
     updated_at   TIMESTAMPTZ DEFAULT NOW()
 );
 
-CREATE INDEX idx_nasabah_email ON nasabah(email);
-CREATE INDEX idx_nasabah_nik ON nasabah(nik);
-
 -- Tabel Tabungan Haji
 CREATE TABLE tabungan_haji (
     id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -209,8 +190,6 @@ CREATE TABLE tabungan_haji (
     dibuka_at       TIMESTAMPTZ DEFAULT NOW(),
     created_at      TIMESTAMPTZ DEFAULT NOW()
 );
-
-CREATE INDEX idx_tabungan_nasabah ON tabungan_haji(nasabah_id);
 
 -- Tabel Transaksi
 CREATE TABLE transaksi (
@@ -226,12 +205,6 @@ CREATE TABLE transaksi (
     waktu           TIMESTAMPTZ DEFAULT NOW()
 );
 
-CREATE INDEX idx_transaksi_tabungan_waktu
-ON transaksi(tabungan_id, waktu DESC);
-
-CREATE INDEX idx_transaksi_referensi
-ON transaksi(referensi);
-
 -- Tabel Audit Log (untuk compliance)
 CREATE TABLE audit_log (
     id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -242,9 +215,6 @@ CREATE TABLE audit_log (
     metadata    JSONB,                          -- detail bebas
     waktu       TIMESTAMPTZ DEFAULT NOW()
 );
-
-CREATE INDEX idx_audit_waktu ON audit_log(waktu DESC);
-CREATE INDEX idx_audit_action ON audit_log(action);
 ```
 
 ### 4.1 Insert Sample Data
@@ -341,7 +311,6 @@ model Transaksi {
   metode         String?      @db.VarChar(20)
   waktu          DateTime     @default(now())
 
-  @@index([tabunganId, waktu(sort: Desc)])
   @@map("transaksi")
 }
 ```
