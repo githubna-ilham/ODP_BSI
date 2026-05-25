@@ -188,63 +188,87 @@ Kalau cuma butuh ringkas (1-2 paragraf):
 
 ## Langkah 2 — Bikin Product Backlog dengan Epic & Story (45 menit)
 
+> **Integrasi penting**: Story-story di langkah ini **akan diimplementasi jadi kode di Modul 2**. Tiap Story = 1 endpoint API yang akan Anda bikin. Jadi pikirkan Story bukan sebagai "ide abstrak" tapi sebagai "kontrak kerja konkret untuk minggu depan".
+
 ### 2.1 Setup Issue Type
 
 Jira Scrum project default punya issue type: **Epic, Story, Task, Bug, Sub-task**. Verifikasi tersedia:
 - **Project Settings** → **Issue types** → cek 5 type di atas ada.
 
-### 2.2 Bikin Epic Dulu (4 Epic)
+### 2.2 Bikin Epic Dulu (5 Epic)
 
 Klik **Backlog** di sidebar. Klik **+ Create epic** di kolom Epic (sidebar kiri Backlog view).
 
-Bikin 4 epic berikut:
+Bikin 5 epic berikut — 1 epic teknis + 4 epic user-facing:
 
-| Epic Key | Summary | Color |
-|---|---|---|
-| THO-1 | Onboarding Nasabah Tabungan Haji | Purple |
-| THO-2 | Setor Saldo | Blue |
-| THO-3 | Monitoring Tabungan | Green |
-| THO-4 | Admin & Reporting | Orange |
+| Epic Key | Summary | Color | Modul 2 Coverage |
+|---|---|---|---|
+| THO-1 | Infrastruktur Backend | Grey | Langkah 1-4 (DB, project setup, Express bootstrap) |
+| THO-2 | Onboarding Nasabah | Purple | Langkah 5 (CRUD Nasabah) |
+| THO-3 | Tabungan Haji & Transaksi | Blue | Langkah 6 (Tabungan + Setor) |
+| THO-4 | Keamanan & Auth | Red | Langkah 7 (JWT, middleware) |
+| THO-5 | Monitoring & Admin (Future) | Green | (Tidak dicover Modul 2, tugas lanjutan) |
 
 Set color tiap epic biar mudah dibedakan di board nanti.
 
-### 2.3 Bikin Story di Tiap Epic
+### 2.3 Bikin Story di Tiap Epic — Nyambung ke Modul 2
 
 Klik **+ Create** (tombol biru di header) → pilih **Story** → isi:
 - **Summary**: ringkasan story
 - **Epic Link**: pilih epic parent
-- **Description**: format INVEST (Sebagai... Saya ingin... Sehingga...)
+- **Description**: format INVEST + endpoint API yang akan dibikin di Modul 2
 
-Bikin minimal 15 story. Contoh untuk Epic THO-1:
+#### Story untuk THO-1 (Infrastruktur Backend)
 
-```
-Summary: Daftar tabungan haji dari mobile app
-Epic Link: THO-1 (Onboarding)
-Description:
-Sebagai nasabah,
-Saya ingin daftar tabungan haji dari mobile app,
-Sehingga saya tidak perlu datang ke cabang.
+| Story | Endpoint / Output Modul 2 |
+|---|---|
+| Setup database PostgreSQL lokal | DB `tabungan_haji` siap di `localhost:5432` |
+| Init project Node.js + TypeScript | `package.json`, `tsconfig.json`, struktur folder |
+| Schema database dengan Prisma | `prisma/schema.prisma` + migration apply |
+| Bootstrap Express server | `GET /health` returns 200 |
+
+#### Story untuk THO-2 (Onboarding Nasabah)
+
+| Story | Endpoint Modul 2 |
+|---|---|
+| Daftar nasabah baru | `POST /api/nasabah` |
+| Lihat list semua nasabah | `GET /api/nasabah` |
+| Lihat detail 1 nasabah | `GET /api/nasabah/:id` |
+| Update data nasabah | `PATCH /api/nasabah/:id` |
+| Hapus nasabah | `DELETE /api/nasabah/:id` |
+
+#### Story untuk THO-3 (Tabungan Haji & Transaksi)
+
+| Story | Endpoint Modul 2 |
+|---|---|
+| Buka rekening tabungan haji | `POST /api/tabungan` |
+| Setor saldo (idempotent + DB transaction) | `POST /api/tabungan/:id/setor` |
+| Lihat saldo & detail tabungan | `GET /api/tabungan/:id` |
+| Lihat mutasi transaksi | `GET /api/tabungan/:id/mutasi` |
+
+#### Story untuk THO-4 (Keamanan & Auth)
+
+| Story | Endpoint Modul 2 |
+|---|---|
+| Login user dengan JWT | `POST /api/auth/login` |
+| Proteksi endpoint sensitif dengan middleware | `requireAuth` middleware |
+| Logout (token invalidation) | `POST /api/auth/logout` |
+
+#### Contoh Format Description (INVEST + Modul 2 Link)
+
+```markdown
+**User Story:**
+Sebagai nasabah, saya ingin daftar tabungan haji dari mobile app,
+sehingga saya tidak perlu datang ke cabang.
+
+**Endpoint (Modul 2):**
+POST /api/nasabah
+
+**Reference:**
+Modul-2-RESTful-API-PostgreSQL/latihan.md → Langkah 5
 ```
 
-```
-Summary: Upload foto KTP saat daftar
-Epic Link: THO-1
-Description:
-Sebagai nasabah,
-Saya ingin upload foto KTP saat daftar,
-Sehingga validasi KYC bisa dilakukan otomatis.
-```
-
-```
-Summary: Pilih jangka waktu menabung
-Epic Link: THO-1
-Description:
-Sebagai nasabah,
-Saya ingin pilih jangka waktu menabung (5/10/15 tahun),
-Sehingga aplikasi bisa hitung target setoran bulanan.
-```
-
-Lanjut bikin untuk Epic THO-2 (Setor), THO-3 (Monitoring), THO-4 (Admin). Target: minimal 15 story total.
+Target: bikin **minimal 15 Story** total (4 + 5 + 4 + 3 = 16 dari mapping di atas). Bikin tambahan story Future di THO-5 (mis. "Lihat estimasi tahun berangkat haji", "Export laporan bulanan") supaya backlog terlihat hidup.
 
 ### 2.4 Set Priority (MoSCoW)
 
@@ -469,12 +493,25 @@ Di view **Backlog**:
    - **End date**: auto-calculated
    - **Sprint goal**: "Nasabah bisa daftar tabungan haji dari mobile dan lakukan setor pertama (minimum viable flow), siap untuk pilot 10 cabang."
 
-### 6.2 Pilih Story untuk Sprint 1
+### 6.2 Pilih Story untuk Sprint 1 — Sesuai Materi Modul 2
 
 Drag-and-drop story dari **Backlog** ke **Sprint 1**:
 - Pilih dari priority **Highest** (Must-have).
 - Target velocity: 22 points (Sprint pertama tebakan kasar).
 - Pastikan story yang dipilih support Sprint Goal.
+
+**Rekomendasi isi Sprint 1** (sesuai urutan latihan Modul 2):
+
+| Order | Story | Epic | Modul 2 Langkah |
+|---|---|---|---|
+| 1 | Setup database PostgreSQL lokal | THO-1 | Langkah 1 |
+| 2 | Init project Node.js + TypeScript | THO-1 | Langkah 2 |
+| 3 | Schema database dengan Prisma | THO-1 | Langkah 3 |
+| 4 | Bootstrap Express server | THO-1 | Langkah 4 |
+| 5 | Daftar nasabah baru | THO-2 | Langkah 5 |
+| 6 | Buka rekening tabungan haji | THO-3 | Langkah 6.1-6.3 |
+| 7 | Setor saldo (idempotent) | THO-3 | Langkah 6.4-6.5 |
+| 8 | Login user dengan JWT | THO-4 | Langkah 7 |
 
 Cek total points di header Sprint — pastikan sesuai velocity target.
 
@@ -771,10 +808,37 @@ Lakukan planning Sprint 2 dengan **feedback dari Retro & Stakeholder** Sprint 1.
 - Tambah custom field "Compliance Reviewed" (boolean).
 - Modify workflow: issue dengan label `compliance` harus di-approve Tim Compliance sebelum bisa masuk **Done**.
 
-### D. Integrasi dengan GitHub
-- **Settings** → **Apps** → install **GitHub for Jira**.
-- Link branch GitHub ke issue Jira (commit message format `[THO-5] Add endpoint setor`).
-- Sekarang dev activity di GitHub auto-update status di Jira.
+### D. Integrasi dengan GitHub (Smart Commit) — Penting untuk Modul 2 & 5
+
+Saat mulai koding di Modul 2, hubungkan Jira ↔ GitHub supaya tiap commit otomatis nampak di issue Jira.
+
+**Setup (sekali):**
+1. **Project Settings** → **Apps** → install **GitHub for Jira** dari Marketplace (free).
+2. Authorize Atlassian app ke GitHub account/org.
+3. Pilih repo: `ODP_BSI` (atau repo Anda).
+
+**Konvensi naming:**
+
+| Item | Format | Contoh |
+|---|---|---|
+| Branch | `feat/<KEY>-<short-desc>` | `feat/THO-7-setor-idempotent` |
+| Commit | `<KEY> <message>` | `THO-7 implement idempotent setor endpoint` |
+| PR title | `[<KEY>] <description>` | `[THO-7] Setor saldo dengan DB transaction` |
+
+**Smart Commit syntax** (di commit message):
+
+```bash
+# Tambah comment ke issue
+git commit -m "THO-7 #comment Endpoint setor sudah lulus Postman test"
+
+# Update time tracking
+git commit -m "THO-7 #time 2h Implementasi service layer"
+
+# Transition status
+git commit -m "THO-7 #close Ready for review"
+```
+
+Setelah setup, di issue Jira muncul tab **Development** yang nampilin: branches, commits, dan PRs yang related. Bagus untuk Sprint Review demo.
 
 ### E. JQL Query Practice
 Belajar **Jira Query Language** untuk filter:

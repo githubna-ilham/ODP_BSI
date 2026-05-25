@@ -4,7 +4,9 @@
 >
 > **Durasi estimasi**: 4–6 jam.
 >
-> **Tool**: Claude Code CLI + Node.js 20+ + Docker Desktop + Postman.
+> **Tool**: Claude Code CLI + Node.js 20+ + PostgreSQL 16 (lokal) + Postman.
+>
+> **Catatan**: Docker akan dibahas di **Modul 5 (Git & Docker)**. Di modul ini PostgreSQL di-install langsung di laptop biar fokus pada API & database modeling.
 
 ---
 
@@ -17,7 +19,7 @@ Jalankan di terminal:
 ```bash
 node --version       # harus 20.x atau lebih baru
 npm --version        # harus 10.x atau lebih baru
-docker --version     # harus 20.x atau lebih baru
+psql --version       # harus 16.x (akan di-install di Langkah 1 kalau belum ada)
 claude --version     # Claude Code CLI sudah ter-install (dari Modul 1)
 ```
 
@@ -35,44 +37,78 @@ cd tabungan-haji-api
 
 ---
 
-## Langkah 1 — Setup PostgreSQL via Docker (15 menit)
+## Langkah 1 — Install PostgreSQL Lokal (15 menit)
 
-**Tujuan**: punya database PostgreSQL yang jalan di local, siap dipakai dari kode.
+**Tujuan**: punya database PostgreSQL yang jalan di laptop, siap dipakai dari kode.
 
-### 1.1 Jalankan Container PostgreSQL
+> **Kenapa tidak pakai Docker?** Untuk modul ini, kita fokus ke API & database modeling. Containerization (Docker) akan dibahas tersendiri di **Modul 5 (Git & Docker)**. Setelah Modul 5, Anda bisa migrasi setup ini ke Docker.
+
+### 1.1 Install PostgreSQL 16
+
+**macOS — pakai Postgres.app (paling simpel):**
+
+1. Download dari [postgresapp.com](https://postgresapp.com).
+2. Drag `Postgres.app` ke folder `/Applications`.
+3. Buka aplikasi → klik **Initialize** → server jalan di port `5432`.
+4. Tambah CLI tools ke PATH:
+   ```bash
+   sudo mkdir -p /etc/paths.d &&
+   echo /Applications/Postgres.app/Contents/Versions/latest/bin | sudo tee /etc/paths.d/postgresapp
+   ```
+   Restart terminal supaya `psql` command tersedia.
+
+**Windows — pakai installer EDB:**
+
+1. Download dari [enterprisedb.com/downloads/postgres-postgresql-downloads](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads) — pilih versi 16.
+2. Run installer → ikuti default → set password untuk user `postgres` (catat!).
+3. Port: `5432` (default). Centang **pgAdmin** & **Command Line Tools**.
+4. Setelah install, buka **SQL Shell (psql)** dari Start Menu untuk verifikasi.
+
+**Linux (Ubuntu/Debian):**
 
 ```bash
-docker run --name pg-tabungan-haji \
-  -e POSTGRES_USER=bsi_user \
-  -e POSTGRES_PASSWORD=rahasia123 \
-  -e POSTGRES_DB=tabungan_haji \
-  -p 5432:5432 \
-  -d postgres:16-alpine
+sudo apt update
+sudo apt install -y postgresql-16 postgresql-client-16
+sudo systemctl start postgresql
 ```
 
-### 1.2 Verifikasi Container Jalan
+### 1.2 Bikin Database & User
+
+Buka terminal (Mac/Linux) atau **SQL Shell (psql)** (Windows):
 
 ```bash
-docker ps | grep pg-tabungan-haji
+# Mac/Linux: connect ke default database
+psql postgres
+
+# Windows: pakai SQL Shell, login sebagai postgres dengan password tadi
 ```
 
-Harus muncul container `pg-tabungan-haji` dengan status `Up`.
+Di prompt `psql=#`, jalankan:
 
-### 1.3 Test Connect ke Database
+```sql
+CREATE USER bsi_user WITH PASSWORD 'rahasia123';
+CREATE DATABASE tabungan_haji OWNER bsi_user;
+GRANT ALL PRIVILEGES ON DATABASE tabungan_haji TO bsi_user;
+\q
+```
+
+### 1.3 Test Connect dengan User Baru
 
 ```bash
-docker exec -it pg-tabungan-haji psql -U bsi_user -d tabungan_haji
+psql -U bsi_user -d tabungan_haji -h localhost
 ```
 
-Di prompt `psql` ketik:
+Kalau prompt minta password → ketik `rahasia123`. Di dalam psql:
 
 ```sql
 SELECT version();
 ```
 
-Output harus menampilkan versi PostgreSQL 16.x. Ketik `\q` untuk keluar.
+Output harus menampilkan PostgreSQL 16.x. Ketik `\q` untuk keluar.
 
-**Checkpoint**: PostgreSQL jalan, bisa di-connect, versi 16. ✅
+> **Troubleshoot**: kalau muncul error `peer authentication failed`, edit `pg_hba.conf` (lokasi tergantung OS) — ubah method `peer` jadi `md5` untuk local connection, lalu restart service postgres.
+
+**Checkpoint**: PostgreSQL 16 jalan di `localhost:5432`, database `tabungan_haji` ada, user `bsi_user` bisa connect. ✅
 
 ---
 
