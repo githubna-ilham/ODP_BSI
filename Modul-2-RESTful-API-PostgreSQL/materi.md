@@ -158,27 +158,7 @@ ON transaksi (tabungan_id, waktu DESC);
 | **Open source** | Tanpa license fee, vendor-independent |
 | **Extensions** | PostGIS, pgcrypto, dll |
 
-### 3.2 Setup Cepat dengan Docker
-
-Cara paling cepat — tanpa install ribet:
-
-```bash
-docker run --name pg-bsi \
-  -e POSTGRES_PASSWORD=rahasiabsi123 \
-  -e POSTGRES_DB=tabungan_haji \
-  -p 5432:5432 \
-  -d postgres:16
-```
-
-Lalu connect via `psql`:
-
-```bash
-docker exec -it pg-bsi psql -U postgres -d tabungan_haji
-```
-
-> Detail Docker dibahas di **Modul 5**. Untuk sekarang cukup paham bahwa Docker memudahkan setup database tanpa "polusi" install global.
-
-### 3.3 Tipe Data Penting
+### 3.2 Tipe Data Penting
 
 | Tipe | Penggunaan | Contoh |
 |---|---|---|
