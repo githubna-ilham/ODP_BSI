@@ -37,7 +37,7 @@ cd tabungan-haji-api
 
 ---
 
-## Langkah 1 — Install PostgreSQL Lokal (15 menit)
+## Langkah 1 — Install PostgreSQL Lokal + pgAdmin (20 menit)
 
 **Tujuan**: punya database PostgreSQL yang jalan di laptop, siap dipakai dari kode.
 
@@ -72,43 +72,70 @@ sudo apt install -y postgresql-16 postgresql-client-16
 sudo systemctl start postgresql
 ```
 
-### 1.2 Bikin Database & User
+### 1.2 Install pgAdmin (kalau belum)
 
-Buka terminal (Mac/Linux) atau **SQL Shell (psql)** (Windows):
+**pgAdmin** = GUI client untuk manage PostgreSQL — lebih ramah daripada `psql` CLI.
 
-```bash
-# Mac/Linux: connect ke default database
-psql postgres
+- **Windows**: sudah include kalau install via EDB installer. Skip langkah ini.
+- **macOS / Linux / install terpisah**: download dari [pgadmin.org/download](https://www.pgadmin.org/download/).
 
-# Windows: pakai SQL Shell, login sebagai postgres dengan password tadi
-```
+Buka pgAdmin → akan diminta set **master password** (password untuk pgAdmin-nya, bukan postgres). Catat.
 
-Di prompt `psql=#`, jalankan:
+### 1.3 Register Server PostgreSQL Lokal
 
-```sql
-CREATE USER bsi_user WITH PASSWORD 'rahasia123';
-CREATE DATABASE tabungan_haji OWNER bsi_user;
-GRANT ALL PRIVILEGES ON DATABASE tabungan_haji TO bsi_user;
-\q
-```
+Di pgAdmin sidebar kiri, klik kanan **Servers** → **Register → Server…**
 
-### 1.3 Test Connect dengan User Baru
+**Tab General:**
+- Name: `Local PostgreSQL` (bebas)
 
-```bash
-psql -U bsi_user -d tabungan_haji -h localhost
-```
+**Tab Connection:**
+- Host name/address: `localhost`
+- Port: `5432`
+- Maintenance database: `postgres`
+- Username: `postgres`
+- Password: (password yang di-set saat install PostgreSQL)
+- Centang **Save password**
 
-Kalau prompt minta password → ketik `rahasia123`. Di dalam psql:
+Klik **Save**. Server muncul di sidebar — expand `Servers → Local PostgreSQL → Databases`.
+
+### 1.4 Bikin Database & User via pgAdmin
+
+**Bikin user `bsi_user`:**
+
+1. Expand `Local PostgreSQL → Login/Group Roles` → klik kanan → **Create → Login/Group Role…**
+2. **General** tab → Name: `bsi_user`
+3. **Definition** tab → Password: `rahasia123`
+4. **Privileges** tab → toggle ON: **Can login?**, **Create databases?**
+5. Klik **Save**.
+
+**Bikin database `tabungan_haji`:**
+
+1. Klik kanan **Databases** → **Create → Database…**
+2. **General** tab → Database: `tabungan_haji`, Owner: `bsi_user`
+3. Klik **Save**.
+
+Database `tabungan_haji` muncul di sidebar.
+
+### 1.5 Test Connect dengan User Baru
+
+Buat koneksi baru sebagai `bsi_user` untuk memastikan privilege benar:
+
+1. Klik kanan **Servers** → **Register → Server…**
+2. Name: `BSI User Connection`
+3. Connection tab → Host: `localhost`, Port: `5432`, Maintenance DB: `tabungan_haji`, Username: `bsi_user`, Password: `rahasia123`
+4. Klik **Save** — kalau berhasil connect tanpa error, setup beres.
+
+**Test query** — klik kanan database `tabungan_haji` → **Query Tool**, jalankan:
 
 ```sql
 SELECT version();
 ```
 
-Output harus menampilkan PostgreSQL 16.x. Ketik `\q` untuk keluar.
+Output harus menampilkan PostgreSQL 16.x.
 
-> **Troubleshoot**: kalau muncul error `peer authentication failed`, edit `pg_hba.conf` (lokasi tergantung OS) — ubah method `peer` jadi `md5` untuk local connection, lalu restart service postgres.
+> **Troubleshoot**: kalau gagal connect dengan error `password authentication failed`, cek `pg_hba.conf` (di folder data PostgreSQL) — pastikan baris `host all all 127.0.0.1/32 md5` ada, lalu restart service postgres.
 
-**Checkpoint**: PostgreSQL 16 jalan di `localhost:5432`, database `tabungan_haji` ada, user `bsi_user` bisa connect. ✅
+**Checkpoint**: PostgreSQL 16 jalan di `localhost:5432`, database `tabungan_haji` ada, user `bsi_user` bisa connect via pgAdmin. ✅
 
 ---
 
@@ -292,11 +319,20 @@ Output yang diharapkan:
 
 ### 3.4 Verifikasi Table di Database
 
-```bash
-docker exec -it pg-tabungan-haji psql -U bsi_user -d tabungan_haji -c "\dt"
+Di pgAdmin, refresh database `tabungan_haji` (klik kanan → **Refresh**), lalu expand:
+
+```
+Databases → tabungan_haji → Schemas → public → Tables
 ```
 
 Harus muncul 5 table: `nasabah`, `tabungan_haji`, `transaksi`, `audit_log`, `_prisma_migrations`.
+
+Alternatif via Query Tool — klik kanan database → **Query Tool**, jalankan:
+
+```sql
+SELECT table_name FROM information_schema.tables
+WHERE table_schema = 'public';
+```
 
 **Checkpoint**: 4 table domain + migration table tersedia di Postgres. ✅
 
@@ -880,7 +916,7 @@ curl http://localhost:3000/api/v1/tabungan-haji/<ID_TABUNGAN>
 - Setor pertama sukses, saldo = 500.000.
 - Setor dengan referensi sama tidak nambah saldo (idempotent ✓).
 - Mutasi muncul di tabel `transaksi`.
-- Audit log tercatat di tabel `audit_log` (cek via psql).
+- Audit log tercatat di tabel `audit_log` (cek di pgAdmin → klik kanan tabel → **View/Edit Data → All Rows**).
 ✅
 
 ---
