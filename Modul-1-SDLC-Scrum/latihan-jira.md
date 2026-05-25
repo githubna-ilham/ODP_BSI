@@ -53,13 +53,17 @@ Edit profile Anda: nama lengkap, role (Developer / Scrum Master / PO). Berguna s
 
 ## Langkah 1 — Tulis Product Vision (15 menit)
 
-Jira tidak punya "Product Vision" field built-in. Workaround: pakai **Project Description** atau **Confluence page** (kalau diaktifkan).
+Jira **tidak punya** field "Product Vision" built-in. Ada **3 alternatif** — pilih yang paling cocok dengan workspace Anda:
 
-### 1.1 Set Project Description
+| Opsi | Cocok untuk | Pros | Cons |
+|---|---|---|---|
+| **A. Confluence Page** (recommended) | Workspace yang punya Confluence (sering free bersama Jira) | Format rich text + image + table + versioned | Butuh Confluence aktif |
+| **B. Issue Khusus Documentation** | Workspace tanpa Confluence | Simple, langsung di Jira | Format terbatas, susah collaborative edit |
+| **C. Project Description** | Yang mau singkat & ringkas saja | Quick, no extra setup | Cuma 1-2 paragraf, no formatting |
 
-1. Buka project `THO` → **Project Settings** (icon gear di sidebar bawah).
-2. **Details** → edit **Description**.
-3. Paste template Product Vision 5 section:
+### Template Product Vision (Pakai di Opsi Manapun)
+
+Sebelum eksekusi, siapkan teks ini dulu — dipakai di salah satu opsi di bawah:
 
 ```markdown
 ## Product Vision: Tabungan Haji Online (BSI Mobile)
@@ -87,16 +91,98 @@ BSI integrasi penuh di 1 aplikasi.
 - Penurunan 30% antrian cabang untuk transaksi haji
 ```
 
-4. **Save**.
+---
 
-### 1.2 (Opsional) Bikin di Confluence
+### 🥇 Opsi A — Confluence Page (Recommended)
 
-Kalau workspace Anda punya Confluence:
-1. **Apps** → **Confluence** → bikin space `Tabungan Haji Online`.
-2. Bikin page **Product Vision** dengan template "Product Requirements".
-3. Link ke project Jira: di project Settings → Integrations → link Confluence space.
+**Cek dulu**: di header Jira (top bar) → klik **Apps** → cek apakah ada **Confluence**. Atau coba akses `https://[your-site].atlassian.net/wiki` — kalau bisa dibuka berarti Confluence aktif.
 
-**Checkpoint**: Product Vision tersimpan di project description / Confluence page. ✅
+1. Klik tombol **Apps** di header top → pilih **Confluence**.
+   *(Atau ke `https://[your-site].atlassian.net/wiki` langsung.)*
+2. Di Confluence: klik **Create space** → pilih template **Software project** → nama `Tabungan Haji Online`.
+3. Di space baru, klik **Create** (icon `+` di sidebar) → pilih template **Product Requirements** atau **Blank page**.
+4. Title page: **Product Vision — Tabungan Haji Online**.
+5. Paste template Product Vision di atas → klik **Publish**.
+
+**Link ke project Jira:**
+1. Balik ke Jira → buka project `THO`.
+2. Sidebar kiri scroll bawah → klik ⚙️ **Project settings**.
+3. Pilih **Apps** → **Confluence**.
+4. Klik **Add a Confluence space** → pilih space "Tabungan Haji Online".
+
+Sekarang di sidebar project Jira muncul tab **Pages** yang link ke Confluence.
+
+---
+
+### 🥈 Opsi B — Issue Khusus Documentation
+
+Kalau Confluence tidak tersedia, bikin issue khusus untuk dokumentasi:
+
+1. Klik tombol biru **Create** di header top Jira.
+2. Isi form:
+   - **Project**: Tabungan Haji Online (THO)
+   - **Issue Type**: Task *(atau "Documentation" kalau ada)*
+   - **Summary**: `[DOC] Product Vision — Tabungan Haji Online`
+   - **Description**: paste template Product Vision di atas
+   - **Label**: tambah `documentation` *(klik field Labels → ketik → Enter)*
+   - **Priority**: Highest *(supaya muncul di top backlog)*
+3. Klik **Create**.
+
+**Cara akses cepat di kemudian hari:**
+- Filter: di search bar atas → ketik `project = THO AND labels = "documentation"`.
+- Save jadi filter: klik **Save as** → nama "Dokumentasi THO".
+
+---
+
+### 🥉 Opsi C — Project Description (Singkat)
+
+Kalau cuma butuh ringkas (1-2 paragraf):
+
+**Cara akses Project Settings:**
+
+```
+┌─────────────────────────────────────────────────────────┐
+│ ◯ Atlassian   Your work   Projects   Apps   ...    [+] │
+├───────────────┬─────────────────────────────────────────┤
+│ ⌂ Home        │  Tabungan Haji Online                   │
+│ 📊 Projects   │  ┌───────────────────────────────────┐  │
+│  └ Tabungan H │  │ Summary  Backlog  Board  Reports │  │
+│    └ Backlog  │  └───────────────────────────────────┘  │
+│    └ Board    │                                          │
+│    └ Reports  │                                          │
+│  ...          │                                          │
+│               │                                          │
+│  ⚙️ Project   │  ← KLIK INI (scroll sidebar paling bawah)│
+│     settings  │                                          │
+└───────────────┴─────────────────────────────────────────┘
+```
+
+1. Buka project `THO` di sidebar kiri.
+2. **Scroll ke paling bawah sidebar kiri** → klik ⚙️ **Project settings**.
+   *(Kalau tidak nampak, klik **More actions (•••)** di kanan atas project → **Project settings**.)*
+3. Tab pertama (default selected) adalah **Details**. Kalau tidak, klik **Details** di kiri.
+4. Cari field **Description** → klik area kosongnya → muncul text editor.
+5. Paste **versi singkat** Product Vision:
+   ```
+   Fitur Tabungan Haji Online di BSI Mobile untuk calon jamaah haji
+   usia 25-55 tahun. Memungkinkan daftar, setor (QRIS/transfer), dan
+   monitoring tabungan dari mobile app — tanpa perlu ke cabang.
+
+   Target: 5.000 nasabah di bulan 1, 60% transaksi via mobile di bulan 3.
+   ```
+6. Scroll bawah → klik **Save**.
+
+> **Catatan**: kalau Description tidak menampung 5 section penuh, **kombinasikan**: section singkat di Description + link ke Confluence/Issue untuk versi lengkap.
+
+---
+
+### Tip Tambahan
+
+- **Apapun opsi yang dipilih**, pin link Product Vision di tempat yang mudah diakses tim (Slack channel description, Notion, atau Confluence overview).
+- Saat Sprint Planning, **selalu rujuk Product Vision** untuk pastikan story baru tetap aligned dengan visi.
+- Vision **bisa di-update** seiring product berkembang — tapi jangan terlalu sering (ini "north star", bukan task list).
+
+**Checkpoint**: Product Vision tersimpan di salah satu lokasi (Confluence / Issue / Project Description) + bisa diakses semua tim member. ✅
 
 ---
 
