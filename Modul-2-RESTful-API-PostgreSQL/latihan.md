@@ -672,6 +672,15 @@ export async function buka(nasabahId: string) {
   });
 }
 
+export async function findAll(nasabahId?: string) {
+  const list = await prisma.tabunganHaji.findMany({
+    where: nasabahId ? { nasabahId } : undefined,
+    orderBy: { dibuatPada: "desc" },
+    include: { nasabah: { select: { nama: true, email: true } } }
+  });
+  return list.map((t) => ({ ...t, saldo: t.saldo.toString() }));
+}
+
 export async function findById(id: string) {
   const t = await prisma.tabunganHaji.findUnique({
     where: { id },
@@ -774,6 +783,14 @@ export async function bukaTabungan(req: Request, res: Response, next: NextFuncti
   } catch (err) { next(err); }
 }
 
+export async function list(req: Request, res: Response, next: NextFunction) {
+  try {
+    const nasabahId = typeof req.query.nasabah_id === "string" ? req.query.nasabah_id : undefined;
+    const list = await service.findAll(nasabahId);
+    return sukses(res, list);
+  } catch (err) { next(err); }
+}
+
 export async function detail(req: Request, res: Response, next: NextFunction) {
   try {
     const t = await service.findById(req.params.id);
@@ -812,6 +829,7 @@ import * as ctrl from "./tabungan.controller";
 const router = Router();
 
 router.post("/", ctrl.bukaTabungan);
+router.get("/", ctrl.list);
 router.get("/:id", ctrl.detail);
 router.get("/:id/mutasi", ctrl.getMutasi);
 router.post("/:id/setor", ctrl.setor);

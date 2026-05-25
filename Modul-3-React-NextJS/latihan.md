@@ -506,9 +506,7 @@ export function KartuTabungan({ tabungan }: { tabungan: TabunganHaji }) {
 
 ### 6.2 Hook untuk Fetch Daftar Tabungan
 
-Buat endpoint baru di backend kalau belum ada — atau pakai endpoint detail yang sudah ada.
-
-Asumsi backend punya endpoint `GET /api/v1/tabungan-haji?nasabah_id=xxx`. Kalau belum, **catat** sebagai todo untuk update Modul 2.
+Endpoint `GET /api/v1/tabungan-haji?nasabah_id=xxx` sudah disediakan di Modul 2 (Langkah 6).
 
 `src/hooks/use-tabungan.ts`:
 
