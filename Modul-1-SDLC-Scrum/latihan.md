@@ -1,846 +1,817 @@
-# Latihan Modul 1 — Membuat Artifact Scrum
+# Latihan Modul 1 (Versi Jira) — Membuat Artifact Scrum di Jira
 
-> **Target**: di akhir latihan, Anda punya **set Scrum artifact lengkap** untuk satu produk (Product Backlog, Sprint Backlog, DoR, DoD, User Story dengan AC, Planning Poker estimation, Sprint Review & Retrospective).
+> **Target**: di akhir latihan, Anda punya **Jira Project lengkap** dengan semua Scrum artifact yang ter-track secara digital — Product Backlog, Sprint Backlog, Burndown chart auto-generated, Daily Scrum logging, Sprint Review & Retrospective documentation.
 >
-> **Durasi estimasi**: 2–3 jam.
+> **Durasi estimasi**: 2,5–3 jam.
 >
-> **Tool**: dokumen text/markdown (atau pakai Notion/Jira/Trello kalau familiar). **Tidak perlu coding** — latihan ini fokus ke skill **planning & dokumentasi** sebagai Product Owner / Scrum Master / Developer.
-
----
-
-## Skenario Latihan
-
-Anda dan tim baru saja dibentuk untuk mengembangkan fitur baru:
-
-> **Tabungan Haji Online di Aplikasi Mobile**
+> **Skenario**: sama dengan `latihan.md` versi dokumen — fitur **Tabungan Haji Online di Aplikasi Mobile**. Bedanya, sekarang Anda kerjakan di **Jira** (tool standar industri) bukan markdown file.
 >
-> Memungkinkan nasabah daftar, setor saldo, lihat saldo, dan terima notifikasi dari aplikasi mobile — tanpa harus ke cabang.
-
-Tim Anda terdiri dari:
-- **1 Product Owner** (mewakili bisnis & nasabah)
-- **1 Scrum Master**
-- **5 Developers** (mix backend, frontend, QA)
-
-Sprint length disepakati **2 minggu**.
-
-Latihan ini mengikuti **alur Sprint pertama dari nol** sampai selesai — termasuk artifact yang dihasilkan di setiap tahap.
+> **Tool**: Jira Software (Cloud, gratis untuk team ≤ 10 orang) + browser.
 
 ---
 
-## Klarifikasi: Scrum Artifact vs Dokumen BRD/SDD
+## Kenapa Pakai Jira?
 
-Sebelum mulai latihan, **penting paham bedanya** — biar tidak salah paham kalau dengar istilah ini di kantor:
+Versi `latihan.md` membuat Anda paham **konsep** artifact Scrum. Versi `latihan-jira.md` ini ngajarin **cara real** tim engineering mengelola Scrum di tool industri.
 
-### Scrum Artifact (yang akan kita bikin di latihan ini)
-
-Dari **Scrum Guide 2020**, hanya ada **3 artifact resmi**:
-
-| Artifact | Commitment |
-|---|---|
-| **Product Backlog** | Product Goal |
-| **Sprint Backlog** | Sprint Goal |
-| **Increment** | Definition of Done |
-
-Karakteristik: **lightweight**, **evolving** (di-update tiap Sprint), berbasis **conversation**, owned by Scrum Team.
-
-### BRD & SDD (dokumen Waterfall tradisional)
-
-| Dokumen | Isi | Karakteristik |
+| Aspek | Versi `latihan.md` (Markdown) | Versi `latihan-jira.md` (Jira) |
 |---|---|---|
-| **BRD** (Business Requirement Document) | Tujuan bisnis, scope, requirement fungsional & non-fungsional | Comprehensive, up-front, signed-off, contractual |
-| **SDD** (Software Design Document) | Arsitektur sistem, database schema, modul, sequence diagram | Detail teknis, written by architect/lead, signed-off |
+| **Tool** | Text editor (VS Code, Obsidian) | Jira Software Cloud |
+| **Backlog format** | List di markdown | Issue dengan tipe Story/Task/Epic |
+| **Estimasi** | Manual catat di file | Story Points field di issue |
+| **Burndown** | Manual hitung & gambar | **Auto-generated** dari status issue |
+| **Daily Scrum** | Log di file | Pakai Board (Kanban view) — drag card |
+| **Sprint Review** | Tulis di markdown | Lihat di Sprint Report (auto-generated) |
+| **Cocok untuk** | Belajar konsep | Kerja real di tim |
 
-Karakteristik: **heavy**, **static** (signed sekali di awal), berbasis **document**, owned by analyst/architect.
+**Recommendation**: kerjakan dua-duanya untuk pengalaman lengkap — konsep dulu (markdown), lalu real-world (Jira).
 
-### Beda Fundamental
+---
 
-| Aspek | BRD / SDD | Scrum Artifact |
-|---|---|---|
-| **Asal paradigma** | Waterfall / heavy process | Agile / Scrum |
-| **Filosofi** | "Tahu semua di awal, dokumen lengkap, tidak berubah" | "Belajar sambil jalan, dokumen secukupnya, embrace change" |
-| **Bentuk** | Multi-page PDF/Word formal | List (backlog), plan (sprint), working software |
-| **Update** | Static — sekali sign-off | Continuous |
-| **Audiens utama** | Stakeholder bisnis (BRD) / tim teknis (SDD) | Seluruh Scrum Team |
-| **Approval** | Signed-off oleh manajemen | Tidak ada formal approval — empirical |
+## Persiapan: Setup Akun Jira (10 menit)
 
-### Realita di Industri Perbankan: Hybrid
+### 1. Bikin Akun Jira Cloud
 
-Di **banking**, banyak tim Scrum **tetap perlu BRD/SDD** karena tuntutan compliance:
+1. Buka [jira.atlassian.com](https://www.atlassian.com/software/jira) → klik **Get it free**.
+2. Daftar pakai email kerja atau Gmail. Pilih option **Jira Software**.
+3. Bikin nama site, mis. `odp-bsi-anda`. URL: `odp-bsi-anda.atlassian.net`.
+4. Pilih plan **Free** (cukup untuk latihan, sampai 10 user).
 
-| Kebutuhan | Solusi Praktis |
+### 2. Bikin Project
+
+1. **Projects** → **Create project** → template **Scrum**.
+2. Nama project: `Tabungan Haji Online` (key: `THO`).
+3. Default board: **Scrum Board** (akan kita pakai di Langkah 6 ke depan).
+
+### 3. Set Profile
+
+Edit profile Anda: nama lengkap, role (Developer / Scrum Master / PO). Berguna saat assign issue.
+
+**Checkpoint**: Jira site & project `THO` siap, board kosong dapat dibuka. ✅
+
+---
+
+## Langkah 1 — Tulis Product Vision di Project Description (10 menit)
+
+Untuk latihan ini, kita pakai **Project Description** — cara paling cepat & langsung tanpa setup tambahan. Cukup untuk Vision ringkas yang sering dirujuk.
+
+### 1.1 Buka Project Settings
+
+```
+┌─────────────────────────────────────────────────────────┐
+│ Sidebar kiri Jira                                       │
+├─────────────────────────────────────────────────────────┤
+│ ⌂ Home                                                  │
+│ 📊 Projects                                             │
+│  └ Tabungan Haji Online       ← klik project Anda      │
+│    └ Summary                                            │
+│    └ Backlog                                            │
+│    └ Board                                              │
+│    └ Reports                                            │
+│  ...                                                    │
+│                                                         │
+│  ⚙️ Project settings           ← KLIK INI               │
+│     (scroll sidebar PALING BAWAH)                       │
+└─────────────────────────────────────────────────────────┘
+```
+
+1. Buka project `THO` di sidebar kiri.
+2. **Scroll ke paling bawah sidebar kiri** → klik ⚙️ **Project settings**.
+   *(Kalau tidak nampak, klik **More actions (•••)** di kanan atas project → **Project settings**.)*
+3. Tab **Details** (default selected) sudah terbuka.
+
+### 1.2 Isi Field Description
+
+1. Cari field **Description** → klik area kosongnya → muncul text editor.
+2. Paste teks Product Vision di bawah ini:
+
+```
+Fitur Tabungan Haji Online di BSI Mobile untuk calon jamaah haji
+usia 25-55 tahun. Memungkinkan daftar, setor (QRIS/transfer), dan
+monitoring tabungan dari mobile app — tanpa perlu ke cabang.
+
+Masalah: buka tabungan haji & setor saldo harus ke cabang. Antri lama,
+jam terbatas (08.00-15.00), tidak fleksibel untuk yang kerja.
+
+Indikator sukses:
+- Bulan 1: 5.000 nasabah daftar via mobile
+- Bulan 3: 60% transaksi setor terjadi via mobile (vs cabang)
+- Rating fitur di app: ≥ 4.5/5
+- Penurunan 30% antrian cabang untuk transaksi haji
+```
+
+3. Scroll bawah → klik **Save**.
+
+### 1.3 Verifikasi
+
+Balik ke project (klik project name di breadcrumb atau sidebar) → buka tab **Summary**. Description tampil di bagian atas — dan akan muncul untuk semua tim member yang akses project.
+
+### Tip
+
+- Saat **Sprint Planning**, buka Description ini sebagai pengingat: pastikan story baru aligned dengan Vision.
+- Vision boleh di-update seiring product berkembang, tapi jangan terlalu sering (ini "north star", bukan task list).
+**Checkpoint**: Project Description sudah terisi Vision + bisa diakses dari tab Summary project. ✅
+
+---
+
+## Langkah 2 — Bikin Product Backlog dengan Epic & Story (45 menit)
+
+> **Integrasi penting**: Story-story di langkah ini **akan diimplementasi jadi kode di Modul 2**. Tiap Story = 1 endpoint API yang akan Anda bikin. Jadi pikirkan Story bukan sebagai "ide abstrak" tapi sebagai "kontrak kerja konkret untuk minggu depan".
+
+### 2.1 Setup Issue Type
+
+Jira Scrum project default punya issue type: **Epic, Story, Task, Bug, Sub-task**. Verifikasi tersedia:
+- **Project Settings** → **Issue types** → cek 5 type di atas ada.
+
+### 2.2 Bikin Epic Dulu (5 Epic)
+
+Klik **Backlog** di sidebar. Klik **+ Create epic** di kolom Epic (sidebar kiri Backlog view).
+
+Bikin 5 epic berikut — 1 epic teknis + 4 epic user-facing:
+
+| Epic Key | Summary | Color | Modul 2 Coverage |
+|---|---|---|---|
+| THO-1 | Infrastruktur Backend | Grey | Langkah 1-4 (DB, project setup, Express bootstrap) |
+| THO-2 | Onboarding Nasabah | Purple | Langkah 5 (CRUD Nasabah) |
+| THO-3 | Tabungan Haji & Transaksi | Blue | Langkah 6 (Tabungan + Setor) |
+| THO-4 | Keamanan & Auth | Red | Langkah 7 (JWT, middleware) |
+| THO-5 | Monitoring & Admin (Future) | Green | (Tidak dicover Modul 2, tugas lanjutan) |
+
+Set color tiap epic biar mudah dibedakan di board nanti.
+
+### 2.3 Bikin Story di Tiap Epic — Nyambung ke Modul 2
+
+Klik **+ Create** (tombol biru di header) → pilih **Story** → isi:
+- **Summary**: ringkasan story
+- **Epic Link**: pilih epic parent
+- **Description**: format INVEST + endpoint API yang akan dibikin di Modul 2
+
+#### Story untuk THO-1 (Infrastruktur Backend)
+
+| Story | Endpoint / Output Modul 2 |
 |---|---|
-| **Audit OJK** wajib trace requirement | Export Product Backlog + AC jadi PDF bulanan |
-| **Vendor contract** butuh formal spec | Bikin BRD ringkas (1-3 halaman) — detail di Product Backlog |
-| **Compliance review** butuh signed document | Section sign-off di BRD ringkas untuk milestone tertentu |
-| **Architecture decision** perlu di-record | Pakai **ADR** (Architecture Decision Record) — SDD versi lightweight |
+| Setup database PostgreSQL lokal | DB `tabungan_haji` siap di `localhost:5432` |
+| Init project Node.js + TypeScript | `package.json`, `tsconfig.json`, struktur folder |
+| Schema database dengan Prisma | `prisma/schema.prisma` + migration apply |
+| Bootstrap Express server | `GET /health` returns 200 |
 
-### Pemetaan File Latihan ke Konsep Waterfall
+#### Story untuk THO-2 (Onboarding Nasabah)
 
-Untuk mempermudah kalau Anda bandingkan dengan dokumen tradisional:
-
-| File Latihan | Mendekati konsep di Waterfall |
+| Story | Endpoint Modul 2 |
 |---|---|
-| 01-product-vision.md | "Executive Summary" + "Project Charter" di BRD |
-| 02-product-backlog.md | "Functional Requirements" di BRD — tapi format list & dynamic |
-| 03-acceptance-criteria.md | "Detailed Requirements" + "Test Scenarios" |
-| 04-dor-dod.md | "Quality Requirements" + "Acceptance Standards" |
-| 05-estimasi.md | "Effort Estimation" |
-| 06-sprint-1-planning.md | "Project Plan" (mini, per-Sprint) |
-| 07-09 Sprint mechanics | Tidak ada padanannya di Waterfall (proses live) |
-| 10-velocity-burndown.md | "Progress Report" |
+| Daftar nasabah baru | `POST /api/nasabah` |
+| Lihat list semua nasabah | `GET /api/nasabah` |
+| Lihat detail 1 nasabah | `GET /api/nasabah/:id` |
+| Update data nasabah | `PATCH /api/nasabah/:id` |
+| Hapus nasabah | `DELETE /api/nasabah/:id` |
 
-### Kesimpulan untuk Latihan Ini
+#### Story untuk THO-3 (Tabungan Haji & Transaksi)
 
-- **Yang Anda bikin di latihan ini = Scrum Artifact + supporting docs**, **bukan** BRD/SDD.
-- Tapi **content-nya overlap** — Product Backlog + AC bisa "menggantikan" sebagian besar BRD untuk tim Agile.
-- Di BSI nyatanya, **kedua-duanya hidup berdampingan**: BRD ringkas untuk audit & contract, Scrum artifact untuk daily work.
-- **SDD belum dibikin di Modul 1** karena fokus planning. Konten SDD-like (database schema, API design) akan muncul di **Modul 2-3**.
+| Story | Endpoint Modul 2 |
+|---|---|
+| Buka rekening tabungan haji | `POST /api/tabungan` |
+| Setor saldo (idempotent + DB transaction) | `POST /api/tabungan/:id/setor` |
+| Lihat saldo & detail tabungan | `GET /api/tabungan/:id` |
+| Lihat mutasi transaksi | `GET /api/tabungan/:id/mutasi` |
 
-> **Tip praktis**: kalau di kantor Anda diminta bikin BRD, ekstrak dari **Product Vision (file 01) + Product Backlog (file 02) + AC (file 03)**. Itu sudah ~70% BRD. Sisanya tinggal tambah header formal, sign-off section, dan referensi regulasi.
+#### Story untuk THO-4 (Keamanan & Auth)
+
+| Story | Endpoint Modul 2 |
+|---|---|
+| Login user dengan JWT | `POST /api/auth/login` |
+| Proteksi endpoint sensitif dengan middleware | `requireAuth` middleware |
+| Logout (token invalidation) | `POST /api/auth/logout` |
+
+#### Contoh Format Description (INVEST + Modul 2 Link)
+
+```markdown
+**User Story:**
+Sebagai nasabah, saya ingin daftar tabungan haji dari mobile app,
+sehingga saya tidak perlu datang ke cabang.
+
+**Endpoint (Modul 2):**
+POST /api/nasabah
+
+**Reference:**
+Modul-2-RESTful-API-PostgreSQL/latihan.md → Langkah 5
+```
+
+Target: bikin **minimal 15 Story** total (4 + 5 + 4 + 3 = 16 dari mapping di atas). Bikin tambahan story Future di THO-5 (mis. "Lihat estimasi tahun berangkat haji", "Export laporan bulanan") supaya backlog terlihat hidup.
+
+### 2.4 Set Priority (MoSCoW)
+
+Jira default punya priority: **Highest, High, Medium, Low, Lowest**. Mapping ke MoSCoW:
+
+| MoSCoW | Jira Priority |
+|---|---|
+| **Must have** | Highest |
+| **Should have** | High |
+| **Could have** | Medium |
+| **Won't have (this release)** | Low |
+
+Update priority tiap story dengan klik issue → field Priority → pilih.
+
+### 2.5 Bonus: Add Labels untuk Grouping
+
+Tambah label seperti `tipe:UI`, `tipe:Backend`, `compliance` di issue untuk filter & grouping.
+
+**Checkpoint**: 4 epic + minimal 15 story di backlog, semua punya priority + epic link + description format INVEST. ✅
 
 ---
 
-## Langkah 1 — Tulis Product Goal & Product Vision (15 menit)
+## Langkah 3 — Tulis Acceptance Criteria di Story (30 menit)
 
-**Tujuan**: tim sepakati arah produk yang akan dibangun, jadi acuan semua prioritisasi backlog.
+Jira tidak punya "Acceptance Criteria" field built-in (kecuali di plan Premium). Workaround paling umum:
 
-### 1.1 Template Product Vision
+**Pakai Description field dengan section terpisah.**
 
-Isi template berikut:
+### 3.1 Format Description Lengkap
 
-```
-## Product Vision: [Nama Produk]
+Edit story top-priority (3 story Must-have). Update description-nya:
 
-### Untuk siapa produk ini?
-[Target user dengan profil spesifik]
-
-### Masalah apa yang dipecahkan?
-[Pain point yang dialami target user saat ini]
-
-### Solusi singkat
-[1-2 kalimat yang gambarkan apa produk ini]
-
-### Beda dari alternatif yang ada?
-[Differensiasi vs cara existing / kompetitor]
-
-### Indikator sukses
-[Metric yang akan diukur untuk validasi]
-```
-
-### 1.2 Contoh Diisi
-
-```
-## Product Vision: Tabungan Haji Online (BSI Mobile)
-
-### Untuk siapa produk ini?
-Calon jamaah haji usia 25-55 tahun yang sudah punya aplikasi BSI Mobile,
-mau menabung untuk haji secara reguler tapi malas/repot ke cabang.
-
-### Masalah apa yang dipecahkan?
-Saat ini buka tabungan haji & setor saldo harus ke cabang.
-Antri lama, jam terbatas (08.00-15.00), tidak fleksibel untuk yang kerja.
-
-### Solusi singkat
-Fitur tabungan haji terintegrasi di BSI Mobile — daftar, setor (via QRIS/transfer),
-lihat saldo, terima notifikasi, semua dari HP.
-
-### Beda dari alternatif yang ada?
-- Bank konvensional: tidak ada produk haji.
-- Bank syariah lain: masih offline / sebagian online tapi terpisah dari mobile banking.
-- BSI sekarang: kompetitif dengan integrasi penuh di 1 aplikasi.
-
-### Indikator sukses
-- Bulan 1: 5.000 nasabah daftar via mobile.
-- Bulan 3: 60% transaksi setor terjadi via mobile (vs cabang).
-- Rating fitur di app: ≥ 4.5/5.
-- Penurunan 30% antrian cabang untuk transaksi haji.
-```
-
-### 1.3 Latihan Anda
-
-Buat file `01-product-vision.md`. Isi template untuk fitur Tabungan Haji Online.
-
-**Checkpoint**: Product Vision punya 5 section terisi jelas, bisa dijelaskan ke orang awam dalam 1 menit. ✅
+```markdown
+**User Story:**
+Sebagai nasabah, saya ingin setor saldo via QRIS,
+sehingga proses cepat tanpa transfer manual.
 
 ---
 
-## Langkah 2 — Bikin Product Backlog Awal (30 menit)
+**Acceptance Criteria:**
 
-**Tujuan**: kumpulan kebutuhan dalam format user story, terprioritaskan.
+**AC 1 — Setor sukses dengan saldo cukup**
+- Given saya login sebagai nasabah dengan tabungan haji aktif
+- And saldo rekening sumber Rp 10.000.000
+- When saya scan QRIS merchant haji dan input nominal Rp 500.000
+- And klik tombol "Setor"
+- Then saldo tabungan haji bertambah Rp 500.000
+- And saldo rekening sumber berkurang Rp 500.000
+- And muncul notifikasi "Setor sukses"
+- And transaksi tercatat di mutasi dengan jenis "Setor QRIS"
 
-### 2.1 Format User Story (INVEST)
+**AC 2 — Saldo tidak cukup**
+- Given saldo rekening sumber Rp 100.000
+- When saya scan QRIS dan input nominal Rp 500.000
+- Then sistem tampilkan error "Saldo tidak mencukupi"
+- And transaksi dibatalkan
 
-Konsistenkan format:
-
-```
-**Sebagai** [persona/peran],
-**Saya ingin** [fungsi/aksi],
-**Sehingga** [nilai bisnis yang didapat].
-```
-
-Cek tiap story dengan checklist **INVEST**:
-- **I**ndependent — bisa dikerjakan & rilis sendiri.
-- **N**egotiable — detail bisa didiskusikan.
-- **V**aluable — punya nilai bisnis.
-- **E**stimable — bisa diestimasi.
-- **S**mall — cukup kecil untuk 1 Sprint.
-- **T**estable — punya kriteria yang bisa diuji.
-
-### 2.2 Brainstorm Story untuk Tabungan Haji Online
-
-Mulai dengan **EPIC** (item besar) lalu pecah jadi **Story** (item Sprint-sized).
-
-Contoh:
-
-```
-EPIC: Onboarding Nasabah Tabungan Haji
-  - Story 1: Sebagai nasabah, saya ingin daftar tabungan haji dari mobile app,
-             sehingga saya tidak perlu datang ke cabang.
-  - Story 2: Sebagai nasabah, saya ingin upload foto KTP saat daftar,
-             sehingga validasi KYC bisa dilakukan otomatis.
-  - Story 3: Sebagai nasabah, saya ingin pilih jangka waktu menabung (5/10/15 tahun),
-             sehingga aplikasi bisa hitung target setoran bulanan.
-
-EPIC: Setor Saldo
-  - Story 4: Sebagai nasabah, saya ingin setor saldo via QRIS,
-             sehingga proses cepat tanpa transfer manual.
-  - Story 5: Sebagai nasabah, saya ingin setor saldo via transfer dari rekening BSI lain,
-             sehingga bisa pakai dana yang sudah ada.
-  - Story 6: Sebagai nasabah, saya ingin set autodebit bulanan,
-             sehingga setoran berjalan rutin tanpa saya inisiasi tiap bulan.
-
-EPIC: Monitoring Tabungan
-  - Story 7: Sebagai nasabah, saya ingin lihat saldo & target tabungan haji,
-             sehingga saya tahu progress menuju biaya haji.
-  - Story 8: Sebagai nasabah, saya ingin lihat mutasi 30 hari terakhir,
-             sehingga saya bisa cek riwayat transaksi.
-  - Story 9: Sebagai nasabah, saya ingin notifikasi setiap kali ada setoran masuk,
-             sehingga saya yakin transaksi sukses.
-
-EPIC: Admin & Reporting
-  - Story 10: Sebagai admin cabang, saya ingin lihat daftar nasabah haji aktif,
-              sehingga bisa follow-up untuk produk lain.
-  - Story 11: Sebagai compliance officer, saya ingin export audit log bulanan,
-              sehingga bisa report ke OJK Syariah.
-```
-
-### 2.3 Prioritisasi (MoSCoW)
-
-Klasifikasikan tiap story:
-
-| Prioritas | Arti | Contoh |
-|---|---|---|
-| **M**ust have | Tanpa ini, produk tidak bisa rilis | Story 1, 4, 7 (daftar, setor, lihat saldo) |
-| **S**hould have | Penting tapi bisa di-delay 1-2 Sprint | Story 2, 8, 9 |
-| **C**ould have | Nice to have | Story 3, 5, 6 (autodebit, dll) |
-| **W**on't have (this release) | Out of scope sekarang | Story 10, 11 (akan di-rilis berikutnya) |
-
-### 2.4 Latihan Anda
-
-Buat file `02-product-backlog.md`. Susun **minimal 15 story** terbagi dalam **4 epic**, lalu kasih MoSCoW priority ke masing-masing.
-
-**Checkpoint**: minimal 15 story, semua format INVEST valid, MoSCoW jelas. ✅
+**AC 3 — Nominal di bawah minimum**
+- Given saya scan QRIS
+- When saya input nominal Rp 50.000
+- Then sistem tampilkan error "Setoran minimum Rp 100.000"
+- And tombol "Setor" disable
 
 ---
 
-## Langkah 3 — Tulis Acceptance Criteria (30 menit)
-
-**Tujuan**: tiap story punya kriteria objektif untuk dianggap "Done".
-
-### 3.1 Format Given/When/Then (Gherkin)
-
-```
-**Story**: [recap singkat story]
-
-**AC 1 — [nama kasus]**:
-  Given [kondisi awal]
-  When [aksi yang dilakukan]
-  Then [hasil yang diharapkan]
-  And [konsekuensi tambahan]
+**Definition of Done:**
+- [ ] Code complete sesuai semua AC
+- [ ] Unit test passed (coverage > 80%)
+- [ ] Integration test passed
+- [ ] Audit log tercatat
+- [ ] Approved oleh PO
 ```
 
-### 3.2 Contoh Lengkap
+### 3.2 (Opsional) Custom Field "Acceptance Criteria"
 
-```
-**Story 4**: Sebagai nasabah, saya ingin setor saldo via QRIS,
-             sehingga proses cepat tanpa transfer manual.
+Untuk admin Jira yang punya akses Field Configuration:
+1. **Project Settings** → **Fields** → **Actions** → **Create field**.
+2. Field name: `Acceptance Criteria`, type: **Paragraph (multi-line text)**.
+3. Add ke screen Story.
 
-**AC 1 — Setor sukses dengan saldo cukup**:
-  Given saya login sebagai nasabah dengan tabungan haji aktif
-  And saldo rekening sumber Rp 10.000.000
-  When saya scan QRIS merchant haji dan input nominal Rp 500.000
-  And klik tombol "Setor"
-  Then saldo tabungan haji bertambah Rp 500.000
-  And saldo rekening sumber berkurang Rp 500.000
-  And muncul notifikasi "Setor sukses"
-  And transaksi tercatat di mutasi dengan jenis "Setor QRIS"
+Sekarang AC bisa di-input di field terpisah, lebih rapi.
 
-**AC 2 — Saldo tidak cukup**:
-  Given saldo rekening sumber Rp 100.000
-  When saya scan QRIS dan input nominal Rp 500.000
-  Then sistem tampilkan error "Saldo tidak mencukupi"
-  And transaksi dibatalkan
-  And saldo rekening sumber tidak berubah
+### 3.3 Pakai Checklist Plugin (Optional)
 
-**AC 3 — Nominal di bawah minimum**:
-  Given saya scan QRIS
-  When saya input nominal Rp 50.000
-  Then sistem tampilkan error "Setoran minimum Rp 100.000"
-  And tombol "Setor" disable
+Marketplace plugin populer: **Smart Checklist for Jira** atau **Issue Checklist Free**.
+- Install dari Atlassian Marketplace.
+- Tiap AC jadi checklist item yang bisa di-check saat done.
 
-**AC 4 — Tabungan sedang dibekukan**:
-  Given tabungan haji saya status BEKU
-  When saya scan QRIS
-  Then sistem tampilkan error "Tabungan sedang dibekukan, hubungi customer service"
-  And transaksi tidak diproses
-```
-
-### 3.3 Latihan Anda
-
-Buat file `03-acceptance-criteria.md`. Tulis AC lengkap untuk **3 story Must-have** dari Langkah 2.
-
-Tiap story minimum punya:
-- 1 AC happy path
-- 2 AC edge case / error case
-
-**Checkpoint**: minimal 9 AC total (3 story × 3 AC), semua format Given/When/Then. ✅
+**Checkpoint**: minimal 3 story top-priority punya AC lengkap format Given/When/Then + DoD di description. ✅
 
 ---
 
-## Langkah 4 — Definition of Ready (DoR) & Definition of Done (DoD) (15 menit)
+## Langkah 4 — Definition of Ready & Definition of Done (15 menit)
 
-**Tujuan**: tim sepakati kriteria kualitas untuk story siap di-Sprint & siap dianggap selesai.
+DoR & DoD = **kesepakatan tim**, ditaruh di tempat yang mudah diakses.
 
-### 4.1 Template DoR
+### 4.1 Bikin Issue Tipe "Documentation"
 
-```
-# Definition of Ready
-
-Sebuah story siap masuk Sprint kalau MEMENUHI SEMUA berikut:
-
-- [ ] Format INVEST valid (Sebagai... Saya ingin... Sehingga...).
-- [ ] Acceptance criteria minimum 1 happy path + 1 error case.
-- [ ] [Tambah kriteria lain sesuai konteks tim Anda]
-```
-
-### 4.2 Contoh Diisi
+Cara cepat: bikin 2 issue khusus untuk dokumentasi.
 
 ```
-# Definition of Ready — Tim Tabungan Haji Mobile
+Type: Task
+Summary: [DOC] Definition of Ready
+Description: (isi DoR lengkap)
+Label: documentation
+Priority: Highest
+```
 
-Sebuah story siap masuk Sprint kalau MEMENUHI SEMUA:
+```
+Type: Task
+Summary: [DOC] Definition of Done
+Description: (isi DoD lengkap)
+Label: documentation
+Priority: Highest
+```
 
+Pin di top backlog supaya selalu kelihatan.
+
+### 4.2 Isi Description DoR & DoD
+
+Buka issue `[DOC] Definition of Ready` → field Description → paste:
+
+```
+## Definition of Ready (DoR)
+Story siap masuk Sprint kalau MEMENUHI SEMUA:
 - [ ] Format INVEST valid.
-- [ ] Acceptance criteria minimum 1 happy path + 2 error case.
-- [ ] Sudah di-estimate oleh tim (story points Fibonacci).
-- [ ] Dependency ke tim/sistem lain teridentifikasi.
-- [ ] Untuk story dengan UI: ada mockup/wireframe dari Designer.
-- [ ] Untuk story dengan API baru: contoh request/response sudah disepakati.
-- [ ] Sudah review compliance/security (mandatory untuk story yang touch saldo nasabah).
-- [ ] Test data tersedia di environment staging.
+- [ ] AC minimum 1 happy path + 2 error case.
+- [ ] Sudah di-estimate (story points Fibonacci).
+- [ ] Dependency teridentifikasi.
+- [ ] Untuk UI: ada mockup/wireframe.
+- [ ] Untuk API: contoh request/response disepakati.
+- [ ] Sudah review compliance/security (mandatory untuk touch saldo).
 ```
 
-### 4.3 Template DoD
+Buka issue `[DOC] Definition of Done` → field Description → paste:
 
 ```
-# Definition of Done
-
-Sebuah story dianggap Done kalau MEMENUHI SEMUA berikut:
-
-- [ ] Code complete sesuai acceptance criteria.
-- [ ] Unit test passed dengan coverage [target%].
-- [ ] Code review approved oleh minimal [N] reviewer.
-- [ ] [Kriteria lain]
-```
-
-### 4.4 Contoh DoD Lengkap
-
-```
-# Definition of Done — Tim Tabungan Haji Mobile
-
+## Definition of Done (DoD)
 Story dianggap Done kalau:
-
-- [ ] Code complete sesuai semua acceptance criteria.
-- [ ] Unit test passed (coverage > 80% untuk service & business logic).
-- [ ] Integration test passed di staging.
-- [ ] Code review approved oleh minimal 2 reviewer (1 backend + 1 frontend kalau touch keduanya).
-- [ ] Tidak ada critical/high bug yang belum di-fix.
-- [ ] Dokumentasi API ter-update di OpenAPI spec.
-- [ ] Tested di device: Android 10+ dan iOS 14+.
-- [ ] Tested oleh QA team dan approved.
+- [ ] Code complete sesuai semua AC.
+- [ ] Unit test passed (coverage > 80%).
+- [ ] Integration test passed.
+- [ ] Code review approved oleh minimal 2 reviewer.
+- [ ] Tidak ada critical/high bug.
+- [ ] OpenAPI spec ter-update.
+- [ ] Tested di Android 10+ dan iOS 14+.
+- [ ] Approved oleh QA.
 - [ ] Approved oleh Product Owner.
-- [ ] Security scan passed (SAST tools).
+- [ ] Security scan passed.
 - [ ] Performance test passed (response time < 2 detik p95).
 - [ ] Audit log tercatat untuk operasi yang ubah saldo.
 - [ ] Deployed ke staging dan tested by 1 internal user.
 ```
 
-### 4.5 Latihan Anda
+### 4.3 Akses Cepat lewat Filter
 
-Buat file `04-dor-dod.md`. Tulis DoR dan DoD spesifik untuk tim Anda.
+Save filter `project = THO AND labels = "documentation"` jadi quick filter di sidebar — DoR/DoD selalu 1 klik dari mana saja.
 
-**Checkpoint**: DoR minimum 7 item, DoD minimum 10 item, semuanya relevan untuk konteks banking. ✅
-
----
-
-## Langkah 5 — Estimasi dengan Planning Poker (30 menit)
-
-**Tujuan**: tim estimate story points untuk top stories di backlog.
-
-### 5.1 Skala Fibonacci
-
-| Story Points | Kompleksitas | Indikator |
-|---|---|---|
-| 1 | Sangat sederhana | Ubah text label, css minor |
-| 2 | Sederhana | Tambah field di form, query DB simple |
-| 3 | Standar | Endpoint CRUD baru, integrasi 1 layer |
-| 5 | Cukup kompleks | Feature multi-step, integrasi 2-3 layer |
-| 8 | Kompleks | Multi-service, banyak edge case |
-| 13 | Sangat kompleks | **Coba pecah jadi smaller stories** |
-| 21+ | Terlalu besar | **WAJIB pecah** |
-
-### 5.2 Cara Main Planning Poker
-
-1. PO baca 1 story.
-2. Tim diskusi singkat (5 menit max) — bertanya kalau ada ambiguitas.
-3. Tiap developer **pilih kartu story point bersamaan** (jangan dipengaruhi yang lain).
-4. Reveal kartu → diskusi yang outlier (highest & lowest jelaskan reasoning).
-5. Vote ulang sampai konsensus (max 3 putaran).
-
-### 5.3 Simulasi Latihan
-
-Untuk latihan ini, **Anda main solo** — bayangkan reasoning tiap perspektif. Estimate **10 story** dari backlog Anda.
-
-Template file `05-estimasi.md`:
-
-```
-# Estimasi Story Points
-
-## Story 1: [judul]
-- Estimasi: [angka] points
-- Reasoning:
-  - Backend: [pertimbangan]
-  - Frontend: [pertimbangan]
-  - Risk: [unknown / dependency]
-
-## Story 2: ...
-```
-
-### 5.4 Contoh Diisi
-
-```
-## Story 1: Daftar tabungan haji dari mobile
-- Estimasi: 8 points
-- Reasoning:
-  - Backend: endpoint POST nasabah + auto-buka tabungan, validasi KYC dasar. ~5 points.
-  - Frontend: form daftar multi-step (data diri, KTP upload, konfirmasi). ~5 points.
-  - Risk: integrasi dukcapil untuk validasi NIK belum jelas SLA-nya.
-  - Total kompleks → 8 points.
-
-## Story 4: Setor via QRIS
-- Estimasi: 13 → PECAH
-- Reasoning awal: integrasi QRIS gateway, validasi, mutasi, notifikasi → terlalu besar.
-- Pecah jadi:
-  - 4a: Integrasi gateway QRIS — generate QR (3 points)
-  - 4b: Webhook handler setor sukses → update saldo (5 points)
-  - 4c: Notifikasi push & update mutasi (3 points)
-```
-
-### 5.5 Latihan Anda
-
-Estimate **10 story** dari Backlog Langkah 2. Untuk story 13+, pecah jadi sub-stories yang lebih kecil.
-
-**Checkpoint**: 10 story ter-estimate, tidak ada > 8 points (atau sudah dipecah). ✅
+**Checkpoint**: DoR & DoD ter-dokumentasi di issue & visible untuk semua tim member. ✅
 
 ---
 
-## Langkah 6 — Sprint Planning: Tetapkan Sprint Goal & Sprint Backlog (30 menit)
+## Langkah 5 — Estimasi dengan Story Points (30 menit)
 
-**Tujuan**: definisikan apa yang akan dikerjakan di Sprint 1 (2 minggu).
+Jira built-in support story points — tinggal aktifkan.
 
-### 6.1 Tiga Pertanyaan Sprint Planning
+### 5.1 Enable Story Points Field
 
-| Pertanyaan | Output |
-|---|---|
-| **Why** — kenapa Sprint ini bernilai? | **Sprint Goal** |
-| **What** — apa yang bisa dikerjakan? | **Sprint Backlog (top items)** |
-| **How** — bagaimana mengerjakannya? | **Plan teknis singkat** |
+Default sudah aktif. Verifikasi:
+- Klik 1 story → cari field **Story point estimate** di sidebar kanan.
+- Kalau tidak ada: **Project Settings** → **Issue layout** → drag field **Story point estimate** ke screen.
 
-### 6.2 Tentukan Sprint Goal
+### 5.2 Estimate Story
 
-Sprint Goal = **kalimat single yang gambarkan outcome utama Sprint ini**. Bukan list task.
-
-Contoh **buruk**:
-> "Selesaikan story 1, 2, 4, 7."
-
-Contoh **baik**:
-> "Nasabah bisa daftar tabungan haji dari mobile dan lakukan setor pertama (minimum viable flow), siap untuk pilot 10 cabang."
-
-### 6.3 Pilih Story untuk Sprint Backlog
+Klik tiap story → set Story point estimate dengan **Fibonacci** (1, 2, 3, 5, 8, 13).
 
 Aturan:
-- Velocity tim diestimasi (Sprint pertama biasanya tebakan, ~20-25 points untuk tim 5 orang).
-- Pilih story dari atas backlog (prioritas Must) yang **mendukung Sprint Goal**.
-- Total points = velocity, tidak lebih.
-
-### 6.4 Template Sprint Planning Output
-
-File `06-sprint-1-planning.md`:
-
-```
-# Sprint 1 — Planning
-
-**Periode**: [tanggal mulai] – [tanggal selesai] (2 minggu)
-**Velocity Target**: 22 points
-
-## Sprint Goal
-[Kalimat outcome utama]
-
-## Sprint Backlog
-
-| # | Story | Points | Pemilik utama |
-|---|---|---|---|
-| 1 | [judul story] | 8 | Backend lead |
-| 2 | [judul story] | 5 | Frontend lead |
-| ... | | | |
-| **Total** | | **22** | |
-
-## Sprint Plan Teknis (singkat)
-
-### Week 1
-- Day 1-2: Setup infra + DB schema.
-- Day 3-5: Implementasi backend nasabah + tabungan.
-
-### Week 2
-- Day 6-8: Frontend daftar + setor.
-- Day 9: Integration test.
-- Day 10: Demo + Retro.
-
-## Risiko & Dependency
-- [Risk 1]: ...
-- [Dependency 1]: tim core banking siapkan endpoint X di Day 3.
-```
-
-### 6.5 Latihan Anda
-
-Buat file `06-sprint-1-planning.md`. Tetapkan Sprint Goal yang konkret + pilih ~5-6 story untuk Sprint 1.
-
-**Checkpoint**: Sprint Goal jelas 1 kalimat, total points sesuai velocity (~22). ✅
-
----
-
-## Langkah 7 — Simulasi Daily Scrum (15 menit)
-
-**Tujuan**: praktik format Daily Scrum 3 pertanyaan.
-
-### 7.1 Format Daily Scrum
-
-15 menit, **jam sama tiap hari**, **tempat sama**, **standing-up** (literally).
-
-Tiap developer share:
-1. Apa yang **saya kerjakan kemarin** yang membantu Sprint Goal?
-2. Apa yang **akan saya kerjakan hari ini**?
-3. Apa **impediment** yang menghalangi saya/tim?
-
-### 7.2 Latihan: Simulasi 3 Hari
-
-Buat file `07-daily-scrum.md`. Simulasikan Daily Scrum 3 hari berurutan untuk Sprint 1 Anda.
+- ≤ 3 points: sederhana
+- 5 points: kompleksitas sedang
+- 8 points: kompleks
+- 13+ points: **wajib pecah** jadi smaller story
 
 Contoh:
+- `Daftar tabungan haji dari mobile` → **8 points** (backend + frontend + KYC integration)
+- `Tampilkan saldo di kartu dashboard` → **3 points** (simple display)
+- `Setor via QRIS end-to-end` → **13 points** → pecah jadi:
+  - `Integrasi QRIS gateway` (3 points)
+  - `Webhook handler update saldo` (5 points)
+  - `Notifikasi push + mutasi` (3 points)
 
-```
-# Daily Scrum Log
+### 5.3 Cara Pecah Story Besar di Jira
 
-## Day 1 — Senin, 1 Juni 2026, 09:00
+1. Klik story 13+ points → **Actions** → **Convert to epic** (kalau perlu).
+2. Atau bikin **sub-task** baru di dalam story:
+   - Buka story → **+ Create subtask** → isi summary + estimate.
+3. Atau bikin story baru → set Epic Link ke epic yang sama.
 
-**Sari (Backend Lead)**
-- Kemarin: kickoff, setup repo baru, install Prisma.
-- Hari ini: bikin migration nasabah + tabungan_haji table.
-- Impediment: belum dapat akses ke dev database — request ke DBA.
+### 5.4 Lihat Total Story Points per Epic
 
-**Budi (Frontend Lead)**
-- Kemarin: review spec UI dari designer.
-- Hari ini: setup Next.js project + Tailwind.
-- Impediment: belum dapat Figma access — request ke designer.
+Di view **Backlog**: hover ke epic name → muncul total points dari semua story di epic itu.
 
-**Tina (Backend Dev)**
-- Kemarin: --
-- Hari ini: assist Sari di migration, mulai validasi Zod untuk endpoint nasabah.
-- Impediment: tidak ada.
+Atau pakai **Issue Navigator**: `epic = THO-1` → group by status → lihat total.
 
-**Pak Budi (Scrum Master)**
-- Action: follow up DBA & designer untuk akses Sari & Budi.
+**Checkpoint**: minimal 10 story ter-estimate, tidak ada > 8 points (atau sudah dipecah). ✅
 
 ---
 
-## Day 2 — Selasa, 2 Juni 2026, 09:00
-[isi sama format-nya]
+## Langkah 6 — Sprint Planning di Jira (30 menit)
+
+Jira punya **Sprint** sebagai first-class concept.
+
+### 6.1 Bikin Sprint Baru
+
+Di view **Backlog**:
+1. Scroll ke atas → klik **Create sprint** (atau tombol **+** di area Sprint).
+2. Klik **Edit sprint** di sprint baru:
+   - **Sprint name**: `Sprint 1 — MVP Setor QRIS`
+   - **Duration**: 2 weeks
+   - **Start date**: tanggal mulai
+   - **End date**: auto-calculated
+   - **Sprint goal**: "Nasabah bisa daftar tabungan haji dari mobile dan lakukan setor pertama (minimum viable flow), siap untuk pilot 10 cabang."
+
+### 6.2 Pilih Story untuk Sprint 1 — Sesuai Materi Modul 2
+
+Drag-and-drop story dari **Backlog** ke **Sprint 1**:
+- Pilih dari priority **Highest** (Must-have).
+- Target velocity: 22 points (Sprint pertama tebakan kasar).
+- Pastikan story yang dipilih support Sprint Goal.
+
+**Rekomendasi isi Sprint 1** (sesuai urutan latihan Modul 2):
+
+| Order | Story | Epic | Modul 2 Langkah |
+|---|---|---|---|
+| 1 | Setup database PostgreSQL lokal | THO-1 | Langkah 1 |
+| 2 | Init project Node.js + TypeScript | THO-1 | Langkah 2 |
+| 3 | Schema database dengan Prisma | THO-1 | Langkah 3 |
+| 4 | Bootstrap Express server | THO-1 | Langkah 4 |
+| 5 | Daftar nasabah baru | THO-2 | Langkah 5 |
+| 6 | Buka rekening tabungan haji | THO-3 | Langkah 6.1-6.3 |
+| 7 | Setor saldo (idempotent) | THO-3 | Langkah 6.4-6.5 |
+| 8 | Login user dengan JWT | THO-4 | Langkah 7 |
+
+Cek total points di header Sprint — pastikan sesuai velocity target.
+
+### 6.3 Start Sprint
+
+Klik **Start sprint** → konfirmasi durasi, goal, dan tanggal. Sprint sekarang aktif di **Board**.
+
+### 6.4 Bikin Sub-task per Story (Optional)
+
+Tiap story bisa dipecah jadi technical task. Klik story → **+ Add subtask**:
+```
+Subtask 1: Bikin endpoint POST /nasabah (backend)
+Subtask 2: Bikin halaman daftar (frontend)
+Subtask 3: Integrasi dukcapil untuk validasi NIK
+Subtask 4: Unit test untuk validasi
+Subtask 5: E2E test happy path
+```
+
+Assign subtask ke developer yang relevan (Sari = backend, Budi = frontend).
+
+**Checkpoint**: Sprint 1 aktif dengan Sprint Goal, 5-6 story di sprint (~22 points), beberapa story sudah dipecah jadi subtask. ✅
 
 ---
 
-## Day 3 — Rabu, 3 Juni 2026, 09:00
-[isi sama format-nya]
-```
+## Langkah 7 — Daily Scrum dengan Board (15 menit)
 
-**Checkpoint**: 3 hari Daily Scrum ter-log, ada minimal 1 impediment per hari yang di-handle Scrum Master. ✅
+Di Sprint aktif, **Board** Jira adalah tool utama Daily Scrum.
+
+### 7.1 Pahami Board Columns
+
+Default Scrum Board punya 3 kolom: **To Do, In Progress, Done**.
+
+Bisa di-extend lewat **Board Settings** → **Columns**:
+- To Do
+- In Progress
+- In Review (kalau pakai code review formal)
+- Testing
+- Done
+
+### 7.2 Workflow Daily Scrum
+
+Setiap hari jam 09.00 (15 menit), tim ngumpul (online/offline):
+
+1. Buka **Board** project di layar bersama.
+2. Mulai dari **kolom paling kanan (Done)** → bahas dari sisi paling matang.
+3. Tiap developer:
+   - Highlight card yang dia kerjakan kemarin.
+   - **Drag card** ke kolom baru kalau ada progress (Doing → Review, dll).
+   - Sebut impediment kalau ada → log di Slack/chat.
+
+### 7.3 Update Status via Mobile (Tip)
+
+Jira punya **mobile app** (iOS/Android). Dev bisa update status saat commute atau di lapangan. Sangat membantu untuk Daily Scrum yang efektif.
+
+### 7.4 Simulasi 3 Hari
+
+Untuk latihan, simulasikan 3 hari sprint:
+
+**Day 1 (Senin)**:
+- Sari: drag `POST /nasabah` dari To Do → In Progress.
+- Budi: drag `Setup Next.js project` dari To Do → In Progress.
+- Tina: drag `Migration nasabah table` dari To Do → In Progress.
+
+**Day 2 (Selasa)**:
+- Sari: drag `POST /nasabah` dari In Progress → In Review.
+- Budi: drag `Setup Next.js` dari In Progress → Done.
+- Tina: drag `Migration` dari In Progress → Done, ambil card baru: `Migration tabungan_haji`.
+
+**Day 3 (Rabu)**:
+- Sari: drag `POST /nasabah` In Review → Done, ambil card `POST /tabungan-haji`.
+- Budi: ambil card `Halaman daftar nasabah` → In Progress.
+- Tina: card baru `Migration transaksi` → In Progress.
+
+### 7.5 Add Comment di Issue
+
+Saat update status, dev tambah comment di issue:
+- "Done — endpoint sudah tested via Postman, 5 test case pass."
+- "Blocked — nunggu spec dari PO untuk format error code."
+
+Comment ini jadi **audit trail** untuk Sprint Review nanti.
+
+**Checkpoint**: board ter-update untuk 3 hari simulasi, ada comment di minimal 3 issue. ✅
 
 ---
 
-## Langkah 8 — Sprint Review (20 menit)
+## Langkah 8 — Sprint Review via Sprint Report (20 menit)
 
-**Tujuan**: praktik dokumentasi Sprint Review — demo + feedback.
+Jira **auto-generate Sprint Report** di akhir sprint — tidak perlu tulis manual.
 
-### 8.1 Format Sprint Review
+### 8.1 Akses Sprint Report
 
-Sprint Review **bukan presentasi formal** — lebih ke **working session** dengan stakeholder.
+Selama sprint aktif atau setelah selesai:
+1. **Reports** di sidebar project → pilih **Sprint Report**.
+2. Pilih sprint yang mau di-review (mis. Sprint 1).
 
-Agenda umum (2 jam):
-1. PO sambutan singkat (5 min).
-2. Tim **demo increment** yang sudah Done (45 min).
-3. Diskusi & feedback dari stakeholder (45 min).
-4. PO update Product Backlog berdasar feedback (15 min).
-5. Tentukan **fokus Sprint berikutnya** (10 min).
+Sprint Report otomatis tampilkan:
+- **Sprint goal** (yang Anda set di Langkah 6).
+- **Completed issues** (yang masuk kolom Done).
+- **Incomplete issues** (yang tidak selesai, di-flag untuk re-plan).
+- **Issues removed from sprint** (kalau ada).
+- **Burndown chart** otomatis.
 
-### 8.2 Template Sprint Review
+### 8.2 Simulasi Complete Sprint
 
-File `08-sprint-1-review.md`:
+Untuk latihan, simulasikan akhir sprint:
 
-```
-# Sprint 1 Review
+1. **End sprint** (klik button di Backlog atau Board).
+2. Jira akan tanya: issues yang belum done mau dimasukkan ke sprint mana? Pilih:
+   - **Move to top of backlog** (akan di-prioritize di Sprint 2)
+   - **Move to a specific sprint**
 
-**Tanggal**: [tanggal] 14:00-16:00
-**Hadir**: PO, SM, tim Dev (5 orang), stakeholder (Tim Risk, Tim Compliance, Kepala Bisnis Haji)
+3. Buka Sprint Report — review hasil.
 
-## Sprint Goal — Achieved?
-- Goal: "[Sprint goal Anda]"
-- Status: ✅ Achieved / ⚠️ Partial / ❌ Not achieved
-- Catatan: [Apa yang capai, apa yang slip]
+### 8.3 Dokumentasi Sprint Review
+
+Sprint Report adalah **data**. Untuk **narasi feedback stakeholder**, bikin issue khusus tipe Task dengan summary `[REVIEW] Sprint 1 Review — Tabungan Haji` + label `documentation`, lalu paste template ini di Description:
+
+```markdown
+# Sprint 1 Review — Tabungan Haji
+
+**Tanggal**: 2026-06-12, 14.00-16.00
+**Hadir**: PO, SM, tim Dev (5), Tim Risk, Tim Compliance, Kepala Bisnis Haji
+
+## Sprint Goal — Status
+Goal: "MVP Setor QRIS untuk pilot 10 cabang"
+Status: ✅ Achieved (5/6 story done, 1 slip)
 
 ## Demo Items
-
-### Story 1: [judul]
-- Status: ✅ Done
-- Demo: [siapa demo, apa yang ditunjukkan]
-- Feedback:
-  - [stakeholder X]: "..."
-  - [stakeholder Y]: "..."
-
-### Story 2: ...
+1. **Daftar nasabah dari mobile** (Sari demo) — feedback: tambah validasi nomor KTP duplikat.
+2. **Buka tabungan haji** (Budi demo) — feedback: notifikasi push perlu di-style ulang.
+3. **Setor via QRIS** (Tina demo) — feedback positif, siap pilot.
 
 ## Items Not Done
-- Story [X]: alasan tidak selesai, replan ke Sprint berikutnya.
+- Story `Setor via VA Bank Lain` — slip, replan ke Sprint 2.
 
-## Feedback Stakeholder — Action Items
-
-| # | Feedback | Action | Owner | Sprint |
-|---|---|---|---|---|
-| 1 | Tim Risk minta tambahan audit trail untuk transaksi > Rp 10jt | Add ke backlog | PO | Sprint 2 |
-| 2 | Compliance minta export CSV bulanan | Add ke backlog | PO | Sprint 3 |
+## Action Items
+| Feedback | Action | Owner | Sprint |
+|---|---|---|---|
+| Tambah audit trail untuk transaksi > Rp 10jt | Tambah ke backlog | PO | Sprint 2 |
+| Tim Compliance minta export CSV bulanan | Tambah ke backlog | PO | Sprint 3 |
 
 ## Next Sprint Focus
-[Tema/goal Sprint 2 — masih kasar, akan refine di Planning]
+- Selesaikan story slip + feedback dari stakeholder.
 ```
 
-### 8.3 Latihan Anda
-
-Buat file `08-sprint-1-review.md`. Asumsikan **3-4 story dari Sprint 1 sudah Done** dan **1 slip**. Tulis Sprint Review-nya.
-
-**Checkpoint**: Status Sprint Goal, demo per story, action items hasil feedback ada. ✅
+**Checkpoint**: Sprint Report ter-generate, dokumentasi review tersimpan di issue `[REVIEW]`. ✅
 
 ---
 
 ## Langkah 9 — Sprint Retrospective (15 menit)
 
-**Tujuan**: tim refleksi cara kerja, sepakati improvement actionable.
+Jira tidak punya **Retrospective tool built-in** di plan Free. Untuk latihan ini, kita pakai **issue khusus** sebagai dokumentasi retro.
 
-### 9.1 Format Klasik — "3 Pertanyaan"
+### 9.1 (Opsional) Tools Retrospective Free Eksternal
 
-1. **Apa yang berjalan baik?** (What went well?)
-2. **Apa yang bisa diperbaiki?** (What could be improved?)
-3. **Action item konkret untuk Sprint berikutnya** — siapa, apa, kapan.
+Kalau mau pengalaman retro board visual, ada tools free yang bisa integrate ke Jira:
+- **EasyRetro** ([easyretro.io](https://easyretro.io)) — free untuk team kecil.
+- **Parabol** ([parabol.co](https://parabol.co)) — async-friendly retrospective.
+- **FunRetro** / **Metro Retro** — visual retro board.
 
-### 9.2 Format Alternatif — "Start, Stop, Continue"
+Action items dari tool ini bisa otomatis jadi Jira issue (di EasyRetro/Parabol).
 
-| Start (mulai lakukan) | Stop (hentikan) | Continue (lanjutkan) |
-|---|---|---|
-| Code review buddy harian | Meeting setelah jam 16.00 | Daily Scrum on time |
+### 9.2 Quick Retro di Jira Issue (Untuk Latihan)
 
-### 9.3 Template Retrospective
-
-File `09-sprint-1-retrospective.md`:
+Cara paling simple — bikin issue khusus:
 
 ```
-# Sprint 1 Retrospective
+Type: Task
+Summary: [RETRO] Sprint 1 Retrospective
+Description:
 
-**Tanggal**: [tanggal] 16:30-18:00
-**Hadir**: Tim Scrum saja (tanpa stakeholder)
-**Fasilitator**: Scrum Master
+## Apa yang berjalan baik?
+- Daily Scrum on time tiap hari.
+- OpenAPI spec sangat membantu sync backend-frontend.
+- Pair programming Sari-Tina mempercepat.
 
-## Sprint Stats
-- Velocity: 22 / 22 points (target tercapai)
-- Story selesai: 5 dari 6
-- Bug ditemukan saat UAT: 2 (1 critical, 1 minor)
-
-## Yang Berjalan Baik
-- Daily Scrum efektif — semua hadir tepat waktu.
-- Backend-Frontend sync lewat OpenAPI spec sangat membantu.
-- Pair programming Sari-Tina untuk audit log mempercepat delivery.
-
-## Yang Bisa Diperbaiki
-- Dependency ke tim core banking memperlambat di Day 3-5.
+## Apa yang bisa diperbaiki?
+- Dependency vendor QRIS sandbox bottleneck Day 3-5.
 - Test coverage masih 70% (target 80%).
-- Story acceptance criteria kadang terlalu vague — perlu refine di refinement.
+- AC kadang vague — perlu refine session.
 
-## Action Items untuk Sprint 2
-
-| # | Action | Owner | Deadline |
-|---|---|---|---|
-| 1 | Setup mock API untuk core banking — buffer dependency | Sari | Day 1 Sprint 2 |
-| 2 | Tambah test coverage minimum di DoD | Tim | Sprint Planning |
-| 3 | Refinement session 2 jam/minggu | SM | Mulai Sprint 2 |
+## Action Items
+- [ ] [Sari] Setup mock API vendor — Sprint 2 Day 1
+- [ ] [Tim] Tambah coverage minimum di DoD — sebelum Sprint Planning
+- [ ] [SM] Schedule refinement session 2x/minggu — mulai Sprint 2
 ```
 
-### 9.4 Latihan Anda
+Convert action items jadi **sub-task** atau **new Story** di backlog untuk traceability.
 
-Buat file `09-sprint-1-retrospective.md`. Tulis 3-4 hal di tiap kategori + 2-3 action items konkret.
-
-**Checkpoint**: minimum 3 "berjalan baik", 3 "bisa diperbaiki", 2 action items dengan owner & deadline. ✅
+**Checkpoint**: retro ter-dokumentasi, 2-3 action items concrete di-track di Jira. ✅
 
 ---
 
-## Langkah 10 — (Bonus) Visualisasi Velocity & Burn-down (15 menit)
+## Langkah 10 — Velocity & Burndown Chart (Auto-Generated) (15 menit)
 
-**Tujuan**: praktik track progress dengan tools visual.
+Tidak perlu hitung manual — Jira auto-generate.
 
-### 10.1 Velocity Chart
+### 10.1 Burndown Chart
 
-Setelah beberapa Sprint, plot velocity:
+Selama Sprint aktif:
+- **Reports** → **Burndown Chart** → pilih sprint.
+- Chart menampilkan **sisa story points per hari** vs **ideal trend line**.
 
-```
-Sprint   Velocity
-1        22 points  ← Sprint Anda
-2        25 points
-3        24 points
-4        26 points
-─────────────────
-Average:  24 points
-```
+Interpretasi:
+- **Curve di bawah ideal**: tim ahead of schedule.
+- **Curve di atas ideal**: tim behind schedule — perlu intervensi.
+- **Flat line di tengah**: tim stuck di task tertentu — investigate impediment.
 
-Velocity = prediktor kapasitas Sprint berikutnya.
+### 10.2 Velocity Chart
 
-### 10.2 Burn-down Chart Sprint 1
+Setelah 2+ sprint:
+- **Reports** → **Velocity Chart**.
+- Bar chart tampilkan **commitment vs completed** tiap sprint.
+- Average velocity = prediktor kapasitas Sprint berikutnya.
 
-Y-axis = sisa story points, X-axis = hari Sprint.
+### 10.3 Sprint Health Check
 
-```
-Points
-  ^
-22│●
-  │  ╲
-18│   ●
-  │    ╲
-14│      ●●  (Day 3-4: slow karena dependency)
-  │       ╲
-10│         ●
-  │          ╲
- 6│            ●
-  │             ╲
- 2│              ●
-  │               ╲
- 0│────────────────●─────→ Hari
-  1  2  3  4  5  6  7  8  9 10
-                          ↑ Sprint selesai
-```
+Setelah 3-4 sprint, analisis:
+- **Predictability**: variance commitment vs completed kecil = tim predictable.
+- **Trend**: velocity naik / stabil / turun?
+- **Carry-over rate**: berapa % story carry over ke sprint berikutnya? Target < 10%.
 
-### 10.3 Latihan Anda
+### 10.4 (Bonus) Custom Dashboard
 
-Buat file `10-velocity-burndown.md`. Gambar burn-down chart Sprint 1 Anda (boleh ASCII art atau screenshot dari Google Sheets / Excel).
+Jira punya **Dashboards** untuk visualisasi custom:
+1. **Dashboards** → **Create dashboard** → nama: `Tabungan Haji Sprint Metrics`.
+2. Add gadgets:
+   - **Burndown gadget** — current sprint
+   - **Sprint Health gadget**
+   - **Created vs Resolved** chart
+   - **Pie chart** by priority
+   - **Filter Results** (top 10 oldest issue)
 
-**Checkpoint**: burn-down tergambar, ada interpretasi shape (smooth / flat di tengah / curam di akhir). ✅
+Share dashboard ke seluruh tim & stakeholder.
+
+**Checkpoint**: Burndown chart visible, paham cara baca chart. ✅
 
 ---
 
-## Struktur Folder Latihan Anda
+## Struktur Project Jira Anda — Recap
 
-Setelah selesai, folder hasil latihan harus berisi:
+Setelah selesai, project `THO` Anda harus berisi:
 
-```
-latihan-modul-1/
-├── 01-product-vision.md
-├── 02-product-backlog.md
-├── 03-acceptance-criteria.md
-├── 04-dor-dod.md
-├── 05-estimasi.md
-├── 06-sprint-1-planning.md
-├── 07-daily-scrum.md
-├── 08-sprint-1-review.md
-├── 09-sprint-1-retrospective.md
-└── 10-velocity-burndown.md
-```
-
-10 dokumen ini = **set artifact Scrum lengkap** untuk 1 Sprint cycle.
+| Item | Jumlah |
+|---|---|
+| **Epic** | 4 (Onboarding, Setor, Monitoring, Admin) |
+| **Story di Backlog** | 15+ dengan priority + Story Points |
+| **Story dengan AC lengkap** | Minimal 3 (Must-have priority) |
+| **Sprint aktif/closed** | 1 (Sprint 1) dengan Sprint Goal |
+| **Issue dokumentasi** | DoR, DoD, Retrospective |
+| **Sprint Report** | Auto-generated untuk Sprint 1 |
+| **Burndown & Velocity chart** | Auto-generated |
+| **Action items dari Retro** | 2-3 issue di backlog |
 
 ---
 
-## Tugas Lanjutan (Untuk Eksplorasi Mandiri)
+## Comparison: Jira vs Markdown Workflow
 
-Pilih minimal 2:
+Setelah selesai dua-duanya, refleksikan:
 
-### A. User Story Mapping
-Visualkan **journey nasabah** dari onboarding sampai setor saldo dalam **story map** (horizontal timeline + vertical priority). Tools: Miro, Mural, atau sticky notes fisik.
+| Aktivitas | Markdown lebih cocok kalau | Jira lebih cocok kalau |
+|---|---|---|
+| Brainstorm awal product vision | ✅ (cepat, fokus content) | (overhead UI) |
+| Backlog management | (manual sort) | ✅ (drag, filter, search) |
+| Estimasi | (manual) | ✅ (story points field) |
+| Daily Scrum sync | (susah real-time) | ✅ (board visual) |
+| Burndown & velocity | (manual hitung) | ✅ (auto-generated) |
+| Cross-team visibility | (susah share) | ✅ (URL share, permission) |
+| Documentation deep | ✅ (rich markdown) | (description issue terbatas) |
 
-### B. Refinement Session Simulation
-Asumsikan tim ada di tengah Sprint 1 dan butuh refine 5 story untuk Sprint 2. Tulis simulasi 30-menit session: PO paparkan story, tim ajukan pertanyaan, estimate, sepakati.
-
-### C. Risk Register
-Untuk product Tabungan Haji, identifikasi 10 risiko (teknis, bisnis, regulasi) dan kategorikan: likelihood (low/med/high) × impact (low/med/high). Plot di matrix 3x3.
-
-### D. Stakeholder Map
-Identifikasi semua stakeholder produk Tabungan Haji Online. Klasifikasikan: power (high/low) × interest (high/low). Buat strategi engagement untuk tiap kuadran.
-
-### E. Multi-Sprint Planning
-Plan 3 Sprint berturut-turut (Sprint 2 & 3) berdasar feedback Sprint Review. Buat **Release Plan** untuk fitur lengkap (target Release 1 di akhir Sprint 3).
+Di real-world tim BSI: markdown bagus untuk deep doc & planning artifact, Jira untuk daily execution & tracking. Kombinasikan sesuai konteks tim.
 
 ---
 
-## Self-Assessment
+## Tugas Lanjutan
 
-Centang kemampuan yang sudah Anda kuasai:
+### A. Setup Jira Automation
+Pakai **Automation rules** (free tier 100 runs/bulan):
+- Saat issue masuk Done → auto-update Story Points di Epic.
+- Saat Sprint dimulai → notify Slack channel.
+- Saat issue di-comment → email PO.
 
-**Backlog & Story:**
-- [ ] Bisa tulis Product Vision dengan 5 section.
-- [ ] Bisa identify epic vs story.
-- [ ] Bisa tulis user story format INVEST.
-- [ ] Bisa apply MoSCoW priority.
+### B. Sprint 2 Planning
+Lakukan planning Sprint 2 dengan **feedback dari Retro & Stakeholder** Sprint 1. Bandingkan velocity (target = average Sprint 1).
 
-**Refinement:**
-- [ ] Bisa tulis Acceptance Criteria Given/When/Then.
-- [ ] Bisa estimate story points dengan Fibonacci.
-- [ ] Tahu kapan story harus dipecah (> 8 points).
+### C. Custom Field & Workflow
+- Tambah custom field "Compliance Reviewed" (boolean).
+- Modify workflow: issue dengan label `compliance` harus di-approve Tim Compliance sebelum bisa masuk **Done**.
 
-**Sprint Mechanics:**
-- [ ] Bisa tetapkan Sprint Goal yang outcome-based.
-- [ ] Bisa pilih Sprint Backlog yang realistic (sesuai velocity).
-- [ ] Familiar dengan format Daily Scrum 15 menit.
-- [ ] Tahu agenda Sprint Review (demo + feedback).
-- [ ] Tahu format Retrospective (3 questions / Start-Stop-Continue).
+### D. Integrasi dengan GitHub (Smart Commit) — Penting untuk Modul 2 & 5
 
-**Tracking & Quality:**
-- [ ] Bisa tulis DoR dengan kriteria spesifik.
-- [ ] Bisa tulis DoD untuk konteks banking.
-- [ ] Bisa baca burn-down chart.
-- [ ] Tahu konsep velocity.
+Saat mulai koding di Modul 2, hubungkan Jira ↔ GitHub supaya tiap commit otomatis nampak di issue Jira.
+
+**Setup (sekali):**
+1. **Project Settings** → **Apps** → install **GitHub for Jira** dari Marketplace (free).
+2. Authorize Atlassian app ke GitHub account/org.
+3. Pilih repo: `ODP_BSI` (atau repo Anda).
+
+**Konvensi naming:**
+
+| Item | Format | Contoh |
+|---|---|---|
+| Branch | `feat/<KEY>-<short-desc>` | `feat/THO-7-setor-idempotent` |
+| Commit | `<KEY> <message>` | `THO-7 implement idempotent setor endpoint` |
+| PR title | `[<KEY>] <description>` | `[THO-7] Setor saldo dengan DB transaction` |
+
+**Smart Commit syntax** (di commit message):
+
+```bash
+# Tambah comment ke issue
+git commit -m "THO-7 #comment Endpoint setor sudah lulus Postman test"
+
+# Update time tracking
+git commit -m "THO-7 #time 2h Implementasi service layer"
+
+# Transition status
+git commit -m "THO-7 #close Ready for review"
+```
+
+Setelah setup, di issue Jira muncul tab **Development** yang nampilin: branches, commits, dan PRs yang related. Bagus untuk Sprint Review demo.
+
+### E. JQL Query Practice
+Belajar **Jira Query Language** untuk filter:
+```jql
+project = THO AND sprint in openSprints() AND assignee = currentUser()
+project = THO AND status = "Done" AND updated >= -7d
+project = THO AND priority = Highest AND status != Done
+```
+
+---
+
+## Troubleshooting
+
+| Masalah | Solusi |
+|---|---|
+| Tidak ada "Story" issue type | Project bukan Scrum template. Bikin baru dengan template Scrum. |
+| Tidak bisa drag ke sprint | Pastikan sprint sudah di-create. Klik **Create sprint** di Backlog dulu. |
+| Story Points field tidak muncul | Project Settings → Issue layout → drag field ke screen. |
+| Burndown chart kosong | Sprint belum start. Klik **Start sprint** dulu. |
+| Tidak bisa edit description Issue | Cek permission — minimal "Edit issue" permission di project. |
+| Email notification banjir | Settings → Personal Settings → Email preferences → adjust. |
+
+---
+
+## Checklist Akhir Latihan
+
+Sebelum lanjut Modul 2, pastikan:
+
+- [ ] Akun Jira Cloud aktif + project `THO` ter-setup.
+- [ ] Product Vision tersimpan di Project Description.
+- [ ] 4 Epic dengan color berbeda.
+- [ ] 15+ Story dengan epic link, priority (MoSCoW), dan format INVEST.
+- [ ] Minimal 3 story Must-have punya AC lengkap (Given/When/Then) + DoD.
+- [ ] DoR & DoD ter-dokumentasi di issue khusus (label `documentation`).
+- [ ] Minimal 10 story ter-estimate dengan Story Points Fibonacci.
+- [ ] Sprint 1 aktif dengan Sprint Goal jelas + 5-6 story di sprint.
+- [ ] Beberapa story dipecah jadi sub-task & assigned ke developer.
+- [ ] Board ter-update untuk 3 hari simulasi Daily Scrum.
+- [ ] Sprint Report ter-generate (atau bisa di-akses setelah end sprint).
+- [ ] Sprint Review terdokumentasi di issue `[REVIEW]`.
+- [ ] Retrospective dengan 3-2-3 (3 good, 2 improve, 3 actions) di-track.
+- [ ] Burndown & Velocity chart bisa di-akses & di-interpretasi.
 
 ---
 
 ## Sumber & Referensi
 
-- **Scrum Guide 2020** (~13 halaman, wajib baca): [scrumguides.org](https://scrumguides.org)
-- **User Story Mapping** — Jeff Patton (buku)
-- **Mountain Goat Software** — Mike Cohn (artikel & video Scrum)
-- **Atlassian Agile Coach**: [atlassian.com/agile/scrum](https://www.atlassian.com/agile/scrum)
-- Template Confluence/Jira: tersedia di Atlassian Marketplace, banyak gratis.
+- **Jira Software Documentation** — [atlassian.com/software/jira/guides](https://www.atlassian.com/software/jira/guides)
+- **Atlassian Agile Coach** — [atlassian.com/agile](https://www.atlassian.com/agile) (gratis, banyak template)
+- **Jira Tutorial for Beginners** — YouTube playlist resmi Atlassian
+- **Scrum Guide 2020** — [scrumguides.org](https://scrumguides.org)
+- **EasyRetro** — [easyretro.io](https://easyretro.io)
+- **Atlassian Marketplace** — plugins free & paid untuk Jira
 
 ---
 
-**Selesai latihan ini?** Anda sudah punya **fondasi praktis Scrum** — siap berpartisipasi sebagai Product Owner, Scrum Master, atau Developer di tim BSI. Selanjutnya: **Modul 2 — RESTful API & Database Modeling**, di mana story-story dari backlog Anda mulai di-implement jadi kode.
+**Selesai latihan ini?** Anda sekarang punya **pengalaman real-world Scrum execution** di tool industri-standard — siap berpartisipasi di tim engineering BSI yang pakai Jira sehari-hari. Selanjutnya: **Modul 2 — RESTful API & Database Modeling**, di mana story-story dari Jira backlog akan mulai di-implement jadi kode.
