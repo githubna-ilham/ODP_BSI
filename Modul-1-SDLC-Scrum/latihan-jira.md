@@ -53,7 +53,7 @@ Edit profile Anda: nama lengkap, role (Developer / Scrum Master / PO). Berguna s
 
 ## Langkah 1 — Tulis Product Vision di Project Description (10 menit)
 
-Untuk latihan ini, kita pakai **Project Description** — cara paling cepat & langsung tanpa setup tambahan (no Confluence, no extra issue). Cukup untuk Vision ringkas yang sering dirujuk.
+Untuk latihan ini, kita pakai **Project Description** — cara paling cepat & langsung tanpa setup tambahan. Cukup untuk Vision ringkas yang sering dirujuk.
 
 ### 1.1 Buka Project Settings
 
@@ -110,8 +110,6 @@ Balik ke project (klik project name di breadcrumb atau sidebar) → buka tab **S
 
 - Saat **Sprint Planning**, buka Description ini sebagai pengingat: pastikan story baru aligned dengan Vision.
 - Vision boleh di-update seiring product berkembang, tapi jangan terlalu sering (ini "north star", bukan task list).
-- Kalau nanti workspace Anda diaktifkan Confluence (untuk project real di kantor), pindahkan Vision ke Confluence page untuk versi lebih lengkap.
-
 **Checkpoint**: Project Description sudah terisi Vision + bisa diakses dari tab Summary project. ✅
 
 ---
@@ -317,19 +315,11 @@ Priority: Highest
 
 Pin di top backlog supaya selalu kelihatan.
 
-### 4.2 (Recommended) Bikin di Confluence
+### 4.2 Isi Description DoR & DoD
 
-DoR & DoD lebih cocok di **Confluence page** (kalau available) karena:
-- Bisa di-edit kolaboratif
-- Versioned
-- Bisa di-comment
-- Searchable
-
-Buat page `Team Working Agreement` di Confluence space, isi:
+Buka issue `[DOC] Definition of Ready` → field Description → paste:
 
 ```
-# Team Working Agreement — Tabungan Haji
-
 ## Definition of Ready (DoR)
 Story siap masuk Sprint kalau MEMENUHI SEMUA:
 - [ ] Format INVEST valid.
@@ -339,7 +329,11 @@ Story siap masuk Sprint kalau MEMENUHI SEMUA:
 - [ ] Untuk UI: ada mockup/wireframe.
 - [ ] Untuk API: contoh request/response disepakati.
 - [ ] Sudah review compliance/security (mandatory untuk touch saldo).
+```
 
+Buka issue `[DOC] Definition of Done` → field Description → paste:
+
+```
 ## Definition of Done (DoD)
 Story dianggap Done kalau:
 - [ ] Code complete sesuai semua AC.
@@ -357,9 +351,11 @@ Story dianggap Done kalau:
 - [ ] Deployed ke staging dan tested by 1 internal user.
 ```
 
-Link Confluence page ke project Jira (Project Settings → Apps → Confluence).
+### 4.3 Akses Cepat lewat Filter
 
-**Checkpoint**: DoR & DoD ter-dokumentasi & visible untuk semua tim member. ✅
+Save filter `project = THO AND labels = "documentation"` jadi quick filter di sidebar — DoR/DoD selalu 1 klik dari mana saja.
+
+**Checkpoint**: DoR & DoD ter-dokumentasi di issue & visible untuk semua tim member. ✅
 
 ---
 
@@ -557,7 +553,7 @@ Untuk latihan, simulasikan akhir sprint:
 
 ### 8.3 Dokumentasi Sprint Review
 
-Sprint Report adalah **data**. Untuk **narasi feedback stakeholder**, tambah comment di **Confluence page**:
+Sprint Report adalah **data**. Untuk **narasi feedback stakeholder**, bikin issue khusus tipe Task dengan summary `[REVIEW] Sprint 1 Review — Tabungan Haji` + label `documentation`, lalu paste template ini di Description:
 
 ```markdown
 # Sprint 1 Review — Tabungan Haji
@@ -587,31 +583,24 @@ Status: ✅ Achieved (5/6 story done, 1 slip)
 - Selesaikan story slip + feedback dari stakeholder.
 ```
 
-**Checkpoint**: Sprint Report ter-generate, dokumentasi review di Confluence/issue. ✅
+**Checkpoint**: Sprint Report ter-generate, dokumentasi review tersimpan di issue `[REVIEW]`. ✅
 
 ---
 
 ## Langkah 9 — Sprint Retrospective (15 menit)
 
-Jira tidak punya **Retrospective tool built-in** di plan Free. Workaround:
+Jira tidak punya **Retrospective tool built-in** di plan Free. Untuk latihan ini, kita pakai **issue khusus** sebagai dokumentasi retro.
 
-### 9.1 Opsi 1: Confluence Template
+### 9.1 (Opsional) Tools Retrospective Free Eksternal
 
-1. Confluence space → **Create page** → template **Retrospective**.
-2. Default template ada 3 section: **What went well, What could be improved, Action items**.
-3. Tiap tim member tulis insight masing-masing.
-4. Saat retro meeting, group similar insights, voting untuk top action items.
-
-### 9.2 Opsi 2: Tools Lain (Free)
-
-Banyak tools retrospective free yang integrate dengan Jira:
+Kalau mau pengalaman retro board visual, ada tools free yang bisa integrate ke Jira:
 - **EasyRetro** ([easyretro.io](https://easyretro.io)) — free untuk team kecil.
 - **Parabol** ([parabol.co](https://parabol.co)) — async-friendly retrospective.
 - **FunRetro** / **Metro Retro** — visual retro board.
 
-Action items dari retro **bisa di-create jadi Jira issue otomatis** (kalau pakai EasyRetro/Parabol — ada integrasi).
+Action items dari tool ini bisa otomatis jadi Jira issue (di EasyRetro/Parabol).
 
-### 9.3 Opsi 3: Quick Retro di Jira Issue
+### 9.2 Quick Retro di Jira Issue (Untuk Latihan)
 
 Cara paling simple — bikin issue khusus:
 
@@ -717,9 +706,9 @@ Setelah selesai dua-duanya, refleksikan:
 | Daily Scrum sync | (susah real-time) | ✅ (board visual) |
 | Burndown & velocity | (manual hitung) | ✅ (auto-generated) |
 | Cross-team visibility | (susah share) | ✅ (URL share, permission) |
-| Documentation deep | ✅ (rich markdown) | (description terbatas) — pakai Confluence |
+| Documentation deep | ✅ (rich markdown) | (description issue terbatas) |
 
-Di real-world tim BSI: pakai **kombinasi** — Confluence untuk deep doc + planning artifact, Jira untuk daily execution.
+Di real-world tim BSI: markdown bagus untuk deep doc & planning artifact, Jira untuk daily execution & tracking. Kombinasikan sesuai konteks tim.
 
 ---
 
@@ -798,17 +787,17 @@ project = THO AND priority = Highest AND status != Done
 Sebelum lanjut Modul 2, pastikan:
 
 - [ ] Akun Jira Cloud aktif + project `THO` ter-setup.
-- [ ] Product Vision tersimpan di Project Description atau Confluence.
+- [ ] Product Vision tersimpan di Project Description.
 - [ ] 4 Epic dengan color berbeda.
 - [ ] 15+ Story dengan epic link, priority (MoSCoW), dan format INVEST.
 - [ ] Minimal 3 story Must-have punya AC lengkap (Given/When/Then) + DoD.
-- [ ] DoR & DoD ter-dokumentasi (issue khusus atau Confluence page).
+- [ ] DoR & DoD ter-dokumentasi di issue khusus (label `documentation`).
 - [ ] Minimal 10 story ter-estimate dengan Story Points Fibonacci.
 - [ ] Sprint 1 aktif dengan Sprint Goal jelas + 5-6 story di sprint.
 - [ ] Beberapa story dipecah jadi sub-task & assigned ke developer.
 - [ ] Board ter-update untuk 3 hari simulasi Daily Scrum.
 - [ ] Sprint Report ter-generate (atau bisa di-akses setelah end sprint).
-- [ ] Sprint Review terdokumentasi di Confluence atau comment issue.
+- [ ] Sprint Review terdokumentasi di issue `[REVIEW]`.
 - [ ] Retrospective dengan 3-2-3 (3 good, 2 improve, 3 actions) di-track.
 - [ ] Burndown & Velocity chart bisa di-akses & di-interpretasi.
 
@@ -820,7 +809,6 @@ Sebelum lanjut Modul 2, pastikan:
 - **Atlassian Agile Coach** — [atlassian.com/agile](https://www.atlassian.com/agile) (gratis, banyak template)
 - **Jira Tutorial for Beginners** — YouTube playlist resmi Atlassian
 - **Scrum Guide 2020** — [scrumguides.org](https://scrumguides.org)
-- **Confluence Templates Library** — built-in di Confluence
 - **EasyRetro** — [easyretro.io](https://easyretro.io)
 - **Atlassian Marketplace** — plugins free & paid untuk Jira
 
