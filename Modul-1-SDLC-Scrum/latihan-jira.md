@@ -51,138 +51,68 @@ Edit profile Anda: nama lengkap, role (Developer / Scrum Master / PO). Berguna s
 
 ---
 
-## Langkah 1 — Tulis Product Vision (15 menit)
+## Langkah 1 — Tulis Product Vision di Project Description (10 menit)
 
-Jira **tidak punya** field "Product Vision" built-in. Ada **3 alternatif** — pilih yang paling cocok dengan workspace Anda:
+Untuk latihan ini, kita pakai **Project Description** — cara paling cepat & langsung tanpa setup tambahan (no Confluence, no extra issue). Cukup untuk Vision ringkas yang sering dirujuk.
 
-| Opsi | Cocok untuk | Pros | Cons |
-|---|---|---|---|
-| **A. Confluence Page** (recommended) | Workspace yang punya Confluence (sering free bersama Jira) | Format rich text + image + table + versioned | Butuh Confluence aktif |
-| **B. Issue Khusus Documentation** | Workspace tanpa Confluence | Simple, langsung di Jira | Format terbatas, susah collaborative edit |
-| **C. Project Description** | Yang mau singkat & ringkas saja | Quick, no extra setup | Cuma 1-2 paragraf, no formatting |
+### 1.1 Buka Project Settings
 
-### Template Product Vision (Pakai di Opsi Manapun)
+```
+┌─────────────────────────────────────────────────────────┐
+│ Sidebar kiri Jira                                       │
+├─────────────────────────────────────────────────────────┤
+│ ⌂ Home                                                  │
+│ 📊 Projects                                             │
+│  └ Tabungan Haji Online       ← klik project Anda      │
+│    └ Summary                                            │
+│    └ Backlog                                            │
+│    └ Board                                              │
+│    └ Reports                                            │
+│  ...                                                    │
+│                                                         │
+│  ⚙️ Project settings           ← KLIK INI               │
+│     (scroll sidebar PALING BAWAH)                       │
+└─────────────────────────────────────────────────────────┘
+```
 
-Sebelum eksekusi, siapkan teks ini dulu — dipakai di salah satu opsi di bawah:
+1. Buka project `THO` di sidebar kiri.
+2. **Scroll ke paling bawah sidebar kiri** → klik ⚙️ **Project settings**.
+   *(Kalau tidak nampak, klik **More actions (•••)** di kanan atas project → **Project settings**.)*
+3. Tab **Details** (default selected) sudah terbuka.
 
-```markdown
-## Product Vision: Tabungan Haji Online (BSI Mobile)
+### 1.2 Isi Field Description
 
-### Untuk siapa?
-Calon jamaah haji usia 25-55 tahun yang punya aplikasi BSI Mobile,
-mau menabung untuk haji secara reguler tapi malas/repot ke cabang.
+1. Cari field **Description** → klik area kosongnya → muncul text editor.
+2. Paste teks Product Vision di bawah ini:
 
-### Masalah yang dipecahkan
-Buka tabungan haji & setor saldo harus ke cabang. Antri lama,
+```
+Fitur Tabungan Haji Online di BSI Mobile untuk calon jamaah haji
+usia 25-55 tahun. Memungkinkan daftar, setor (QRIS/transfer), dan
+monitoring tabungan dari mobile app — tanpa perlu ke cabang.
+
+Masalah: buka tabungan haji & setor saldo harus ke cabang. Antri lama,
 jam terbatas (08.00-15.00), tidak fleksibel untuk yang kerja.
 
-### Solusi singkat
-Fitur tabungan haji terintegrasi di BSI Mobile — daftar, setor (via QRIS/transfer),
-lihat saldo, terima notifikasi.
-
-### Beda dari alternatif
-Kompetitor masih offline / sebagian online tapi terpisah dari mobile banking.
-BSI integrasi penuh di 1 aplikasi.
-
-### Indikator sukses
+Indikator sukses:
 - Bulan 1: 5.000 nasabah daftar via mobile
 - Bulan 3: 60% transaksi setor terjadi via mobile (vs cabang)
 - Rating fitur di app: ≥ 4.5/5
 - Penurunan 30% antrian cabang untuk transaksi haji
 ```
 
----
+3. Scroll bawah → klik **Save**.
 
-### 🥇 Opsi A — Confluence Page (Recommended)
+### 1.3 Verifikasi
 
-**Cek dulu**: di header Jira (top bar) → klik **Apps** → cek apakah ada **Confluence**. Atau coba akses `https://[your-site].atlassian.net/wiki` — kalau bisa dibuka berarti Confluence aktif.
+Balik ke project (klik project name di breadcrumb atau sidebar) → buka tab **Summary**. Description tampil di bagian atas — dan akan muncul untuk semua tim member yang akses project.
 
-1. Klik tombol **Apps** di header top → pilih **Confluence**.
-   *(Atau ke `https://[your-site].atlassian.net/wiki` langsung.)*
-2. Di Confluence: klik **Create space** → pilih template **Software project** → nama `Tabungan Haji Online`.
-3. Di space baru, klik **Create** (icon `+` di sidebar) → pilih template **Product Requirements** atau **Blank page**.
-4. Title page: **Product Vision — Tabungan Haji Online**.
-5. Paste template Product Vision di atas → klik **Publish**.
+### Tip
 
-**Link ke project Jira:**
-1. Balik ke Jira → buka project `THO`.
-2. Sidebar kiri scroll bawah → klik ⚙️ **Project settings**.
-3. Pilih **Apps** → **Confluence**.
-4. Klik **Add a Confluence space** → pilih space "Tabungan Haji Online".
+- Saat **Sprint Planning**, buka Description ini sebagai pengingat: pastikan story baru aligned dengan Vision.
+- Vision boleh di-update seiring product berkembang, tapi jangan terlalu sering (ini "north star", bukan task list).
+- Kalau nanti workspace Anda diaktifkan Confluence (untuk project real di kantor), pindahkan Vision ke Confluence page untuk versi lebih lengkap.
 
-Sekarang di sidebar project Jira muncul tab **Pages** yang link ke Confluence.
-
----
-
-### 🥈 Opsi B — Issue Khusus Documentation
-
-Kalau Confluence tidak tersedia, bikin issue khusus untuk dokumentasi:
-
-1. Klik tombol biru **Create** di header top Jira.
-2. Isi form:
-   - **Project**: Tabungan Haji Online (THO)
-   - **Issue Type**: Task *(atau "Documentation" kalau ada)*
-   - **Summary**: `[DOC] Product Vision — Tabungan Haji Online`
-   - **Description**: paste template Product Vision di atas
-   - **Label**: tambah `documentation` *(klik field Labels → ketik → Enter)*
-   - **Priority**: Highest *(supaya muncul di top backlog)*
-3. Klik **Create**.
-
-**Cara akses cepat di kemudian hari:**
-- Filter: di search bar atas → ketik `project = THO AND labels = "documentation"`.
-- Save jadi filter: klik **Save as** → nama "Dokumentasi THO".
-
----
-
-### 🥉 Opsi C — Project Description (Singkat)
-
-Kalau cuma butuh ringkas (1-2 paragraf):
-
-**Cara akses Project Settings:**
-
-```
-┌─────────────────────────────────────────────────────────┐
-│ ◯ Atlassian   Your work   Projects   Apps   ...    [+] │
-├───────────────┬─────────────────────────────────────────┤
-│ ⌂ Home        │  Tabungan Haji Online                   │
-│ 📊 Projects   │  ┌───────────────────────────────────┐  │
-│  └ Tabungan H │  │ Summary  Backlog  Board  Reports │  │
-│    └ Backlog  │  └───────────────────────────────────┘  │
-│    └ Board    │                                          │
-│    └ Reports  │                                          │
-│  ...          │                                          │
-│               │                                          │
-│  ⚙️ Project   │  ← KLIK INI (scroll sidebar paling bawah)│
-│     settings  │                                          │
-└───────────────┴─────────────────────────────────────────┘
-```
-
-1. Buka project `THO` di sidebar kiri.
-2. **Scroll ke paling bawah sidebar kiri** → klik ⚙️ **Project settings**.
-   *(Kalau tidak nampak, klik **More actions (•••)** di kanan atas project → **Project settings**.)*
-3. Tab pertama (default selected) adalah **Details**. Kalau tidak, klik **Details** di kiri.
-4. Cari field **Description** → klik area kosongnya → muncul text editor.
-5. Paste **versi singkat** Product Vision:
-   ```
-   Fitur Tabungan Haji Online di BSI Mobile untuk calon jamaah haji
-   usia 25-55 tahun. Memungkinkan daftar, setor (QRIS/transfer), dan
-   monitoring tabungan dari mobile app — tanpa perlu ke cabang.
-
-   Target: 5.000 nasabah di bulan 1, 60% transaksi via mobile di bulan 3.
-   ```
-6. Scroll bawah → klik **Save**.
-
-> **Catatan**: kalau Description tidak menampung 5 section penuh, **kombinasikan**: section singkat di Description + link ke Confluence/Issue untuk versi lengkap.
-
----
-
-### Tip Tambahan
-
-- **Apapun opsi yang dipilih**, pin link Product Vision di tempat yang mudah diakses tim (Slack channel description, Notion, atau Confluence overview).
-- Saat Sprint Planning, **selalu rujuk Product Vision** untuk pastikan story baru tetap aligned dengan visi.
-- Vision **bisa di-update** seiring product berkembang — tapi jangan terlalu sering (ini "north star", bukan task list).
-
-**Checkpoint**: Product Vision tersimpan di salah satu lokasi (Confluence / Issue / Project Description) + bisa diakses semua tim member. ✅
+**Checkpoint**: Project Description sudah terisi Vision + bisa diakses dari tab Summary project. ✅
 
 ---
 
