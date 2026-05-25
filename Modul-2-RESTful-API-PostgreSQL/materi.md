@@ -36,306 +36,11 @@ Kita lanjutkan kasus dari Modul 1 — bikin **REST API untuk Tabungan Haji**:
 
 ---
 
-## 2. RESTful API — Konsep Dasar
-
-**REST** (Representational State Transfer) adalah arsitektur API yang paling dominan di industri (~80% API publik pakai REST).
-
-### 2.1 Enam Prinsip REST
-
-| Prinsip | Penjelasan |
-|---|---|
-| **Client-Server** | Client dan server terpisah, komunikasi via HTTP |
-| **Stateless** | Server tidak menyimpan state client antar request — tiap request mandiri |
-| **Cacheable** | Response harus bisa di-cache untuk efisiensi |
-| **Uniform Interface** | Konsisten: URI, HTTP method, representasi resource |
-| **Layered System** | Boleh ada layer antara client & server (load balancer, gateway, dll) |
-| **Code on Demand** *(opsional)* | Server bisa kirim executable code (jarang dipakai) |
-
-### 2.2 HTTP Methods (Verbs)
-
-| Method | Idempotent? | Use case |
-|---|---|---|
-| **GET** | ✓ | Read data, tidak boleh mengubah state |
-| **POST** | ✗ | Create resource baru, atau aksi non-idempotent |
-| **PUT** | ✓ | Replace full resource |
-| **PATCH** | ✓ | Update partial resource |
-| **DELETE** | ✓ | Hapus resource |
-
-**Idempotent** = panggil berkali-kali hasilnya sama. Penting di banking — kalau request setor di-retry karena timeout, jangan sampai saldo bertambah 2x.
-
-### 2.3 HTTP Status Codes
-
-Yang paling sering dipakai:
-
-| Code | Kategori | Arti | Contoh |
-|---|---|---|---|
-| **200** | Success | OK | GET sukses |
-| **201** | Success | Created | POST sukses |
-| **204** | Success | No Content | DELETE sukses |
-| **400** | Client error | Bad Request | Format JSON salah |
-| **401** | Client error | Unauthorized | Token JWT tidak ada/invalid |
-| **403** | Client error | Forbidden | Token valid, tapi tidak punya akses |
-| **404** | Client error | Not Found | Resource tidak ada |
-| **409** | Client error | Conflict | Duplikat data |
-| **422** | Client error | Unprocessable Entity | Validasi gagal |
-| **500** | Server error | Internal Server Error | Bug di server |
-| **502/503** | Server error | Bad Gateway / Unavailable | Upstream service down |
-
-### 2.4 Resource Naming Convention
-
-Aturan emas: **resource = noun** (kata benda), **bukan verb**.
-
-| ❌ Salah | ✅ Benar |
-|---|---|
-| `POST /createTabungan` | `POST /tabungan` |
-| `GET /getNasabahById?id=1` | `GET /nasabah/1` |
-| `POST /setorToTabungan` | `POST /tabungan/{id}/setor` |
-| `GET /allTransaksi` | `GET /transaksi` |
-
-Lebih lengkap untuk Tabungan Haji BSI:
-
-```
-GET    /api/v1/nasabah                      # list semua nasabah
-GET    /api/v1/nasabah/{id}                 # detail nasabah
-POST   /api/v1/nasabah                      # daftar nasabah baru
-PATCH  /api/v1/nasabah/{id}                 # update data nasabah
-
-GET    /api/v1/tabungan-haji                # list tabungan haji (filter by nasabah_id)
-POST   /api/v1/tabungan-haji                # buka tabungan haji baru
-GET    /api/v1/tabungan-haji/{id}           # detail tabungan
-GET    /api/v1/tabungan-haji/{id}/mutasi    # mutasi tabungan
-POST   /api/v1/tabungan-haji/{id}/setor     # setor saldo
-POST   /api/v1/tabungan-haji/{id}/tarik     # tarik saldo (kalau diizinkan)
-```
-
-> **Versioning di URL**: pakai `/api/v1/...` supaya kalau ada breaking change, bisa rilis `/v2/` tanpa merusak client lama.
-
-### 2.5 Anatomi Request & Response
-
-**Request POST `/api/v1/tabungan-haji/PSTH-001/setor`:**
-
-```http
-POST /api/v1/tabungan-haji/PSTH-001/setor HTTP/1.1
-Host: api.bsi.co.id
-Authorization: Bearer eyJhbGc...
-Content-Type: application/json
-Idempotency-Key: a3f2-9b1d-7c4e
-
-{
-  "nominal": 500000,
-  "metode": "QRIS",
-  "referensi": "TRX-2026052301234"
-}
-```
-
-**Response sukses (201 Created):**
-
-```http
-HTTP/1.1 201 Created
-Content-Type: application/json
-
-{
-  "data": {
-    "transaksi_id": "TRX-001",
-    "tabungan_id": "PSTH-001",
-    "nominal": 500000,
-    "saldo_sebelum": 2500000,
-    "saldo_sesudah": 3000000,
-    "waktu": "2026-05-23T14:30:00+07:00"
-  }
-}
-```
-
-**Response error (422):**
-
-```json
-{
-  "error": {
-    "code": "VALIDATION_ERROR",
-    "message": "Setoran minimum Rp 100.000",
-    "field": "nominal"
-  }
-}
-```
-
-### 2.6 Format Balikan Data API — Kesepakatan dengan Frontend
-
-Bagian ini sangat penting tapi **sering disepelekan**: format JSON response yang dikembalikan API harus **konsisten dan disepakati di awal** dengan tim frontend (atau consumer lain). Tanpa kesepakatan, tiap endpoint bisa punya format berbeda → frontend repot handle → maintenance nightmare.
-
-> **Aturan emas**: tim backend & frontend **sepakati format response di awal** (sebelum coding), tuangkan di **OpenAPI/Swagger spec** atau **dokumen API contract**, lalu pakai itu sebagai source of truth.
-
-### 2.6.1 Mengapa Format Response Penting
-
-| Tanpa standar response | Dengan standar response |
-|---|---|
-| Tiap endpoint return shape beda — frontend bikin handler khusus per endpoint | Frontend cukup 1 wrapper untuk semua API call |
-| Error message muncul di tempat berbeda (kadang `message`, kadang `error`, kadang plain string) | Error selalu di `error.message` — UI tinggal display |
-| Frontend & backend deploy desync → bug production | Spec konsisten → contract test gampang |
-| Tim frontend "menebak" struktur response | Frontend & backend pakai TypeScript type yang sama |
-
-### 2.6.2 Struktur Standar — `{ data, error, meta }`
-
-Pola yang paling umum dipakai di industri:
-
-```json
-{
-  "data": { ... },        // hasil sukses (object atau array)
-  "error": null,          // null kalau sukses, object kalau gagal
-  "meta": { ... }         // metadata opsional: pagination, timestamp, request_id
-}
-```
-
-**Aturan:**
-- Field `data` & `error` selalu ada — tapi salah satu pasti `null`.
-- Untuk **sukses**: `data` berisi hasil, `error` = `null`.
-- Untuk **error**: `data` = `null`, `error` berisi detail error.
-- Field `meta` opsional — dipakai untuk pagination, timestamp, tracing.
-
-### 2.6.3 Contoh Response Sukses — Single Resource
-
-`GET /api/v1/tabungan-haji/PSTH-001` (HTTP 200):
-
-```json
-{
-  "data": {
-    "id": "PSTH-001",
-    "nomor_rekening": "70110001",
-    "nasabah_id": "NSB-001",
-    "saldo": 5000000,
-    "status": "AKTIF",
-    "dibuka_at": "2026-01-15T08:00:00+07:00"
-  },
-  "error": null,
-  "meta": {
-    "timestamp": "2026-05-23T14:30:00+07:00",
-    "request_id": "req_a3f2-9b1d"
-  }
-}
-```
-
-### 2.6.4 Contoh Response Sukses — List/Collection (dengan Pagination)
-
-`GET /api/v1/tabungan-haji?page=1&limit=20` (HTTP 200):
-
-```json
-{
-  "data": [
-    { "id": "PSTH-001", "nomor_rekening": "70110001", "saldo": 5000000 },
-    { "id": "PSTH-002", "nomor_rekening": "70110002", "saldo": 3500000 }
-  ],
-  "error": null,
-  "meta": {
-    "pagination": {
-      "page": 1,
-      "limit": 20,
-      "total": 152,
-      "total_pages": 8
-    },
-    "timestamp": "2026-05-23T14:30:00+07:00"
-  }
-}
-```
-
-### 2.6.5 Contoh Response Error — Validasi Gagal
-
-`POST /api/v1/tabungan-haji/PSTH-001/setor` dengan nominal terlalu kecil (HTTP 422):
-
-```json
-{
-  "data": null,
-  "error": {
-    "code": "VALIDATION_ERROR",
-    "message": "Validasi input gagal",
-    "details": [
-      {
-        "field": "nominal",
-        "message": "Nominal minimum Rp 100.000"
-      }
-    ]
-  },
-  "meta": {
-    "timestamp": "2026-05-23T14:30:00+07:00",
-    "request_id": "req_a3f2-9b1d"
-  }
-}
-```
-
-### 2.6.6 Contoh Response Error — Business Logic Error
-
-`POST /setor` ke tabungan yang sudah ditutup (HTTP 409 Conflict):
-
-```json
-{
-  "data": null,
-  "error": {
-    "code": "TABUNGAN_TIDAK_AKTIF",
-    "message": "Tabungan PSTH-001 sudah ditutup — tidak bisa setor lagi"
-  },
-  "meta": {
-    "timestamp": "2026-05-23T14:30:00+07:00"
-  }
-}
-```
-
-### 2.6.7 Standardisasi Error Code
-
-Tim sepakati daftar error code di awal — frontend bisa match code → terjemah ke pesan UI yang user-friendly (multi-bahasa, contextual).
-
-| Error Code | HTTP Status | Use case |
-|---|---|---|
-| `VALIDATION_ERROR` | 422 | Input format/range salah |
-| `UNAUTHORIZED` | 401 | Token tidak ada/invalid/expired |
-| `FORBIDDEN` | 403 | Token valid tapi tidak punya akses |
-| `NOT_FOUND` | 404 | Resource tidak ditemukan |
-| `CONFLICT` | 409 | Konflik state (duplikat, sudah ditutup) |
-| `RATE_LIMIT_EXCEEDED` | 429 | Terlalu banyak request |
-| `INTERNAL_ERROR` | 500 | Bug di server |
-| `SERVICE_UNAVAILABLE` | 503 | Upstream service down |
-| `TABUNGAN_TIDAK_AKTIF` | 409 | Custom — domain-specific error |
-| `SALDO_TIDAK_CUKUP` | 422 | Custom — domain-specific error |
-
-> **Tip**: prefix custom error code dengan **domain** (`TABUNGAN_*`, `NASABAH_*`, `TRANSAKSI_*`) — supaya mudah grouping di logging & monitoring.
-
-### 2.6.8 Konvensi Penamaan Field JSON
-
-| Aspek | Konvensi | Contoh |
-|---|---|---|
-| **Format key** | `snake_case` (atau `camelCase` — pilih satu, konsisten!) | `nomor_rekening` atau `nomorRekening` |
-| **Tanggal/waktu** | ISO 8601 dengan timezone | `"2026-05-23T14:30:00+07:00"` |
-| **Uang** | Integer dalam satuan terkecil (rupiah penuh) — bukan float | `5000000` (bukan `"Rp 5.000.000"`) |
-| **Boolean** | `true` / `false` (bukan `"true"` / `1`) | `"is_aktif": true` |
-| **Enum** | `UPPER_SNAKE_CASE` untuk konstanta | `"status": "AKTIF"` |
-| **Null vs missing** | Pakai `null` eksplisit untuk field yang ada tapi kosong | `"nomor_hp": null` |
-| **ID** | String (UUID/format custom), bukan integer auto-increment | `"PSTH-001"`, `"a3f2-9b1d-..."` |
-
-### 2.6.9 Aturan Tambahan untuk Banking API
-
-- **Format uang**: simpan & kirim sebagai **integer** (rupiah penuh) — JANGAN float. Frontend yang format display.
-- **Sensitive data masking**: jangan kirim full nomor rekening/NIK ke client kalau tidak perlu. Mask: `"7011****0001"`.
-- **Timestamp dengan timezone**: selalu sertakan timezone — `+07:00` (WIB) untuk operasi domestik.
-- **Tidak expose internal state**: jangan return stack trace, query SQL, atau path file di error message production.
-- **Audit trail context**: response transaksi (mutasi saldo) sebaiknya include `transaksi_id` dan `referensi` untuk traceability.
-
-### 2.6.10 Dokumentasi sebagai Kesepakatan
-
-Setelah format disepakati, **tuangkan ke dokumen** yang bisa di-share & versioned:
-
-| Tool | Format |
-|---|---|
-| **OpenAPI / Swagger** | Standard industri, auto-generate docs + client SDK |
-| **Postman Collection** | Bisa di-share, ada example request/response |
-| **TypeScript types** | Generate dari OpenAPI — backend & frontend pakai type yang sama |
-| **README per endpoint** | Untuk project sederhana |
-
-Detail OpenAPI dibahas di **§11 Dokumentasi API**.
-
----
-
-## 3. Database Modeling — Dasar
+## 2. Database Modeling — Dasar
 
 Sebelum bikin API, **rancang dulu database**-nya. Salah desain database → API ikut salah → susah refactor di kemudian hari.
 
-### 3.1 ERD (Entity Relationship Diagram)
+### 2.1 ERD (Entity Relationship Diagram)
 
 ERD memvisualisasikan tabel + relasi antar tabel.
 
@@ -389,7 +94,7 @@ erDiagram
 - `FK` = Foreign Key
 - `UK` = Unique Key
 
-### 3.2 Tiga Bentuk Relasi
+### 2.2 Tiga Bentuk Relasi
 
 | Relasi | Contoh | Implementasi |
 |---|---|---|
@@ -397,7 +102,7 @@ erDiagram
 | **1:N** (one-to-many) | Nasabah ↔ Tabungan Haji | FK di sisi N (tabungan) |
 | **M:N** (many-to-many) | Nasabah ↔ Produk Bank | Junction table (nasabah_produk) |
 
-### 3.3 Normalisasi (Singkat)
+### 2.3 Normalisasi (Singkat)
 
 Tujuan: hindari duplikasi & inkonsistensi data.
 
@@ -409,7 +114,7 @@ Tujuan: hindari duplikasi & inkonsistensi data.
 
 Untuk modul ini, fokus ke **3NF** — cukup untuk 90% kasus.
 
-### 3.4 Constraint Penting
+### 2.4 Constraint Penting
 
 | Constraint | Fungsi | Contoh |
 |---|---|---|
@@ -420,7 +125,7 @@ Untuk modul ini, fokus ke **3NF** — cukup untuk 90% kasus.
 | `CHECK` | Aturan custom | `CHECK (saldo >= 0)` |
 | `DEFAULT` | Nilai default | `created_at TIMESTAMP DEFAULT NOW()` |
 
-### 3.5 Index — Untuk Performance
+### 2.5 Index — Untuk Performance
 
 Index = "daftar isi" tabel — query lebih cepat tapi insert/update sedikit lebih lambat.
 
@@ -438,11 +143,11 @@ ON transaksi (tabungan_id, waktu DESC);
 
 ---
 
-## 4. PostgreSQL — Pengenalan
+## 3. PostgreSQL — Pengenalan
 
 **PostgreSQL** (sering disebut "Postgres") adalah RDBMS open-source paling powerful & matang. Dipakai banyak fintech & bank besar — termasuk banyak sistem di BSI.
 
-### 4.1 Kenapa PostgreSQL?
+### 3.1 Kenapa PostgreSQL?
 
 | Fitur | Manfaat untuk banking |
 |---|---|
@@ -453,7 +158,7 @@ ON transaksi (tabungan_id, waktu DESC);
 | **Open source** | Tanpa license fee, vendor-independent |
 | **Extensions** | PostGIS, pgcrypto, dll |
 
-### 4.2 Setup Cepat dengan Docker
+### 3.2 Setup Cepat dengan Docker
 
 Cara paling cepat — tanpa install ribet:
 
@@ -473,7 +178,7 @@ docker exec -it pg-bsi psql -U postgres -d tabungan_haji
 
 > Detail Docker dibahas di **Modul 5**. Untuk sekarang cukup paham bahwa Docker memudahkan setup database tanpa "polusi" install global.
 
-### 4.3 Tipe Data Penting
+### 3.3 Tipe Data Penting
 
 | Tipe | Penggunaan | Contoh |
 |---|---|---|
@@ -491,9 +196,9 @@ docker exec -it pg-bsi psql -U postgres -d tabungan_haji
 
 ---
 
-## 5. Schema Design — Tabungan Haji
+## 4. Schema Design — Tabungan Haji
 
-Implementasi konkret ERD di §3.1:
+Implementasi konkret ERD di §2.1:
 
 ```sql
 -- Aktifkan extension UUID
@@ -562,7 +267,7 @@ CREATE INDEX idx_audit_waktu ON audit_log(waktu DESC);
 CREATE INDEX idx_audit_action ON audit_log(action);
 ```
 
-### 5.1 Insert Sample Data
+### 4.1 Insert Sample Data
 
 ```sql
 -- Sample nasabah
@@ -579,11 +284,11 @@ FROM nasabah;
 
 ---
 
-## 6. Migrations — Version Control untuk Schema
+## 5. Migrations — Version Control untuk Schema
 
 **Migration** = file SQL/code yang merepresentasikan satu perubahan schema, di-version-kan di Git. Tujuannya: schema database bisa di-reproduce di semua environment (dev, staging, prod).
 
-### 6.1 Kenapa Bukan SQL Langsung?
+### 5.1 Kenapa Bukan SQL Langsung?
 
 | Tanpa migration | Dengan migration |
 |---|---|
@@ -592,7 +297,7 @@ FROM nasabah;
 | Rollback = manual scan SQL | Rollback = `migrate down` |
 | Audit perubahan susah | Tiap perubahan punya file & timestamp |
 
-### 6.2 Pilihan Tool Migration
+### 5.2 Pilihan Tool Migration
 
 | Tool | Stack |
 |---|---|
@@ -604,7 +309,7 @@ FROM nasabah;
 
 Untuk modul ini kita pakai **Prisma** (paling enak buat fresh project di Node.js).
 
-### 6.3 Contoh: Migration dengan Prisma
+### 5.3 Contoh: Migration dengan Prisma
 
 `prisma/schema.prisma`:
 
@@ -667,6 +372,301 @@ Jalankan:
 npx prisma migrate dev --name init   # generate migration + apply
 npx prisma generate                  # generate type-safe client
 ```
+
+---
+
+## 6. RESTful API — Konsep Dasar
+
+**REST** (Representational State Transfer) adalah arsitektur API yang paling dominan di industri (~80% API publik pakai REST).
+
+### 6.1 Enam Prinsip REST
+
+| Prinsip | Penjelasan |
+|---|---|
+| **Client-Server** | Client dan server terpisah, komunikasi via HTTP |
+| **Stateless** | Server tidak menyimpan state client antar request — tiap request mandiri |
+| **Cacheable** | Response harus bisa di-cache untuk efisiensi |
+| **Uniform Interface** | Konsisten: URI, HTTP method, representasi resource |
+| **Layered System** | Boleh ada layer antara client & server (load balancer, gateway, dll) |
+| **Code on Demand** *(opsional)* | Server bisa kirim executable code (jarang dipakai) |
+
+### 6.2 HTTP Methods (Verbs)
+
+| Method | Idempotent? | Use case |
+|---|---|---|
+| **GET** | ✓ | Read data, tidak boleh mengubah state |
+| **POST** | ✗ | Create resource baru, atau aksi non-idempotent |
+| **PUT** | ✓ | Replace full resource |
+| **PATCH** | ✓ | Update partial resource |
+| **DELETE** | ✓ | Hapus resource |
+
+**Idempotent** = panggil berkali-kali hasilnya sama. Penting di banking — kalau request setor di-retry karena timeout, jangan sampai saldo bertambah 2x.
+
+### 6.3 HTTP Status Codes
+
+Yang paling sering dipakai:
+
+| Code | Kategori | Arti | Contoh |
+|---|---|---|---|
+| **200** | Success | OK | GET sukses |
+| **201** | Success | Created | POST sukses |
+| **204** | Success | No Content | DELETE sukses |
+| **400** | Client error | Bad Request | Format JSON salah |
+| **401** | Client error | Unauthorized | Token JWT tidak ada/invalid |
+| **403** | Client error | Forbidden | Token valid, tapi tidak punya akses |
+| **404** | Client error | Not Found | Resource tidak ada |
+| **409** | Client error | Conflict | Duplikat data |
+| **422** | Client error | Unprocessable Entity | Validasi gagal |
+| **500** | Server error | Internal Server Error | Bug di server |
+| **502/503** | Server error | Bad Gateway / Unavailable | Upstream service down |
+
+### 6.4 Resource Naming Convention
+
+Aturan emas: **resource = noun** (kata benda), **bukan verb**.
+
+| ❌ Salah | ✅ Benar |
+|---|---|
+| `POST /createTabungan` | `POST /tabungan` |
+| `GET /getNasabahById?id=1` | `GET /nasabah/1` |
+| `POST /setorToTabungan` | `POST /tabungan/{id}/setor` |
+| `GET /allTransaksi` | `GET /transaksi` |
+
+Lebih lengkap untuk Tabungan Haji BSI:
+
+```
+GET    /api/v1/nasabah                      # list semua nasabah
+GET    /api/v1/nasabah/{id}                 # detail nasabah
+POST   /api/v1/nasabah                      # daftar nasabah baru
+PATCH  /api/v1/nasabah/{id}                 # update data nasabah
+
+GET    /api/v1/tabungan-haji                # list tabungan haji (filter by nasabah_id)
+POST   /api/v1/tabungan-haji                # buka tabungan haji baru
+GET    /api/v1/tabungan-haji/{id}           # detail tabungan
+GET    /api/v1/tabungan-haji/{id}/mutasi    # mutasi tabungan
+POST   /api/v1/tabungan-haji/{id}/setor     # setor saldo
+POST   /api/v1/tabungan-haji/{id}/tarik     # tarik saldo (kalau diizinkan)
+```
+
+> **Versioning di URL**: pakai `/api/v1/...` supaya kalau ada breaking change, bisa rilis `/v2/` tanpa merusak client lama.
+
+### 6.5 Anatomi Request & Response
+
+**Request POST `/api/v1/tabungan-haji/PSTH-001/setor`:**
+
+```http
+POST /api/v1/tabungan-haji/PSTH-001/setor HTTP/1.1
+Host: api.bsi.co.id
+Authorization: Bearer eyJhbGc...
+Content-Type: application/json
+Idempotency-Key: a3f2-9b1d-7c4e
+
+{
+  "nominal": 500000,
+  "metode": "QRIS",
+  "referensi": "TRX-2026052301234"
+}
+```
+
+**Response sukses (201 Created):**
+
+```http
+HTTP/1.1 201 Created
+Content-Type: application/json
+
+{
+  "data": {
+    "transaksi_id": "TRX-001",
+    "tabungan_id": "PSTH-001",
+    "nominal": 500000,
+    "saldo_sebelum": 2500000,
+    "saldo_sesudah": 3000000,
+    "waktu": "2026-05-23T14:30:00+07:00"
+  }
+}
+```
+
+**Response error (422):**
+
+```json
+{
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "Setoran minimum Rp 100.000",
+    "field": "nominal"
+  }
+}
+```
+
+### 6.6 Format Balikan Data API — Kesepakatan dengan Frontend
+
+Bagian ini sangat penting tapi **sering disepelekan**: format JSON response yang dikembalikan API harus **konsisten dan disepakati di awal** dengan tim frontend (atau consumer lain). Tanpa kesepakatan, tiap endpoint bisa punya format berbeda → frontend repot handle → maintenance nightmare.
+
+> **Aturan emas**: tim backend & frontend **sepakati format response di awal** (sebelum coding), tuangkan di **OpenAPI/Swagger spec** atau **dokumen API contract**, lalu pakai itu sebagai source of truth.
+
+### 6.6.1 Mengapa Format Response Penting
+
+| Tanpa standar response | Dengan standar response |
+|---|---|
+| Tiap endpoint return shape beda — frontend bikin handler khusus per endpoint | Frontend cukup 1 wrapper untuk semua API call |
+| Error message muncul di tempat berbeda (kadang `message`, kadang `error`, kadang plain string) | Error selalu di `error.message` — UI tinggal display |
+| Frontend & backend deploy desync → bug production | Spec konsisten → contract test gampang |
+| Tim frontend "menebak" struktur response | Frontend & backend pakai TypeScript type yang sama |
+
+### 6.6.2 Struktur Standar — `{ data, error, meta }`
+
+Pola yang paling umum dipakai di industri:
+
+```json
+{
+  "data": { ... },        // hasil sukses (object atau array)
+  "error": null,          // null kalau sukses, object kalau gagal
+  "meta": { ... }         // metadata opsional: pagination, timestamp, request_id
+}
+```
+
+**Aturan:**
+- Field `data` & `error` selalu ada — tapi salah satu pasti `null`.
+- Untuk **sukses**: `data` berisi hasil, `error` = `null`.
+- Untuk **error**: `data` = `null`, `error` berisi detail error.
+- Field `meta` opsional — dipakai untuk pagination, timestamp, tracing.
+
+### 6.6.3 Contoh Response Sukses — Single Resource
+
+`GET /api/v1/tabungan-haji/PSTH-001` (HTTP 200):
+
+```json
+{
+  "data": {
+    "id": "PSTH-001",
+    "nomor_rekening": "70110001",
+    "nasabah_id": "NSB-001",
+    "saldo": 5000000,
+    "status": "AKTIF",
+    "dibuka_at": "2026-01-15T08:00:00+07:00"
+  },
+  "error": null,
+  "meta": {
+    "timestamp": "2026-05-23T14:30:00+07:00",
+    "request_id": "req_a3f2-9b1d"
+  }
+}
+```
+
+### 6.6.4 Contoh Response Sukses — List/Collection (dengan Pagination)
+
+`GET /api/v1/tabungan-haji?page=1&limit=20` (HTTP 200):
+
+```json
+{
+  "data": [
+    { "id": "PSTH-001", "nomor_rekening": "70110001", "saldo": 5000000 },
+    { "id": "PSTH-002", "nomor_rekening": "70110002", "saldo": 3500000 }
+  ],
+  "error": null,
+  "meta": {
+    "pagination": {
+      "page": 1,
+      "limit": 20,
+      "total": 152,
+      "total_pages": 8
+    },
+    "timestamp": "2026-05-23T14:30:00+07:00"
+  }
+}
+```
+
+### 6.6.5 Contoh Response Error — Validasi Gagal
+
+`POST /api/v1/tabungan-haji/PSTH-001/setor` dengan nominal terlalu kecil (HTTP 422):
+
+```json
+{
+  "data": null,
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "Validasi input gagal",
+    "details": [
+      {
+        "field": "nominal",
+        "message": "Nominal minimum Rp 100.000"
+      }
+    ]
+  },
+  "meta": {
+    "timestamp": "2026-05-23T14:30:00+07:00",
+    "request_id": "req_a3f2-9b1d"
+  }
+}
+```
+
+### 6.6.6 Contoh Response Error — Business Logic Error
+
+`POST /setor` ke tabungan yang sudah ditutup (HTTP 409 Conflict):
+
+```json
+{
+  "data": null,
+  "error": {
+    "code": "TABUNGAN_TIDAK_AKTIF",
+    "message": "Tabungan PSTH-001 sudah ditutup — tidak bisa setor lagi"
+  },
+  "meta": {
+    "timestamp": "2026-05-23T14:30:00+07:00"
+  }
+}
+```
+
+### 6.6.7 Standardisasi Error Code
+
+Tim sepakati daftar error code di awal — frontend bisa match code → terjemah ke pesan UI yang user-friendly (multi-bahasa, contextual).
+
+| Error Code | HTTP Status | Use case |
+|---|---|---|
+| `VALIDATION_ERROR` | 422 | Input format/range salah |
+| `UNAUTHORIZED` | 401 | Token tidak ada/invalid/expired |
+| `FORBIDDEN` | 403 | Token valid tapi tidak punya akses |
+| `NOT_FOUND` | 404 | Resource tidak ditemukan |
+| `CONFLICT` | 409 | Konflik state (duplikat, sudah ditutup) |
+| `RATE_LIMIT_EXCEEDED` | 429 | Terlalu banyak request |
+| `INTERNAL_ERROR` | 500 | Bug di server |
+| `SERVICE_UNAVAILABLE` | 503 | Upstream service down |
+| `TABUNGAN_TIDAK_AKTIF` | 409 | Custom — domain-specific error |
+| `SALDO_TIDAK_CUKUP` | 422 | Custom — domain-specific error |
+
+> **Tip**: prefix custom error code dengan **domain** (`TABUNGAN_*`, `NASABAH_*`, `TRANSAKSI_*`) — supaya mudah grouping di logging & monitoring.
+
+### 6.6.8 Konvensi Penamaan Field JSON
+
+| Aspek | Konvensi | Contoh |
+|---|---|---|
+| **Format key** | `snake_case` (atau `camelCase` — pilih satu, konsisten!) | `nomor_rekening` atau `nomorRekening` |
+| **Tanggal/waktu** | ISO 8601 dengan timezone | `"2026-05-23T14:30:00+07:00"` |
+| **Uang** | Integer dalam satuan terkecil (rupiah penuh) — bukan float | `5000000` (bukan `"Rp 5.000.000"`) |
+| **Boolean** | `true` / `false` (bukan `"true"` / `1`) | `"is_aktif": true` |
+| **Enum** | `UPPER_SNAKE_CASE` untuk konstanta | `"status": "AKTIF"` |
+| **Null vs missing** | Pakai `null` eksplisit untuk field yang ada tapi kosong | `"nomor_hp": null` |
+| **ID** | String (UUID/format custom), bukan integer auto-increment | `"PSTH-001"`, `"a3f2-9b1d-..."` |
+
+### 6.6.9 Aturan Tambahan untuk Banking API
+
+- **Format uang**: simpan & kirim sebagai **integer** (rupiah penuh) — JANGAN float. Frontend yang format display.
+- **Sensitive data masking**: jangan kirim full nomor rekening/NIK ke client kalau tidak perlu. Mask: `"7011****0001"`.
+- **Timestamp dengan timezone**: selalu sertakan timezone — `+07:00` (WIB) untuk operasi domestik.
+- **Tidak expose internal state**: jangan return stack trace, query SQL, atau path file di error message production.
+- **Audit trail context**: response transaksi (mutasi saldo) sebaiknya include `transaksi_id` dan `referensi` untuk traceability.
+
+### 6.6.10 Dokumentasi sebagai Kesepakatan
+
+Setelah format disepakati, **tuangkan ke dokumen** yang bisa di-share & versioned:
+
+| Tool | Format |
+|---|---|
+| **OpenAPI / Swagger** | Standard industri, auto-generate docs + client SDK |
+| **Postman Collection** | Bisa di-share, ada example request/response |
+| **TypeScript types** | Generate dari OpenAPI — backend & frontend pakai type yang sama |
+| **README per endpoint** | Untuk project sederhana |
+
+Detail OpenAPI dibahas di **§11 Dokumentasi API**.
 
 ---
 
@@ -1158,7 +1158,7 @@ Workflow lengkap di hari ke-2:
 
 | Step | Aktivitas | Tool |
 |---|---|---|
-| 1 | Design ERD (sesuai §3.1) | dbdiagram.io / pen & paper |
+| 1 | Design ERD (sesuai §2.1) | dbdiagram.io / pen & paper |
 | 2 | Setup Postgres via Docker | Docker |
 | 3 | Tulis `schema.prisma` (pakai prompt AI kalau perlu) | Claude Code |
 | 4 | `npx prisma migrate dev --name init` | Terminal |
